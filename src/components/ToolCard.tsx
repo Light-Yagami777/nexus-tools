@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -14,7 +13,7 @@ import {
   Activity,
   Palette,
   Home,
-  Dice,
+  Dices,
   Braces,
   QrCode
 } from "lucide-react";
@@ -40,7 +39,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
       case "ruler": return <Ruler {...iconProps} />;
       case "palette": return <Palette {...iconProps} />;
       case "home": return <Home {...iconProps} />;
-      case "dice": return <Dice {...iconProps} />;
+      case "dice": return <Dices {...iconProps} />;
       default: return <Activity {...iconProps} />;
     }
   };

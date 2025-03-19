@@ -1,4 +1,3 @@
-
 export type ToolCategory = 
   | 'All'
   | 'Image Tools'
