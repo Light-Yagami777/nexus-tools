@@ -7,7 +7,8 @@ import { Footer } from "@/components/Footer";
 import { 
   getFeaturedTools, 
   getNewTools, 
-  tools 
+  tools,
+  searchTools
 } from "@/utils/toolsData";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -16,11 +17,20 @@ const Index = () => {
   const [featuredTools, setFeaturedTools] = useState(getFeaturedTools());
   const [newTools, setNewTools] = useState(getNewTools());
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState(tools);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim().length >= 1) {
+      setSearchResults(searchTools(searchQuery));
+    } else {
+      setSearchResults(tools);
+    }
+  }, [searchQuery]);
 
   const heroVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -53,6 +63,10 @@ const Index = () => {
         duration: 0.5
       }
     }
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   return (
@@ -89,7 +103,7 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
-                to="/categories"
+                to="/all-tools"
                 className="px-8 py-3 rounded-lg bg-primary text-white font-medium transition-all hover:shadow-lg hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 focus:outline-none"
               >
                 Browse All Tools
@@ -173,7 +187,7 @@ const Index = () => {
             >
               <h2 className="text-2xl md:text-3xl font-semibold">Featured Tools</h2>
               <Link 
-                to="/categories" 
+                to="/all-tools" 
                 className="text-primary font-medium flex items-center hover:underline"
               >
                 View All
@@ -213,7 +227,7 @@ const Index = () => {
         </section>
       )}
       
-      {/* All Tools Section */}
+      {/* Search Results & All Tools Section */}
       <section className="py-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -226,11 +240,11 @@ const Index = () => {
               variants={itemVariants}
               className="text-2xl md:text-3xl font-semibold mb-10"
             >
-              Browse All Tools
+              {searchQuery ? "Search Results" : "Browse All Tools"}
             </motion.h2>
             
             <motion.div variants={itemVariants}>
-              <ToolGrid tools={tools} />
+              <ToolGrid tools={searchResults} />
             </motion.div>
           </motion.div>
         </div>

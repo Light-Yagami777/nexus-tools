@@ -7,9 +7,10 @@ import { searchTools, Tool } from "@/utils/toolsData";
 
 interface SearchBarProps {
   className?: string;
+  onSearch?: (query: string) => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ className = "" }) => {
+export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Tool[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -17,13 +18,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "" }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (query.trim().length >= 2) {
+    if (query.trim().length >= 1) {
       const searchResults = searchTools(query);
       setResults(searchResults);
+      if (onSearch) {
+        onSearch(query);
+      }
     } else {
       setResults([]);
+      if (onSearch) {
+        onSearch("");
+      }
     }
-  }, [query]);
+  }, [query, onSearch]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -39,6 +46,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "" }) => {
   const handleClear = () => {
     setQuery("");
     setResults([]);
+    if (onSearch) {
+      onSearch("");
+    }
   };
 
   const handleToolClick = (path: string) => {
