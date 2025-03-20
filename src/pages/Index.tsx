@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
 import { Footer } from "@/components/Footer";
+import { SearchBar } from "@/components/SearchBar";
 import { 
   getFeaturedTools, 
   getNewTools, 
@@ -139,18 +140,9 @@ const Index = () => {
             
             <motion.div
               variants={itemVariants}
-              className="max-w-3xl mx-auto relative"
+              className="max-w-3xl mx-auto"
             >
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-muted-foreground" />
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for a tool..."
-                className="w-full py-4 pl-12 pr-4 rounded-full glass focus:outline-none focus:ring-2 focus:ring-primary/50 text-lg"
-              />
+              <SearchBar onSearch={handleSearch} className="w-full" />
             </motion.div>
             
             <motion.div
@@ -169,6 +161,18 @@ const Index = () => {
               ))}
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+      
+      {/* Ad Space - Top Banner */}
+      <section className="py-8 px-6 md:px-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">SPONSORED</span>
+            <div className="h-24 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-primary/20">
+              <p className="text-muted-foreground">Premium Ad Space</p>
+            </div>
+          </div>
         </div>
       </section>
       
@@ -199,6 +203,20 @@ const Index = () => {
               <ToolGrid tools={featuredTools} />
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+      
+      {/* Ad Space - Mid Banner */}
+      <section className="py-8 px-6 md:px-10 bg-gradient-subtle">
+        <div className="max-w-7xl mx-auto">
+          <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md">
+            <div className="text-center">
+              <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">ADVERTISEMENT</span>
+              <div className="h-32 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
+                <p className="text-muted-foreground">Premium Ad Banner</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       
