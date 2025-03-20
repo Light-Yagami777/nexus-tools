@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import WordCounter from "./pages/tools/WordCounter";
 import PasswordGenerator from "./pages/tools/PasswordGenerator";
+import QrCodeGenerator from "./pages/tools/QrCodeGenerator";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
@@ -51,6 +52,7 @@ const App = () => {
               {/* Implemented Tool Routes */}
               <Route path="/tools/word-counter" element={<WordCounter />} />
               <Route path="/tools/password-generator" element={<PasswordGenerator />} />
+              <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
               
               {/* Image Tools */}
               <Route path="/tools/image-to-png" element={<ToolPlaceholder toolName="Image to PNG Converter" toolDescription="Convert your images to PNG format. Upload an image and download it as a high-quality PNG file with transparency support." />} />
