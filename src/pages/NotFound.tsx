@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
+import { AlertCircle } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -27,11 +28,15 @@ const NotFound = () => {
           className="max-w-md w-full px-6 py-12 text-center"
         >
           <div className="mb-8">
+            <div className="flex justify-center mb-4">
+              <AlertCircle className="h-16 w-16 text-destructive" />
+            </div>
             <h1 className="text-8xl font-bold text-primary">404</h1>
             <div className="h-1 w-16 bg-primary mx-auto my-6 rounded-full"></div>
             <h2 className="text-2xl font-semibold mb-4">Page Not Found</h2>
             <p className="text-muted-foreground mb-8">
               The page you are looking for doesn't exist or has been moved.
+              This tool might be under development.
             </p>
           </div>
           
