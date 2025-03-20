@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { 
   Github, 
@@ -10,7 +9,7 @@ import {
   Linkedin, 
   Youtube,
   ArrowRight,
-  Tool,
+  Wrench,
   ShieldCheck,
   Clock,
   Globe
@@ -60,7 +59,7 @@ export const Footer = () => {
   ];
 
   const features = [
-    { icon: <Tool className="h-5 w-5" />, text: "100+ Free Tools" },
+    { icon: <Wrench className="h-5 w-5" />, text: "100+ Free Tools" },
     { icon: <ShieldCheck className="h-5 w-5" />, text: "No Registration Required" },
     { icon: <Clock className="h-5 w-5" />, text: "Fast & Easy to Use" },
     { icon: <Globe className="h-5 w-5" />, text: "Available Everywhere" }
