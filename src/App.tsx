@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,7 @@ import PasswordGenerator from "./pages/tools/PasswordGenerator";
 import QrCodeGenerator from "./pages/tools/QrCodeGenerator";
 import DevFormatting from "./pages/tools/DevFormatting";
 import ImageToPng from "./pages/tools/ImageToPng";
+import JsonFormatter from "./pages/tools/JsonFormatter";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
@@ -57,18 +57,10 @@ const App = () => {
               <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
               <Route path="/tools/dev-formatting" element={<DevFormatting />} />
               <Route path="/tools/image-to-png" element={<ImageToPng />} />
+              <Route path="/tools/json-formatter" element={<JsonFormatter />} />
               
               {/* Image Tools */}
               <Route path="/tools/image-to-jpg" element={<ToolPlaceholder toolName="Image to JPG Converter" toolDescription="Convert images to JPG format with adjustable quality settings. Perfect for reducing file size while maintaining visual clarity." />} />
-              <Route path="/tools/image-resizer" element={<ToolPlaceholder toolName="Image Resizer" toolDescription="Resize your images to specific dimensions. Maintain aspect ratio or customize width and height as needed." />} />
-              <Route path="/tools/image-compressor" element={<ToolPlaceholder toolName="Image Compressor" toolDescription="Compress images without noticeable quality loss. Reduce file size for faster website loading and storage optimization." />} />
-              <Route path="/tools/image-to-base64" element={<ToolPlaceholder toolName="Image to Base64" toolDescription="Convert images to Base64 encoded strings for embedding directly in HTML, CSS, or JavaScript files." />} />
-              <Route path="/tools/webp-to-png" element={<ToolPlaceholder toolName="WebP to PNG Converter" toolDescription="Convert WebP images to PNG format. Preserve quality and transparency while ensuring broader compatibility." />} />
-              <Route path="/tools/gif-maker" element={<ToolPlaceholder toolName="GIF Maker" toolDescription="Create animated GIFs from a series of images. Adjust frame rate, dimensions, and quality to your needs." />} />
-              <Route path="/tools/image-cropper" element={<ToolPlaceholder toolName="Image Cropper" toolDescription="Crop your images to any size or aspect ratio. Use presets for social media platforms or custom dimensions." />} />
-              <Route path="/tools/screenshot-to-pdf" element={<ToolPlaceholder toolName="Screenshot to PDF" toolDescription="Convert screenshots to PDF documents. Combine multiple images into a single professional PDF file." />} />
-              <Route path="/tools/png-to-jpg" element={<ToolPlaceholder toolName="PNG to JPG" toolDescription="Convert PNG images to JPG format with adjustable quality settings." />} />
-              <Route path="/tools/jpg-to-png" element={<ToolPlaceholder toolName="JPG to PNG" toolDescription="Convert JPG images to PNG format with adjustable quality settings." />} />
               
               {/* SEO Tools */}
               <Route path="/tools/meta-tag-generator" element={<ToolPlaceholder toolName="Meta Tag Generator" toolDescription="Generate optimized meta tags for better SEO. Create title, description, and other meta tags for improved search visibility." />} />
