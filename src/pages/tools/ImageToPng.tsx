@@ -109,17 +109,49 @@ const ImageToPng = () => {
   const downloadImage = () => {
     if (!convertedUrl) return;
     
-    const link = document.createElement("a");
-    link.href = convertedUrl;
-    link.download = `${imageName || "image"}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Use canvas for better quality
+    if (canvasRef.current) {
+      const link = document.createElement('a');
+      link.download = `${imageName || "image"}.png`;
+      link.href = canvasRef.current.toDataURL('image/png');
+      link.click();
+      
+      toast({
+        title: "Download started",
+        description: "Your PNG image is being downloaded.",
+      });
+    }
+  };
+
+  const copyQRCode = async () => {
+    if (!convertedUrl) return;
     
-    toast({
-      title: "Download started",
-      description: "Your PNG image is being downloaded.",
-    });
+    try {
+      if (canvasRef.current) {
+        canvasRef.current.toBlob(async (blob) => {
+          if (blob) {
+            // Create a ClipboardItem
+            const item = new ClipboardItem({ 'image/png': blob });
+            await navigator.clipboard.write([item]);
+            
+            setIsCopied(true);
+            toast({
+              title: "Copied to clipboard",
+              description: "QR code image copied to clipboard",
+            });
+            
+            setTimeout(() => setIsCopied(false), 2000);
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error copying QR code:", error);
+      toast({
+        title: "Copy failed",
+        description: "Failed to copy QR code. Your browser may not support this feature.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -152,6 +184,9 @@ const ImageToPng = () => {
       setImageName(file.name.replace(/\.[^/.]+$/, ""));
     }
   };
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isCopied, setIsCopied] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col">
