@@ -70,6 +70,11 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				nexus: {
+					DEFAULT: 'hsl(var(--nexus-primary))',
+					secondary: 'hsl(var(--nexus-secondary))',
+					accent: 'hsl(var(--nexus-accent))'
 				}
 			},
 			borderRadius: {

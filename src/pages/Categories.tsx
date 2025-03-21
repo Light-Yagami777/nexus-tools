@@ -30,7 +30,7 @@ const Categories = () => {
             transition={{ duration: 0.5 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Tool Categories</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">NEXUS Tool Categories</h1>
             <p className="text-lg text-muted-foreground">
               Browse tools by category to find exactly what you need.
             </p>
