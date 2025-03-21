@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Image, Upload, Download, Trash2, FileWarning } from "lucide-react";
+import { Image as LucideImage, Upload, Download, Trash2, FileWarning } from "lucide-react";
 
 const ImageToPng = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -18,6 +18,8 @@ const ImageToPng = () => {
   const [imageName, setImageName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -107,48 +109,44 @@ const ImageToPng = () => {
   };
 
   const downloadImage = () => {
-    if (!convertedUrl) return;
+    if (!convertedUrl || !canvasRef.current) return;
     
     // Use canvas for better quality
-    if (canvasRef.current) {
-      const link = document.createElement('a');
-      link.download = `${imageName || "image"}.png`;
-      link.href = canvasRef.current.toDataURL('image/png');
-      link.click();
-      
-      toast({
-        title: "Download started",
-        description: "Your PNG image is being downloaded.",
-      });
-    }
+    const link = document.createElement('a');
+    link.download = `${imageName || "image"}.png`;
+    link.href = canvasRef.current.toDataURL('image/png');
+    link.click();
+    
+    toast({
+      title: "Download started",
+      description: "Your PNG image is being downloaded.",
+    });
   };
 
   const copyQRCode = async () => {
-    if (!convertedUrl) return;
+    if (!convertedUrl || !canvasRef.current) return;
     
     try {
-      if (canvasRef.current) {
-        canvasRef.current.toBlob(async (blob) => {
-          if (blob) {
-            // Create a ClipboardItem
-            const item = new ClipboardItem({ 'image/png': blob });
-            await navigator.clipboard.write([item]);
-            
-            setIsCopied(true);
-            toast({
-              title: "Copied to clipboard",
-              description: "QR code image copied to clipboard",
-            });
-            
-            setTimeout(() => setIsCopied(false), 2000);
-          }
-        });
-      }
+      canvasRef.current.toBlob(async (blob) => {
+        if (blob) {
+          // Create a ClipboardItem
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          
+          setIsCopied(true);
+          toast({
+            title: "Copied to clipboard",
+            description: "Image copied to clipboard",
+          });
+          
+          setTimeout(() => setIsCopied(false), 2000);
+        }
+      });
     } catch (error) {
-      console.error("Error copying QR code:", error);
+      console.error("Error copying image:", error);
       toast({
         title: "Copy failed",
-        description: "Failed to copy QR code. Your browser may not support this feature.",
+        description: "Failed to copy image. Your browser may not support this feature.",
         variant: "destructive",
       });
     }
@@ -185,9 +183,6 @@ const ImageToPng = () => {
     }
   };
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isCopied, setIsCopied] = useState(false);
-
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -201,7 +196,7 @@ const ImageToPng = () => {
           >
             <header className="text-center mb-12">
               <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <Image className="h-6 w-6 text-primary" />
+                <LucideImage className="h-6 w-6 text-primary" />
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold mb-4">Image to PNG Converter</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -335,6 +330,10 @@ const ImageToPng = () => {
                         src={convertedUrl}
                         alt="Converted PNG"
                         className="max-h-64 max-w-full object-contain"
+                      />
+                      <canvas 
+                        ref={canvasRef} 
+                        className="hidden"
                       />
                     </div>
                     

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
@@ -94,7 +95,7 @@ const DevFormatting = () => {
     }
   };
 
-  // Very simple HTML/XML formatter
+  // Very simple HTML/XML formatter (could be improved)
   const formatHTML = (code: string) => {
     let formatted = '';
     let indent = 0;
@@ -223,7 +224,7 @@ const DevFormatting = () => {
                 </Select>
               </div>
 
-              <div className="glass-card p-4 rounded-xl">
+              <div className="p-4 rounded-xl border bg-card">
                 <Textarea
                   placeholder={`Paste your ${fileType.toUpperCase()} code here...`}
                   value={input}
@@ -272,7 +273,7 @@ const DevFormatting = () => {
                 )}
               </div>
 
-              <div className="glass-card p-4 rounded-xl">
+              <div className="p-4 rounded-xl border bg-card">
                 {output ? (
                   <pre className="min-h-[400px] font-mono text-sm overflow-auto whitespace-pre-wrap">
                     {output}
