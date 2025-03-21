@@ -1,5 +1,4 @@
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
@@ -8,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Image as LucideImage, Upload, Download, Trash2, FileWarning } from "lucide-react";
+import { Image as LucideImageIcon, Upload, Download, Trash2, FileWarning } from "lucide-react";
 
 const ImageToPng = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -20,6 +19,22 @@ const ImageToPng = () => {
   const { toast } = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCopied, setIsCopied] = useState(false);
+
+  useEffect(() => {
+    if (convertedUrl && canvasRef.current) {
+      const img = new Image();
+      img.onload = () => {
+        if (!canvasRef.current) return;
+        const ctx = canvasRef.current.getContext('2d');
+        if (ctx) {
+          canvasRef.current.width = img.width;
+          canvasRef.current.height = img.height;
+          ctx.drawImage(img, 0, 0);
+        }
+      };
+      img.src = convertedUrl;
+    }
+  }, [convertedUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -196,7 +211,7 @@ const ImageToPng = () => {
           >
             <header className="text-center mb-12">
               <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <LucideImage className="h-6 w-6 text-primary" />
+                <LucideImageIcon className="h-6 w-6 text-primary" />
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold mb-4">Image to PNG Converter</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
