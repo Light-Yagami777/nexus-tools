@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
@@ -11,11 +12,11 @@ import { Image as LucideImageIcon, Upload, Download, Trash2, FileWarning } from 
 
 const ImageToPng = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [convertedUrl, setConvertedUrl] = useState<string | null>(null);
   const [isConverting, setIsConverting] = useState(false);
-  const [imageName, setImageName] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [filename, setFilename] = useState<string>("");
   const { toast } = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -40,170 +41,163 @@ const ImageToPng = () => {
     const file = e.target.files && e.target.files[0];
     
     if (file) {
-      // Reset previous conversion
-      setConvertedUrl(null);
-      
       // Check if file is an image
       if (!file.type.startsWith("image/")) {
+        setError("Please select an image file");
         toast({
           variant: "destructive",
           title: "Invalid file type",
-          description: "Please select an image file.",
+          description: "Please select an image file",
         });
         return;
       }
       
-      // Create a preview URL
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
       setSelectedImage(file);
-      setImageName(file.name.replace(/\.[^/.]+$/, "")); // Remove extension
-    }
-  };
-
-  const clearImage = () => {
-    setSelectedImage(null);
-    setPreviewUrl(null);
-    setConvertedUrl(null);
-    setImageName("");
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      setError(null);
+      
+      // Create a preview URL
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      
+      // Set default filename (original name without extension)
+      const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+      setFilename(nameWithoutExt);
     }
   };
 
   const convertToPng = () => {
-    if (!selectedImage || !previewUrl) return;
+    if (!selectedImage) {
+      setError("Please select an image to convert");
+      toast({
+        variant: "destructive",
+        title: "No image selected",
+        description: "Please select an image to convert",
+      });
+      return;
+    }
     
     setIsConverting(true);
+    setError(null);
     
-    // Create an image element to use for the canvas
-    const img = new Image();
-    img.onload = () => {
-      // Create a canvas to draw the image
+    try {
       const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      // Draw the image on the canvas
       const ctx = canvas.getContext("2d");
-      if (ctx) {
+      
+      if (!ctx) {
+        throw new Error("Unable to get canvas context");
+      }
+      
+      // Create an image element to load the selected file
+      const img = document.createElement("img");
+      
+      img.onload = () => {
+        // Set canvas dimensions to match the image
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // Draw the image onto the canvas
         ctx.drawImage(img, 0, 0);
         
         // Convert canvas to PNG data URL
-        try {
-          const pngUrl = canvas.toDataURL("image/png");
-          setConvertedUrl(pngUrl);
-          toast({
-            title: "Conversion successful",
-            description: "Your image has been converted to PNG format.",
-          });
-        } catch (error) {
-          console.error("Error converting to PNG:", error);
-          toast({
-            variant: "destructive",
-            title: "Conversion failed",
-            description: "Failed to convert image to PNG. Please try again.",
-          });
-        }
-      }
+        const pngUrl = canvas.toDataURL("image/png");
+        setConvertedUrl(pngUrl);
+        
+        toast({
+          title: "Conversion successful",
+          description: "Image has been converted to PNG format",
+        });
+        
+        setIsConverting(false);
+      };
       
-      setIsConverting(false);
-    };
-    
-    img.onerror = () => {
+      img.onerror = () => {
+        setError("Failed to load image");
+        toast({
+          variant: "destructive",
+          title: "Conversion failed",
+          description: "Failed to load the image",
+        });
+        setIsConverting(false);
+      };
+      
+      // Load the image from the file
+      img.src = URL.createObjectURL(selectedImage);
+    } catch (err) {
+      console.error("Error converting image:", err);
+      setError("Failed to convert image");
       toast({
         variant: "destructive",
-        title: "Image loading failed",
-        description: "Failed to load the selected image. Please try another file.",
+        title: "Conversion failed",
+        description: "An error occurred while converting the image",
       });
       setIsConverting(false);
-    };
-    
-    img.src = previewUrl;
+    }
   };
 
-  const downloadImage = () => {
-    if (!convertedUrl || !canvasRef.current) return;
+  const downloadPng = () => {
+    if (!convertedUrl) return;
     
-    // Use canvas for better quality
-    const link = document.createElement('a');
-    link.download = `${imageName || "image"}.png`;
-    link.href = canvasRef.current.toDataURL('image/png');
+    const link = document.createElement("a");
+    link.href = convertedUrl;
+    link.download = `${filename || "converted"}.png`;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
     
     toast({
       title: "Download started",
-      description: "Your PNG image is being downloaded.",
+      description: "Your PNG image is being downloaded",
     });
   };
 
-  const copyQRCode = async () => {
-    if (!convertedUrl || !canvasRef.current) return;
+  const copyToClipboard = async () => {
+    if (!convertedUrl) return;
     
     try {
-      canvasRef.current.toBlob(async (blob) => {
-        if (blob) {
-          // Create a ClipboardItem
-          const item = new ClipboardItem({ 'image/png': blob });
-          await navigator.clipboard.write([item]);
-          
-          setIsCopied(true);
-          toast({
-            title: "Copied to clipboard",
-            description: "Image copied to clipboard",
-          });
-          
-          setTimeout(() => setIsCopied(false), 2000);
-        }
-      });
-    } catch (error) {
-      console.error("Error copying image:", error);
+      const response = await fetch(convertedUrl);
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+      
+      setIsCopied(true);
       toast({
-        title: "Copy failed",
-        description: "Failed to copy image. Your browser may not support this feature.",
+        title: "Copied to clipboard",
+        description: "Image has been copied to clipboard",
+      });
+      
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy image:", err);
+      toast({
         variant: "destructive",
+        title: "Copy failed",
+        description: "Failed to copy image to clipboard",
       });
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const reset = () => {
+    setSelectedImage(null);
+    setConvertedUrl(null);
+    setPreviewUrl(null);
+    setFilename("");
+    setError(null);
     
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      
-      // Check if file is an image
-      if (!file.type.startsWith("image/")) {
-        toast({
-          variant: "destructive",
-          title: "Invalid file type",
-          description: "Please select an image file.",
-        });
-        return;
-      }
-      
-      // Create a preview URL
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      setSelectedImage(file);
-      setConvertedUrl(null);
-      setImageName(file.name.replace(/\.[^/.]+$/, ""));
-    }
+    toast({
+      title: "Reset complete",
+      description: "All data has been cleared",
+    });
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
       
-      <main className="flex-grow py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
+      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,190 +209,146 @@ const ImageToPng = () => {
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold mb-4">Image to PNG Converter</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Convert images from any format to PNG. Preserve transparency and quality with our free online converter.
+                Convert your images to PNG format with this free online tool. Maintain transparency and quality without any watermarks.
               </p>
             </header>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Upload Section */}
+            {/* Input Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="space-y-6"
             >
-              <div className="bg-card rounded-xl border p-6">
+              <div className="p-6 rounded-xl border bg-card">
                 <h2 className="text-xl font-semibold mb-4">Upload Image</h2>
                 
-                <div
-                  className={`border-2 border-dashed rounded-lg p-8 text-center ${
-                    previewUrl ? "border-primary/30" : "border-muted hover:border-muted-foreground/50"
-                  } transition-colors duration-200`}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                >
-                  {previewUrl ? (
-                    <div className="space-y-4">
-                      <div className="relative max-h-52 overflow-hidden rounded-md mx-auto">
+                <div className="space-y-4">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="image-upload">Select Image</Label>
+                    <Input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                  
+                  {previewUrl && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">Preview:</p>
+                      <div className="rounded-md overflow-hidden border bg-background/50 p-2">
                         <img
                           src={previewUrl}
                           alt="Preview"
-                          className="object-contain mx-auto max-h-48"
+                          className="max-w-full h-auto max-h-[300px] mx-auto"
                         />
                       </div>
-                      <div className="text-sm truncate max-w-full">
-                        {selectedImage?.name}
-                      </div>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={clearImage}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Remove
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="mx-auto h-20 w-20 text-muted-foreground">
-                        <Upload className="h-12 w-12 mx-auto mb-2" />
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        <Label
-                          htmlFor="image-upload"
-                          className="mx-auto text-center cursor-pointer text-base font-medium hover:text-primary transition-colors"
-                        >
-                          Click to upload
-                        </Label>
-                        <p>or drag and drop</p>
-                        <p className="text-xs mt-1">
-                          JPEG, JPG, WebP, GIF, BMP or any image format
-                        </p>
-                      </div>
-                      <Input
-                        id="image-upload"
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleFileChange}
-                      />
                     </div>
                   )}
-                </div>
-                
-                {previewUrl && !convertedUrl && (
-                  <div className="mt-4">
-                    <Button
-                      onClick={convertToPng}
-                      className="w-full"
-                      disabled={isConverting}
-                    >
-                      {isConverting ? "Converting..." : "Convert to PNG"}
-                    </Button>
-                  </div>
-                )}
-              </div>
-              
-              <div className="bg-card rounded-xl border p-6">
-                <h2 className="text-xl font-semibold mb-4">About PNG Format</h2>
-                <p className="text-muted-foreground mb-4">
-                  PNG (Portable Network Graphics) is a raster-graphics file format that supports lossless data compression. 
-                  Unlike JPEG, PNG supports transparency and is ideal for images with sharp edges and solid colors.
-                </p>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-1">
-                    <p className="font-medium">Advantages:</p>
-                    <ul className="list-disc pl-5 text-muted-foreground">
-                      <li>Lossless compression</li>
-                      <li>Transparency support</li>
-                      <li>Better for text & graphics</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="font-medium">Best for:</p>
-                    <ul className="list-disc pl-5 text-muted-foreground">
-                      <li>Logos and icons</li>
-                      <li>Screenshots</li>
-                      <li>Images with transparency</li>
-                    </ul>
-                  </div>
+                  
+                  {selectedImage && (
+                    <div className="mt-4 space-y-4">
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <Label htmlFor="filename">Filename</Label>
+                        <div className="flex">
+                          <Input
+                            id="filename"
+                            value={filename}
+                            onChange={(e) => setFilename(e.target.value)}
+                            className="rounded-r-none"
+                          />
+                          <div className="flex items-center px-3 border border-l-0 rounded-r-md bg-muted text-muted-foreground text-sm">
+                            .png
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={convertToPng} 
+                        className="w-full"
+                        disabled={isConverting || !selectedImage}
+                      >
+                        {isConverting ? "Converting..." : "Convert to PNG"}
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={reset}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Reset
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {error && (
+                    <div className="bg-destructive/15 text-destructive rounded-md p-3 flex items-center text-sm mt-4">
+                      <FileWarning className="h-4 w-4 mr-2" />
+                      {error}
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
 
-            {/* Result Section */}
+            {/* Output Section */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="space-y-6"
             >
-              <div className="bg-card rounded-xl border p-6 flex flex-col h-full">
-                <h2 className="text-xl font-semibold mb-4">Converted Image</h2>
+              <div className="p-6 rounded-xl border bg-card h-full">
+                <h2 className="text-xl font-semibold mb-4">Converted PNG</h2>
                 
                 {convertedUrl ? (
-                  <div className="space-y-6 flex-grow flex flex-col">
-                    <div className="flex-grow relative border rounded-lg p-4 flex items-center justify-center bg-background/50">
+                  <div className="space-y-4">
+                    <div className="rounded-md overflow-hidden border bg-background/50 p-2">
                       <img
                         src={convertedUrl}
                         alt="Converted PNG"
-                        className="max-h-64 max-w-full object-contain"
-                      />
-                      <canvas 
-                        ref={canvasRef} 
-                        className="hidden"
+                        className="max-w-full h-auto max-h-[300px] mx-auto"
                       />
                     </div>
                     
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Label htmlFor="filename">Filename:</Label>
-                        <div className="flex-grow">
-                          <Input
-                            id="filename"
-                            value={imageName}
-                            onChange={(e) => setImageName(e.target.value)}
-                            className="flex-grow"
-                          />
-                        </div>
-                        <span className="text-muted-foreground text-sm">.png</span>
-                      </div>
-                      
-                      <Button onClick={downloadImage} className="w-full">
+                    <Separator />
+                    
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Button 
+                        onClick={downloadPng}
+                        className="flex-1"
+                      >
                         <Download className="mr-2 h-4 w-4" />
-                        Download PNG Image
+                        Download PNG
+                      </Button>
+                      
+                      <Button 
+                        variant="outline" 
+                        onClick={copyToClipboard}
+                        className="flex-1"
+                      >
+                        {isCopied ? "Copied!" : "Copy to Clipboard"}
                       </Button>
                     </div>
+                    
+                    <canvas ref={canvasRef} className="hidden" />
                   </div>
                 ) : (
-                  <div className="flex-grow flex flex-col items-center justify-center p-8 text-center">
-                    <div className="bg-muted/30 rounded-full p-6 mb-4">
-                      <FileWarning className="h-12 w-12 text-muted-foreground" />
+                  <div className="border rounded-md border-dashed h-[300px] flex items-center justify-center">
+                    <div className="text-center text-muted-foreground p-4">
+                      <Upload className="h-8 w-8 mx-auto mb-2" />
+                      <p>No image converted yet</p>
+                      <p className="text-sm mt-1">
+                        Upload an image and click "Convert to PNG" to see the result here
+                      </p>
                     </div>
-                    <h3 className="text-lg font-medium mb-2">No Converted Image Yet</h3>
-                    <p className="text-muted-foreground max-w-md">
-                      {previewUrl 
-                        ? "Press the Convert button to generate your PNG image" 
-                        : "Upload an image to convert it to PNG format"}
-                    </p>
                   </div>
                 )}
-              </div>
-              
-              <div className="bg-card rounded-xl border p-6">
-                <h2 className="text-xl font-semibold mb-4">How It Works</h2>
-                <ol className="space-y-3 text-muted-foreground list-decimal pl-5">
-                  <li>Upload any image file from your device</li>
-                  <li>Our tool converts the image to PNG format while preserving quality</li>
-                  <li>Download the converted PNG image to your device</li>
-                </ol>
-                <Separator className="my-4" />
-                <div className="text-sm text-muted-foreground">
-                  <p className="mb-2 font-medium">Privacy Note:</p>
-                  <p>Your images are processed entirely in your browser and are never uploaded to any server.</p>
-                </div>
               </div>
             </motion.div>
           </div>
