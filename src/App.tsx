@@ -11,6 +11,11 @@ import PasswordGenerator from "./pages/tools/PasswordGenerator";
 import QrCodeGenerator from "./pages/tools/QrCodeGenerator";
 import DevFormatting from "./pages/tools/DevFormatting";
 import ImageToPng from "./pages/tools/ImageToPng";
+import ImageToJpg from "./pages/tools/ImageToJpg";
+import ImageResizer from "./pages/tools/ImageResizer";
+import ImageCompressor from "./pages/tools/ImageCompressor";
+import ImageToBase64 from "./pages/tools/ImageToBase64";
+import WebpToPng from "./pages/tools/WebpToPng";
 import JsonFormatter from "./pages/tools/JsonFormatter";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
@@ -57,7 +62,15 @@ const App = () => {
               <Route path="/tools/image-to-png" element={<ImageToPng />} />
               <Route path="/tools/json-formatter" element={<JsonFormatter />} />
               
-              <Route path="/tools/image-to-jpg" element={<ToolPlaceholder toolName="Image to JPG Converter" toolDescription="Convert images to JPG format with adjustable quality settings. Perfect for reducing file size while maintaining visual clarity." />} />
+              <Route path="/tools/image-to-jpg" element={<ImageToJpg />} />
+              <Route path="/tools/image-resizer" element={<ImageResizer />} />
+              <Route path="/tools/image-compressor" element={<ImageCompressor />} />
+              <Route path="/tools/image-to-base64" element={<ImageToBase64 />} />
+              <Route path="/tools/webp-to-png" element={<WebpToPng />} />
+              
+              <Route path="/tools/gif-maker" element={<ToolPlaceholder toolName="GIF Maker" toolDescription="Create animated GIFs from a series of images. Perfect for creating animations, memes, and sharing dynamic content." />} />
+              <Route path="/tools/image-cropper" element={<ToolPlaceholder toolName="Image Cropper" toolDescription="Precisely crop your images to any size or aspect ratio. Remove unwanted parts and focus on what matters." />} />
+              <Route path="/tools/screenshot-to-pdf" element={<ToolPlaceholder toolName="Screenshot to PDF" toolDescription="Convert screenshots to PDF documents. Great for documentation, reports, and archiving webpage captures." />} />
               
               <Route path="/tools/meta-tag-generator" element={<ToolPlaceholder toolName="Meta Tag Generator" toolDescription="Generate optimized meta tags for better SEO. Create title, description, and other meta tags for improved search visibility." />} />
               <Route path="/tools/keyword-density" element={<ToolPlaceholder toolName="Keyword Density Checker" toolDescription="Analyze keyword density in your content. Identify overused and underused keywords for SEO optimization." />} />

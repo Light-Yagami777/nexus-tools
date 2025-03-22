@@ -67,8 +67,8 @@ export const NavBar = () => {
         </Link>
 
         {/* Desktop Nav - Centered SearchBar */}
-        <div className="hidden md:flex items-center justify-center flex-1 mx-4">
-          <SearchBar className="w-full max-w-md" />
+        <div className="hidden md:block flex-1 mx-auto max-w-xl px-4">
+          <SearchBar className="w-full" />
         </div>
 
         {/* Desktop Nav Links */}
