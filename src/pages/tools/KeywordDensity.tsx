@@ -9,9 +9,9 @@ import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { SearchCheck, Upload, BarChart2, Copy, Trash, FileText, ArrowRight } from 'lucide-react';
+import { SearchCheck, Upload, BarChart2, Copy, Trash, FileText, ArrowRight, ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface KeywordData {
   keyword: string;
@@ -27,6 +27,12 @@ const KeywordDensity = () => {
   const [totalWords, setTotalWords] = useState(0);
   const [totalCharacters, setTotalCharacters] = useState(0);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Common words to exclude
   const commonWords = new Set([
@@ -120,6 +126,10 @@ const KeywordDensity = () => {
     });
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -129,11 +139,23 @@ const KeywordDensity = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-2">Keyword Density Checker</h1>
-            <p className="text-muted-foreground">
-              Analyze keyword density and distribution in your content
-            </p>
+          <div className="mb-6 flex items-center">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleBack} 
+              className="mr-2"
+              aria-label="Go back"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Back
+            </Button>
+            <div className="text-center flex-grow">
+              <h1 className="text-3xl font-bold mb-2">Keyword Density Checker</h1>
+              <p className="text-muted-foreground">
+                Analyze keyword density and distribution in your content
+              </p>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
