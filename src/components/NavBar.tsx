@@ -63,7 +63,7 @@ export const NavBar = () => {
               MT
             </motion.span>
           </div>
-          <span className="font-semibold text-lg md:text-xl tracking-tight">MultiTools</span>
+          <span className="font-semibold text-lg md:text-xl tracking-tight">Nexus Tools</span>
         </Link>
 
         {/* Desktop Nav - Centered SearchBar */}
