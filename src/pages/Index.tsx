@@ -121,15 +121,15 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Search Section */}
+      {/* Search Section - Centered */}
       <section className="py-12 px-6 md:px-10 bg-gradient-subtle">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto flex justify-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerVariants}
-            className="text-center"
+            className="text-center w-full max-w-3xl"
           >
             <motion.h2 
               variants={itemVariants}
@@ -140,14 +140,14 @@ const Index = () => {
             
             <motion.div
               variants={itemVariants}
-              className="max-w-3xl mx-auto"
+              className="w-full"
             >
               <SearchBar onSearch={handleSearch} className="w-full" />
             </motion.div>
             
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap justify-center gap-2 mt-4 max-w-3xl mx-auto"
+              className="flex flex-wrap justify-center gap-2 mt-4"
             >
               <span className="text-sm text-muted-foreground mr-2">Popular searches:</span>
               {["converter", "calculator", "generator", "formatter", "image"].map((term) => (

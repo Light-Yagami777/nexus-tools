@@ -283,6 +283,16 @@ export const tools: Tool[] = [
     isFeatured: true,
   },
   {
+    id: 'dev-formatting',
+    name: 'Dev Formatting',
+    description: 'One tool for formatting ALL types of files',
+    category: 'Developer Tools',
+    icon: 'code',
+    path: '/tools/dev-formatting',
+    isNew: true,
+    isFeatured: true,
+  },
+  {
     id: 'color-picker',
     name: 'Color Picker',
     description: 'Select and generate color codes for your projects',

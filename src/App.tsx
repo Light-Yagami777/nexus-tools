@@ -20,7 +20,6 @@ import { Tool } from "./utils/toolsData";
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Tool placeholder component for tools that aren't fully implemented yet
   const ToolPlaceholder = ({ toolName, toolDescription = "This tool is coming soon! We're working hard to implement it." }: { toolName: string, toolDescription?: string }) => (
     <div className="min-h-screen flex flex-col">
       <div className="flex-grow flex items-center justify-center">
@@ -51,7 +50,6 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               
-              {/* Implemented Tool Routes */}
               <Route path="/tools/word-counter" element={<WordCounter />} />
               <Route path="/tools/password-generator" element={<PasswordGenerator />} />
               <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
@@ -59,10 +57,8 @@ const App = () => {
               <Route path="/tools/image-to-png" element={<ImageToPng />} />
               <Route path="/tools/json-formatter" element={<JsonFormatter />} />
               
-              {/* Image Tools */}
               <Route path="/tools/image-to-jpg" element={<ToolPlaceholder toolName="Image to JPG Converter" toolDescription="Convert images to JPG format with adjustable quality settings. Perfect for reducing file size while maintaining visual clarity." />} />
               
-              {/* SEO Tools */}
               <Route path="/tools/meta-tag-generator" element={<ToolPlaceholder toolName="Meta Tag Generator" toolDescription="Generate optimized meta tags for better SEO. Create title, description, and other meta tags for improved search visibility." />} />
               <Route path="/tools/keyword-density" element={<ToolPlaceholder toolName="Keyword Density Checker" toolDescription="Analyze keyword density in your content. Identify overused and underused keywords for SEO optimization." />} />
               <Route path="/tools/sitemap-generator" element={<ToolPlaceholder toolName="Sitemap Generator" toolDescription="Generate XML sitemaps for your website to help search engines discover and index your pages more efficiently." />} />
@@ -74,7 +70,6 @@ const App = () => {
               <Route path="/tools/mobile-friendly-test" element={<ToolPlaceholder toolName="Mobile-Friendly Test" toolDescription="Check if your site is mobile-friendly according to Google's standards. Identify and fix mobile usability issues." />} />
               <Route path="/tools/seo-analyzer" element={<ToolPlaceholder toolName="SEO Analyzer" toolDescription="Comprehensive SEO analysis of your webpage. Get actionable insights to improve your search engine ranking." />} />
               
-              {/* Text Tools */}
               <Route path="/tools/character-counter" element={<ToolPlaceholder toolName="Character Counter" toolDescription="Count characters with and without spaces. Track your character usage for social media posts, essays, and more." />} />
               <Route path="/tools/case-converter" element={<ToolPlaceholder toolName="Case Converter" toolDescription="Convert text between different cases: uppercase, lowercase, title case, sentence case, and more." />} />
               <Route path="/tools/lorem-ipsum" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate dummy text for your designs. Customize length, format, and style to fit your project needs." />} />
@@ -85,7 +80,6 @@ const App = () => {
               <Route path="/tools/markdown-editor" element={<ToolPlaceholder toolName="Markdown Editor" toolDescription="Write and preview markdown in real-time. Export to HTML or formatted text for documentation." />} />
               <Route path="/tools/string-utilities" element={<ToolPlaceholder toolName="String Utilities" toolDescription="Various string manipulation utilities including trim, replace, extract, and more." />} />
               
-              {/* Developer Tools */}
               <Route path="/tools/json-formatter" element={<ToolPlaceholder toolName="JSON Formatter" toolDescription="Format and validate your JSON data with syntax highlighting. Identify errors and improve readability." />} />
               <Route path="/tools/color-picker" element={<ToolPlaceholder toolName="Color Picker" toolDescription="Select and generate color codes for your projects. Convert between RGB, HEX, HSL, and more." />} />
               <Route path="/tools/css-minifier" element={<ToolPlaceholder toolName="CSS Minifier" toolDescription="Minify your CSS files to reduce file size and improve loading speed." />} />
@@ -97,7 +91,6 @@ const App = () => {
               <Route path="/tools/markdown-to-html" element={<ToolPlaceholder toolName="Markdown to HTML" toolDescription="Convert Markdown to HTML code. Preview and download the generated HTML." />} />
               <Route path="/tools/sql-formatter" element={<ToolPlaceholder toolName="SQL Formatter" toolDescription="Format and beautify SQL queries for better readability and debugging." />} />
               
-              {/* Math & Calculators */}
               <Route path="/tools/bmi-calculator" element={<ToolPlaceholder toolName="BMI Calculator" toolDescription="Calculate your Body Mass Index and understand what it means for your health." />} />
               <Route path="/tools/mortgage-calculator" element={<ToolPlaceholder toolName="Mortgage Calculator" toolDescription="Calculate mortgage payments and generate amortization schedules based on loan terms." />} />
               <Route path="/tools/percentage-calculator" element={<ToolPlaceholder toolName="Percentage Calculator" toolDescription="Calculate percentages easily. Find percentage increases, decreases, and differences." />} />
@@ -109,7 +102,6 @@ const App = () => {
               <Route path="/tools/currency-converter" element={<ToolPlaceholder toolName="Currency Converter" toolDescription="Convert between different currencies using up-to-date exchange rates." />} />
               <Route path="/tools/binary-decimal" element={<ToolPlaceholder toolName="Binary Decimal Converter" toolDescription="Convert between binary, decimal, hexadecimal, and octal number systems." />} />
               
-              {/* Unit Converters */}
               <Route path="/tools/unit-converter" element={<ToolPlaceholder toolName="Unit Converter" toolDescription="Convert between different units of measurement across multiple categories." />} />
               <Route path="/tools/length-converter" element={<ToolPlaceholder toolName="Length Converter" toolDescription="Convert between different units of length such as meters, feet, inches, and more." />} />
               <Route path="/tools/weight-converter" element={<ToolPlaceholder toolName="Weight Converter" toolDescription="Convert between different units of weight including kilograms, pounds, ounces, and more." />} />
@@ -121,7 +113,6 @@ const App = () => {
               <Route path="/tools/pressure-converter" element={<ToolPlaceholder toolName="Pressure Converter" toolDescription="Convert between different pressure units like pascals, bars, psi, and more." />} />
               <Route path="/tools/angle-converter" element={<ToolPlaceholder toolName="Angle Converter" toolDescription="Convert between different angle units including degrees, radians, and gradians." />} />
               
-              {/* Security & Encryption Tools */}
               <Route path="/tools/md5-generator" element={<ToolPlaceholder toolName="MD5 Hash Generator" toolDescription="Generate MD5 hashes from text or files. Verify data integrity with checksum comparison." />} />
               <Route path="/tools/sha256-generator" element={<ToolPlaceholder toolName="SHA256 Hash Generator" toolDescription="Generate secure SHA256 hashes for passwords, files, and data verification." />} />
               <Route path="/tools/hash-identifier" element={<ToolPlaceholder toolName="Hash Identifier" toolDescription="Identify different types of cryptographic hashes by pattern recognition." />} />
@@ -132,7 +123,6 @@ const App = () => {
               <Route path="/tools/password-strength" element={<ToolPlaceholder toolName="Password Strength Checker" toolDescription="Evaluate the strength of your passwords against common security standards and best practices." />} />
               <Route path="/tools/jwt-decoder" element={<ToolPlaceholder toolName="JWT Decoder" toolDescription="Decode and verify JSON Web Tokens to inspect their contents and validate signatures." />} />
               
-              {/* Social Media Tools */}
               <Route path="/tools/youtube-thumbnail" element={<ToolPlaceholder toolName="YouTube Thumbnail Downloader" toolDescription="Download thumbnails from YouTube videos in different resolutions." />} />
               <Route path="/tools/social-media-image-resizer" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
               <Route path="/tools/hashtag-generator" element={<ToolPlaceholder toolName="Hashtag Generator" toolDescription="Generate relevant hashtags for your content based on keywords and trending topics." />} />
@@ -144,7 +134,6 @@ const App = () => {
               <Route path="/tools/social-profile-analyzer" element={<ToolPlaceholder toolName="Social Profile Analyzer" toolDescription="Analyze social media profiles for engagement metrics and optimization opportunities." />} />
               <Route path="/tools/post-scheduler" element={<ToolPlaceholder toolName="Post Scheduler" toolDescription="Find the optimal times to post on social media based on audience activity patterns." />} />
               
-              {/* Miscellaneous */}
               <Route path="/tools/random-number-generator" element={<ToolPlaceholder toolName="Random Number Generator" toolDescription="Generate random numbers within a specified range with options for uniqueness and distribution." />} />
               <Route path="/tools/uuid-generator" element={<ToolPlaceholder toolName="UUID Generator" toolDescription="Generate UUIDs/GUIDs in various formats for database and application use." />} />
               <Route path="/tools/coin-flip" element={<ToolPlaceholder toolName="Coin Flip" toolDescription="Flip a virtual coin for making decisions with randomized outcomes." />} />
@@ -156,12 +145,10 @@ const App = () => {
               <Route path="/tools/screen-recorder" element={<ToolPlaceholder toolName="Screen Recorder" toolDescription="Record your screen directly in browser with audio narration and editing options." />} />
               <Route path="/tools/meme-generator" element={<ToolPlaceholder toolName="Meme Generator" toolDescription="Create custom memes with popular templates or upload your own images." />} />
               
-              {/* Pages Routes */}
               <Route path="/categories" element={<Categories />} />
               <Route path="/about" element={<About />} />
               <Route path="/all-tools" element={<AllTools />} />
               
-              {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>

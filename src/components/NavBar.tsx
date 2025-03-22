@@ -66,15 +66,17 @@ export const NavBar = () => {
           <span className="font-semibold text-lg md:text-xl tracking-tight">MultiTools</span>
         </Link>
 
-        {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center space-x-8">
-          <SearchBar className="w-64" />
-          <nav className="flex items-center space-x-6">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/categories">Categories</NavLink>
-            <NavLink to="/about">About</NavLink>
-          </nav>
+        {/* Desktop Nav - Centered SearchBar */}
+        <div className="hidden md:flex items-center justify-center flex-1 mx-4">
+          <SearchBar className="w-full max-w-md" />
         </div>
+
+        {/* Desktop Nav Links */}
+        <nav className="hidden md:flex items-center space-x-6">
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/categories">Categories</NavLink>
+          <NavLink to="/about">About</NavLink>
+        </nav>
 
         {/* Mobile Menu Button */}
         <button
