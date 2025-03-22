@@ -1,14 +1,14 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavBar } from '@/components/NavBar';
 import { Footer } from '@/components/Footer';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Copy, Check, Trash, Upload, Code, FileType } from 'lucide-react';
+import { Copy, Check, Trash, Upload, Code, FileType, ArrowRight, ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link, useNavigate } from 'react-router-dom';
 
 type FileType = 'json' | 'html' | 'css' | 'javascript' | 'sql' | 'xml' | 'markdown' | 'text';
 
@@ -20,6 +20,11 @@ const DevFormatting = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const formatCode = () => {
     try {
@@ -32,14 +37,12 @@ const DevFormatting = () => {
 
       let formatted = '';
       
-      // Format based on file type
       switch (fileType) {
         case 'json':
           const parsed = JSON.parse(input);
           formatted = JSON.stringify(parsed, null, 2);
           break;
         case 'html':
-          // Basic HTML formatting - in a real app you'd use a proper HTML formatter
           formatted = input
             .replace(/>\s*</g, '>\n<')
             .replace(/(<[^>]+>)/g, (match) => {
@@ -50,7 +53,6 @@ const DevFormatting = () => {
             .join('\n');
           break;
         case 'css':
-          // Basic CSS formatting
           formatted = input
             .replace(/\s*{\s*/g, ' {\n  ')
             .replace(/\s*;\s*/g, ';\n  ')
@@ -58,14 +60,10 @@ const DevFormatting = () => {
             .replace(/\n\s*\n/g, '\n');
           break;
         case 'javascript':
-          // For JS, we do some basic formatting
-          // In a real app, you'd use a proper JS formatter
           try {
-            // This is a simplified approach - real formatter would be more sophisticated
             const obj = eval('(' + input + ')');
             formatted = JSON.stringify(obj, null, 2);
           } catch (e) {
-            // If it's not valid JS object, just do basic formatting
             formatted = input
               .replace(/\s*{\s*/g, ' {\n  ')
               .replace(/\s*;\s*/g, ';\n  ')
@@ -74,7 +72,6 @@ const DevFormatting = () => {
           }
           break;
         case 'sql':
-          // Basic SQL formatting
           formatted = input
             .replace(/\s+/g, ' ')
             .replace(/\s*,\s*/g, ', ')
@@ -83,7 +80,6 @@ const DevFormatting = () => {
             .trim();
           break;
         case 'xml':
-          // Basic XML formatting
           formatted = input
             .replace(/>\s*</g, '>\n<')
             .replace(/(<[^>]+>)/g, (match) => {
@@ -94,14 +90,12 @@ const DevFormatting = () => {
             .join('\n');
           break;
         case 'markdown':
-          // For markdown, we just clean up extra spaces and normalize line breaks
           formatted = input
             .replace(/\n{3,}/g, '\n\n')
             .replace(/\s+\n/g, '\n')
             .trim();
           break;
         default:
-          // For plain text, just normalize spacing
           formatted = input
             .replace(/\n{3,}/g, '\n\n')
             .replace(/\s+\n/g, '\n')
@@ -140,14 +134,12 @@ const DevFormatting = () => {
 
       let minified = '';
       
-      // Minify based on file type
       switch (fileType) {
         case 'json':
           const parsed = JSON.parse(input);
           minified = JSON.stringify(parsed);
           break;
         case 'html':
-          // Basic HTML minification
           minified = input
             .replace(/\s+/g, ' ')
             .replace(/>\s+</g, '><')
@@ -156,7 +148,6 @@ const DevFormatting = () => {
             .trim();
           break;
         case 'css':
-          // Basic CSS minification
           minified = input
             .replace(/\/\*[\s\S]*?\*\//g, '')
             .replace(/\s+/g, ' ')
@@ -168,7 +159,6 @@ const DevFormatting = () => {
             .trim();
           break;
         case 'javascript':
-          // Basic JS minification
           minified = input
             .replace(/\/\/.*$/gm, '')
             .replace(/\/\*[\s\S]*?\*\//g, '')
@@ -181,14 +171,12 @@ const DevFormatting = () => {
             .trim();
           break;
         case 'sql':
-          // Basic SQL minification
           minified = input
             .replace(/--.*$/gm, '')
             .replace(/\s+/g, ' ')
             .trim();
           break;
         case 'xml':
-          // Basic XML minification
           minified = input
             .replace(/>\s+</g, '><')
             .replace(/\s+>/g, '>')
@@ -197,7 +185,6 @@ const DevFormatting = () => {
             .trim();
           break;
         default:
-          // For markdown and plain text, we just remove extra whitespace
           minified = input
             .replace(/\s+/g, ' ')
             .trim();
@@ -251,7 +238,6 @@ const DevFormatting = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Try to detect file type from extension
     const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
     
     if (fileExtension === 'json') setFileType('json');
@@ -271,6 +257,29 @@ const DevFormatting = () => {
     reader.readAsText(file);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const relatedFormatters = [
+    { id: 'json-formatter', name: 'JSON Formatter', path: '/tools/json-formatter' },
+    { id: 'html-minifier', name: 'HTML Minifier', path: '/tools/html-minifier' },
+    { id: 'css-minifier', name: 'CSS Minifier', path: '/tools/css-minifier' },
+    { id: 'js-minifier', name: 'JavaScript Minifier', path: '/tools/js-minifier' },
+    { id: 'sql-formatter', name: 'SQL Formatter', path: '/tools/sql-formatter' },
+    { id: 'markdown-to-html', name: 'Markdown to HTML', path: '/tools/markdown-to-html' },
+  ];
+
+  const recommendedFormatters = relatedFormatters.filter(formatter => {
+    if (fileType === 'json' && formatter.id === 'json-formatter') return false;
+    if (fileType === 'html' && formatter.id === 'html-minifier') return false;
+    if (fileType === 'css' && formatter.id === 'css-minifier') return false;
+    if (fileType === 'javascript' && formatter.id === 'js-minifier') return false;
+    if (fileType === 'sql' && formatter.id === 'sql-formatter') return false;
+    if (fileType === 'markdown' && formatter.id === 'markdown-to-html') return false;
+    return true;
+  }).slice(0, 3);
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -280,11 +289,23 @@ const DevFormatting = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-2">Dev Formatting</h1>
-            <p className="text-muted-foreground">
-              One tool for formatting ALL types of files - JSON, HTML, CSS, JavaScript, SQL, XML, Markdown and more
-            </p>
+          <div className="mb-6 flex items-center">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleBack} 
+              className="mr-2"
+              aria-label="Go back"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Back
+            </Button>
+            <div className="text-center flex-grow">
+              <h1 className="text-3xl font-bold mb-2">Dev Formatter</h1>
+              <p className="text-muted-foreground">
+                One tool for formatting ALL types of files - JSON, HTML, CSS, JavaScript, SQL, XML, Markdown and more
+              </p>
+            </div>
           </div>
 
           <Tabs defaultValue="json" onValueChange={(value) => setFileType(value as FileType)} className="mb-6">
@@ -301,7 +322,6 @@ const DevFormatting = () => {
           </Tabs>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Input Section */}
             <Card className="p-4">
               <div className="mb-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Input {fileType.toUpperCase()}</h2>
@@ -339,7 +359,6 @@ const DevFormatting = () => {
               </div>
             </Card>
 
-            {/* Output Section */}
             <Card className="p-4">
               <div className="mb-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Formatted {fileType.toUpperCase()}</h2>
@@ -382,8 +401,24 @@ const DevFormatting = () => {
             </Card>
           </div>
 
+          <div className="mt-8 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Recommended Formatters</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {recommendedFormatters.map((formatter) => (
+                <Link key={formatter.id} to={formatter.path}>
+                  <Card className="p-4 hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-medium">{formatter.name}</h3>
+                      <ArrowRight className="h-4 w-4 text-primary" />
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">About Dev Formatting</h2>
+            <h2 className="text-xl font-semibold mb-4">About Dev Formatter</h2>
             <Card className="p-6">
               <p className="mb-4">
                 Dev Formatting is an all-in-one tool for developers to format and beautify various types of code and markup languages.

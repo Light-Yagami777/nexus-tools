@@ -114,6 +114,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'code',
     path: '/tools/meta-tag-generator',
+    isNew: true,
   },
   {
     id: 'keyword-density-checker',
@@ -122,6 +123,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'search',
     path: '/tools/keyword-density',
+    isNew: true,
   },
   {
     id: 'sitemap-generator',
@@ -130,6 +132,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'file-text',
     path: '/tools/sitemap-generator',
+    isNew: true,
   },
   {
     id: 'robots-txt-generator',
@@ -283,8 +286,8 @@ export const tools: Tool[] = [
     isFeatured: true,
   },
   {
-    id: 'dev-formatting',
-    name: 'Dev Formatting',
+    id: 'dev-formatter',
+    name: 'Dev Formatter',
     description: 'One tool for formatting ALL types of files',
     category: 'Developer Tools',
     icon: 'code',
