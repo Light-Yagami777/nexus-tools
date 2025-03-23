@@ -19,6 +19,11 @@ import WebpToPng from "./pages/tools/WebpToPng";
 import KeywordDensity from "./pages/tools/KeywordDensity";
 import MetaTagGenerator from "./pages/tools/MetaTagGenerator";
 import SitemapGenerator from "./pages/tools/SitemapGenerator";
+import GifMaker from "./pages/tools/GifMaker";
+import ImageCropper from "./pages/tools/ImageCropper";
+import ScreenshotToPdf from "./pages/tools/ScreenshotToPdf";
+import RobotsTxtGenerator from "./pages/tools/RobotsTxtGenerator";
+import GoogleIndexChecker from "./pages/tools/GoogleIndexChecker";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
@@ -70,12 +75,12 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               
+              {/* Active tools */}
               <Route path="/tools/word-counter" element={<WordCounter />} />
               <Route path="/tools/password-generator" element={<PasswordGenerator />} />
               <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
               <Route path="/tools/dev-formatting" element={<DevFormatting />} />
               <Route path="/tools/image-to-png" element={<ImageToPng />} />
-              
               <Route path="/tools/image-to-jpg" element={<ImageToJpg />} />
               <Route path="/tools/image-resizer" element={<ImageResizer />} />
               <Route path="/tools/image-compressor" element={<ImageCompressor />} />
@@ -84,15 +89,13 @@ const App = () => {
               <Route path="/tools/keyword-density" element={<KeywordDensity />} />
               <Route path="/tools/meta-tag-generator" element={<MetaTagGenerator />} />
               <Route path="/tools/sitemap-generator" element={<SitemapGenerator />} />
+              <Route path="/tools/gif-maker" element={<GifMaker />} />
+              <Route path="/tools/image-cropper" element={<ImageCropper />} />
+              <Route path="/tools/screenshot-to-pdf" element={<ScreenshotToPdf />} />
+              <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
+              <Route path="/tools/google-index-checker" element={<GoogleIndexChecker />} />
               
-              <Route path="/tools/gif-maker" element={<ToolPlaceholder toolName="GIF Maker" toolDescription="Create animated GIFs from a series of images. Perfect for creating animations, memes, and sharing dynamic content." />} />
-              <Route path="/tools/image-cropper" element={<ToolPlaceholder toolName="Image Cropper" toolDescription="Precisely crop your images to any size or aspect ratio. Remove unwanted parts and focus on what matters." />} />
-              <Route path="/tools/screenshot-to-pdf" element={<ToolPlaceholder toolName="Screenshot to PDF" toolDescription="Convert screenshots to PDF documents. Great for documentation, reports, and archiving webpage captures." />} />
-              
-              <Route path="/tools/robots-txt-generator" element={<ToolPlaceholder toolName="Robots.txt Generator" toolDescription="Create robots.txt files to control crawler access to your website. Guide search engines on what to index and what to ignore." />} />
-              
-              <Route path="/tools/google-index-checker" element={<ToolPlaceholder toolName="Google Index Checker" toolDescription="Check if your pages are indexed by Google. Identify indexing issues and track your website's presence in search results." />} />
-              
+              {/* Tool pages with placeholders */}
               <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />
               <Route path="/tools/page-speed-checker" element={<ToolPlaceholder toolName="Page Speed Checker" toolDescription="Test your website loading speed and get recommendations for improvements. Boost user experience and SEO ranking." />} />
               <Route path="/tools/xml-sitemap-validator" element={<ToolPlaceholder toolName="XML Sitemap Validator" toolDescription="Validate your XML sitemaps for errors and compliance with search engine requirements." />} />

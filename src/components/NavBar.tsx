@@ -56,11 +56,11 @@ export const NavBar = () => {
         <Link to="/" className="flex items-center space-x-2">
           <div className="bg-primary text-white p-2 rounded-lg">
             <motion.div 
-              className="font-bold text-lg flex items-center justify-center w-10 h-10"
+              className="font-bold text-lg flex items-center justify-center w-12 h-12"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Box className="w-6 h-6" />
+              <Box className="w-7 h-7" />
             </motion.div>
           </div>
           <span className="font-semibold text-lg md:text-xl tracking-tight">Nexus Tools</span>
