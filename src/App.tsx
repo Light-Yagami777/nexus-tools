@@ -17,6 +17,8 @@ import ImageCompressor from "./pages/tools/ImageCompressor";
 import ImageToBase64 from "./pages/tools/ImageToBase64";
 import WebpToPng from "./pages/tools/WebpToPng";
 import KeywordDensity from "./pages/tools/KeywordDensity";
+import MetaTagGenerator from "./pages/tools/MetaTagGenerator";
+import SitemapGenerator from "./pages/tools/SitemapGenerator";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
 import Categories from "./pages/Categories";
@@ -80,16 +82,17 @@ const App = () => {
               <Route path="/tools/image-to-base64" element={<ImageToBase64 />} />
               <Route path="/tools/webp-to-png" element={<WebpToPng />} />
               <Route path="/tools/keyword-density" element={<KeywordDensity />} />
+              <Route path="/tools/meta-tag-generator" element={<MetaTagGenerator />} />
+              <Route path="/tools/sitemap-generator" element={<SitemapGenerator />} />
               
               <Route path="/tools/gif-maker" element={<ToolPlaceholder toolName="GIF Maker" toolDescription="Create animated GIFs from a series of images. Perfect for creating animations, memes, and sharing dynamic content." />} />
               <Route path="/tools/image-cropper" element={<ToolPlaceholder toolName="Image Cropper" toolDescription="Precisely crop your images to any size or aspect ratio. Remove unwanted parts and focus on what matters." />} />
               <Route path="/tools/screenshot-to-pdf" element={<ToolPlaceholder toolName="Screenshot to PDF" toolDescription="Convert screenshots to PDF documents. Great for documentation, reports, and archiving webpage captures." />} />
               
-              <Route path="/tools/meta-tag-generator" element={<ToolPlaceholder toolName="Meta Tag Generator" toolDescription="Generate optimized meta tags for better SEO. Create title, description, and other meta tags for improved search visibility." />} />
-              <Route path="/tools/sitemap-generator" element={<ToolPlaceholder toolName="Sitemap Generator" toolDescription="Generate XML sitemaps for your website to help search engines discover and index your pages more efficiently." />} />
               <Route path="/tools/robots-txt-generator" element={<ToolPlaceholder toolName="Robots.txt Generator" toolDescription="Create robots.txt files to control crawler access to your website. Guide search engines on what to index and what to ignore." />} />
               
               <Route path="/tools/google-index-checker" element={<ToolPlaceholder toolName="Google Index Checker" toolDescription="Check if your pages are indexed by Google. Identify indexing issues and track your website's presence in search results." />} />
+              
               <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />
               <Route path="/tools/page-speed-checker" element={<ToolPlaceholder toolName="Page Speed Checker" toolDescription="Test your website loading speed and get recommendations for improvements. Boost user experience and SEO ranking." />} />
               <Route path="/tools/xml-sitemap-validator" element={<ToolPlaceholder toolName="XML Sitemap Validator" toolDescription="Validate your XML sitemaps for errors and compliance with search engine requirements." />} />
