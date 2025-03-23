@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +31,7 @@ import Categories from "./pages/Categories";
 import { Tool } from "./utils/toolsData";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import ToolLayout from "./components/ToolLayout";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -45,23 +47,13 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const ToolPlaceholder = ({ toolName, toolDescription = "This tool is coming soon! We're working hard to implement it." }: { toolName: string, toolDescription?: string }) => (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-grow flex items-center justify-center">
-        <div className="max-w-3xl w-full px-6 py-12">
-          <h1 className="text-3xl font-bold mb-6">{toolName}</h1>
-          <div className="p-8 rounded-xl border bg-card text-card-foreground shadow-sm">
-            <p className="text-lg text-center">
-              {toolDescription}
-            </p>
-            <div className="mt-6 flex justify-center">
-              <a href="/" className="text-primary hover:underline font-medium">
-                ← Return to Home
-              </a>
-            </div>
-          </div>
-        </div>
+    <ToolLayout title={toolName}>
+      <div className="p-8 rounded-xl border bg-card text-card-foreground shadow-sm">
+        <p className="text-lg text-center">
+          {toolDescription}
+        </p>
       </div>
-    </div>
+    </ToolLayout>
   );
 
   return (
@@ -95,7 +87,7 @@ const App = () => {
               <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
               <Route path="/tools/google-index-checker" element={<GoogleIndexChecker />} />
               
-              {/* Tool pages with placeholders */}
+              {/* Tool pages with working placeholders */}
               <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />
               <Route path="/tools/page-speed-checker" element={<ToolPlaceholder toolName="Page Speed Checker" toolDescription="Test your website loading speed and get recommendations for improvements. Boost user experience and SEO ranking." />} />
               <Route path="/tools/xml-sitemap-validator" element={<ToolPlaceholder toolName="XML Sitemap Validator" toolDescription="Validate your XML sitemaps for errors and compliance with search engine requirements." />} />
@@ -106,6 +98,7 @@ const App = () => {
               <Route path="/tools/case-converter" element={<ToolPlaceholder toolName="Case Converter" toolDescription="Convert text between different cases: uppercase, lowercase, title case, sentence case, and more." />} />
               <Route path="/tools/lorem-ipsum" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate dummy text for your designs. Customize length, format, and style to fit your project needs." />} />
               <Route path="/tools/text-to-speech" element={<ToolPlaceholder toolName="Text to Speech" toolDescription="Convert text to natural-sounding speech. Choose from multiple voices and download as audio files." />} />
+              <Route path="/tools/speech-to-text" element={<ToolPlaceholder toolName="Speech to Text" toolDescription="Convert spoken language into written text. Transcribe audio files or record directly in your browser." />} />
               <Route path="/tools/url-encoder-decoder" element={<ToolPlaceholder toolName="URL Encoder/Decoder" toolDescription="Encode or decode URL strings for safe transmission in HTTP requests and responses." />} />
               <Route path="/tools/text-diff" element={<ToolPlaceholder toolName="Text Diff Checker" toolDescription="Compare two texts and find differences. Highlight additions, deletions, and modifications between versions." />} />
               <Route path="/tools/text-formatter" element={<ToolPlaceholder toolName="Text Formatter" toolDescription="Format and beautify your text with options for indentation, line breaks, and spacing." />} />
@@ -144,7 +137,6 @@ const App = () => {
               <Route path="/tools/pressure-converter" element={<ToolPlaceholder toolName="Pressure Converter" toolDescription="Convert between different pressure units like pascals, bars, psi, and more." />} />
               <Route path="/tools/angle-converter" element={<ToolPlaceholder toolName="Angle Converter" toolDescription="Convert between different angle units including degrees, radians, and gradians." />} />
               
-              <Route path="/tools/password-generator" element={<PasswordGenerator />} />
               <Route path="/tools/md5-generator" element={<ToolPlaceholder toolName="MD5 Hash Generator" toolDescription="Generate MD5 hashes from text or files. Verify data integrity with checksum comparison." />} />
               <Route path="/tools/sha256-generator" element={<ToolPlaceholder toolName="SHA256 Hash Generator" toolDescription="Generate secure SHA256 hashes for passwords, files, and data verification." />} />
               <Route path="/tools/hash-identifier" element={<ToolPlaceholder toolName="Hash Identifier" toolDescription="Identify different types of cryptographic hashes by pattern recognition." />} />
