@@ -16,7 +16,6 @@ import ImageResizer from "./pages/tools/ImageResizer";
 import ImageCompressor from "./pages/tools/ImageCompressor";
 import ImageToBase64 from "./pages/tools/ImageToBase64";
 import WebpToPng from "./pages/tools/WebpToPng";
-import JsonFormatter from "./pages/tools/JsonFormatter";
 import KeywordDensity from "./pages/tools/KeywordDensity";
 import AllTools from "./pages/AllTools";
 import About from "./pages/About";
@@ -74,7 +73,6 @@ const App = () => {
               <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
               <Route path="/tools/dev-formatting" element={<DevFormatting />} />
               <Route path="/tools/image-to-png" element={<ImageToPng />} />
-              <Route path="/tools/json-formatter" element={<JsonFormatter />} />
               
               <Route path="/tools/image-to-jpg" element={<ImageToJpg />} />
               <Route path="/tools/image-resizer" element={<ImageResizer />} />
@@ -108,7 +106,6 @@ const App = () => {
               <Route path="/tools/markdown-editor" element={<ToolPlaceholder toolName="Markdown Editor" toolDescription="Write and preview markdown in real-time. Export to HTML or formatted text for documentation." />} />
               <Route path="/tools/string-utilities" element={<ToolPlaceholder toolName="String Utilities" toolDescription="Various string manipulation utilities including trim, replace, extract, and more." />} />
               
-              <Route path="/tools/json-formatter" element={<ToolPlaceholder toolName="JSON Formatter" toolDescription="Format and validate your JSON data with syntax highlighting. Identify errors and improve readability." />} />
               <Route path="/tools/color-picker" element={<ToolPlaceholder toolName="Color Picker" toolDescription="Select and generate color codes for your projects. Convert between RGB, HEX, HSL, and more." />} />
               <Route path="/tools/css-minifier" element={<ToolPlaceholder toolName="CSS Minifier" toolDescription="Minify your CSS files to reduce file size and improve loading speed." />} />
               <Route path="/tools/js-minifier" element={<ToolPlaceholder toolName="JavaScript Minifier" toolDescription="Minify your JavaScript code to improve website performance and reduce bandwidth usage." />} />
@@ -141,6 +138,7 @@ const App = () => {
               <Route path="/tools/pressure-converter" element={<ToolPlaceholder toolName="Pressure Converter" toolDescription="Convert between different pressure units like pascals, bars, psi, and more." />} />
               <Route path="/tools/angle-converter" element={<ToolPlaceholder toolName="Angle Converter" toolDescription="Convert between different angle units including degrees, radians, and gradians." />} />
               
+              <Route path="/tools/password-generator" element={<PasswordGenerator />} />
               <Route path="/tools/md5-generator" element={<ToolPlaceholder toolName="MD5 Hash Generator" toolDescription="Generate MD5 hashes from text or files. Verify data integrity with checksum comparison." />} />
               <Route path="/tools/sha256-generator" element={<ToolPlaceholder toolName="SHA256 Hash Generator" toolDescription="Generate secure SHA256 hashes for passwords, files, and data verification." />} />
               <Route path="/tools/hash-identifier" element={<ToolPlaceholder toolName="Hash Identifier" toolDescription="Identify different types of cryptographic hashes by pattern recognition." />} />
