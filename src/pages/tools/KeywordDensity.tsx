@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { NavBar } from '@/components/NavBar';
 import { Footer } from '@/components/Footer';
@@ -29,12 +28,10 @@ const KeywordDensity = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Common words to exclude
   const commonWords = new Set([
     'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do',
     'at', 'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she', 'or', 'an', 'will', 'my', 'one', 'all', 'would',
@@ -54,7 +51,6 @@ const KeywordDensity = () => {
       return;
     }
 
-    // Count words and characters
     const words = content.toLowerCase()
       .replace(/[^\w\s]/g, '')
       .split(/\s+/)
@@ -63,21 +59,18 @@ const KeywordDensity = () => {
     const wordCount = words.length;
     const charCount = content.length;
     
-    // Count keyword occurrences
     const keywordCounts: Record<string, number> = {};
     words.forEach(word => {
       if (excludeCommonWords && commonWords.has(word)) return;
       keywordCounts[word] = (keywordCounts[word] || 0) + 1;
     });
     
-    // Calculate keyword densities
     const keywordData: KeywordData[] = Object.keys(keywordCounts).map(keyword => ({
       keyword,
       count: keywordCounts[keyword],
       density: (keywordCounts[keyword] / wordCount) * 100
     }));
     
-    // Sort by count (descending)
     keywordData.sort((a, b) => b.count - a.count);
     
     setKeywords(keywordData);
@@ -110,7 +103,6 @@ const KeywordDensity = () => {
   };
 
   const copyToClipboard = () => {
-    // Format the keyword data as a table
     const keywordTable = keywords.map(k => 
       `${k.keyword}\t${k.count}\t${k.density.toFixed(2)}%`
     ).join('\n');
@@ -159,7 +151,6 @@ const KeywordDensity = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Input Section */}
             <Card className="p-4">
               <div className="mb-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Content</h2>
@@ -221,7 +212,6 @@ const KeywordDensity = () => {
               </Button>
             </Card>
 
-            {/* Results Section */}
             <Card className="p-4">
               <div className="mb-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Keyword Analysis</h2>
@@ -280,7 +270,6 @@ const KeywordDensity = () => {
             </Card>
           </div>
 
-          {/* Tips Section */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">SEO Tips for Keyword Density</h2>
             <Card className="p-6">
@@ -295,7 +284,6 @@ const KeywordDensity = () => {
             </Card>
           </div>
 
-          {/* Recommended Tools */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Try These Related Tools</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

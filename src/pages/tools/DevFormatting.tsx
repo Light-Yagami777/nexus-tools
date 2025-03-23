@@ -262,7 +262,6 @@ const DevFormatting = () => {
   };
 
   const relatedFormatters = [
-    { id: 'json-formatter', name: 'JSON Formatter', path: '/tools/json-formatter' },
     { id: 'html-minifier', name: 'HTML Minifier', path: '/tools/html-minifier' },
     { id: 'css-minifier', name: 'CSS Minifier', path: '/tools/css-minifier' },
     { id: 'js-minifier', name: 'JavaScript Minifier', path: '/tools/js-minifier' },
@@ -271,7 +270,6 @@ const DevFormatting = () => {
   ];
 
   const recommendedFormatters = relatedFormatters.filter(formatter => {
-    if (fileType === 'json' && formatter.id === 'json-formatter') return false;
     if (fileType === 'html' && formatter.id === 'html-minifier') return false;
     if (fileType === 'css' && formatter.id === 'css-minifier') return false;
     if (fileType === 'javascript' && formatter.id === 'js-minifier') return false;
@@ -301,7 +299,7 @@ const DevFormatting = () => {
               Back
             </Button>
             <div className="text-center flex-grow">
-              <h1 className="text-3xl font-bold mb-2">Dev Formatter</h1>
+              <h1 className="text-3xl font-bold mb-2">Formatter</h1>
               <p className="text-muted-foreground">
                 One tool for formatting ALL types of files - JSON, HTML, CSS, JavaScript, SQL, XML, Markdown and more
               </p>
@@ -418,10 +416,10 @@ const DevFormatting = () => {
           </div>
 
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">About Dev Formatter</h2>
+            <h2 className="text-xl font-semibold mb-4">About Formatter</h2>
             <Card className="p-6">
               <p className="mb-4">
-                Dev Formatting is an all-in-one tool for developers to format and beautify various types of code and markup languages.
+                Formatter is an all-in-one tool for developers to format and beautify various types of code and markup languages.
               </p>
               <h3 className="font-semibold mt-4 mb-2">Supported File Types:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">

@@ -277,17 +277,8 @@ export const tools: Tool[] = [
 
   // Developer Tools
   {
-    id: 'json-formatter',
-    name: 'JSON Formatter',
-    description: 'Format and validate your JSON data with syntax highlighting',
-    category: 'Developer Tools',
-    icon: 'braces',
-    path: '/tools/json-formatter',
-    isFeatured: true,
-  },
-  {
-    id: 'dev-formatter',
-    name: 'Dev Formatter',
+    id: 'formatter',
+    name: 'Formatter',
     description: 'One tool for formatting ALL types of files',
     category: 'Developer Tools',
     icon: 'code',
