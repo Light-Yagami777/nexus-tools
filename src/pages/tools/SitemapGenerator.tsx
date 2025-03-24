@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/ToolLayout';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -9,9 +7,9 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Copy, RefreshCw, FileText, ChevronLeft, ArrowRight, Globe } from 'lucide-react';
+import { Copy, RefreshCw, FileText, ArrowRight, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SitemapGenerator = () => {
   const [baseUrl, setBaseUrl] = useState('');
@@ -23,7 +21,6 @@ const SitemapGenerator = () => {
   const [generatedSitemap, setGeneratedSitemap] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,7 +74,6 @@ const SitemapGenerator = () => {
     urls.forEach(url => {
       sitemap += '  <url>\n';
       
-      // Format the URL with the base URL if it's not a full URL
       const fullUrl = url.startsWith('http') ? url : `${baseUrlFormatted}${url.startsWith('/') ? url : '/' + url}`;
       sitemap += `    <loc>${fullUrl}</loc>\n`;
       
@@ -124,40 +120,19 @@ const SitemapGenerator = () => {
     setGeneratedSitemap('');
   };
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      <div className="flex-grow container mx-auto px-4 py-8">
+    <ToolLayout title="XML Sitemap Generator">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-6 flex items-center">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleBack} 
-              className="mr-2"
-              aria-label="Go back"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
-            <div className="text-center flex-grow">
-              <h1 className="text-3xl font-bold mb-2">XML Sitemap Generator</h1>
-              <p className="text-muted-foreground">
-                Create XML sitemaps to help search engines discover and index your pages
-              </p>
-            </div>
-          </div>
+          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
+            Create XML sitemaps to help search engines discover and index your pages
+          </p>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Input Form */}
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Site Configuration</h2>
               
@@ -286,7 +261,6 @@ const SitemapGenerator = () => {
               </div>
             </Card>
 
-            {/* Output Section */}
             <Card className="p-6">
               <div className="mb-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Generated Sitemap</h2>
@@ -322,7 +296,6 @@ const SitemapGenerator = () => {
             </Card>
           </div>
 
-          {/* Tips Section */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Sitemap Best Practices</h2>
             <Card className="p-6">
@@ -338,7 +311,6 @@ const SitemapGenerator = () => {
             </Card>
           </div>
 
-          {/* Recommended Tools */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Try These Related Tools</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -370,8 +342,7 @@ const SitemapGenerator = () => {
           </div>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

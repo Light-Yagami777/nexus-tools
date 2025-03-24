@@ -1,14 +1,12 @@
-
 import { useState, useRef } from "react";
-import { motion } from "framer-motion";
-import { NavBar } from "@/components/NavBar";
-import { Footer } from "@/components/Footer";
+import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { Image as LucideImageIcon, Upload, Download, Trash2, FileWarning } from "lucide-react";
+import { motion } from "framer-motion";
 
 const WebpToPng = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -25,7 +23,6 @@ const WebpToPng = () => {
     const file = e.target.files && e.target.files[0];
     
     if (file) {
-      // Check if file is a WebP image
       if (file.type !== "image/webp") {
         setError("Please select a WebP image file");
         toast({
@@ -39,11 +36,9 @@ const WebpToPng = () => {
       setSelectedImage(file);
       setError(null);
       
-      // Create a preview URL
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
       
-      // Set default filename (original name without extension)
       const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
       setFilename(nameWithoutExt);
     }
@@ -71,18 +66,12 @@ const WebpToPng = () => {
         throw new Error("Unable to get canvas context");
       }
       
-      // Create an image element to load the selected file
       const img = document.createElement("img");
       
       img.onload = () => {
-        // Set canvas dimensions to match the image
         canvas.width = img.width;
         canvas.height = img.height;
-        
-        // Draw the image onto the canvas
         ctx.drawImage(img, 0, 0);
-        
-        // Convert canvas to PNG data URL
         const pngUrl = canvas.toDataURL("image/png");
         setConvertedUrl(pngUrl);
         
@@ -104,7 +93,6 @@ const WebpToPng = () => {
         setIsConverting(false);
       };
       
-      // Load the image from the file
       img.src = URL.createObjectURL(selectedImage);
     } catch (err) {
       console.error("Error converting image:", err);
@@ -177,193 +165,184 @@ const WebpToPng = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+    <ToolLayout title="WebP to PNG Converter">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <header className="text-center mb-12">
+            <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
+              <LucideImageIcon className="h-6 w-6 text-primary" />
+            </div>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Convert WebP images to the widely supported PNG format. Preserve transparency and image quality.
+            </p>
+          </header>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-6"
           >
-            <header className="text-center mb-12">
-              <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <LucideImageIcon className="h-6 w-6 text-primary" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">WebP to PNG Converter</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Convert WebP images to the widely supported PNG format. Preserve transparency and image quality.
-              </p>
-            </header>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Input Section */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="space-y-6"
-            >
-              <div className="p-6 rounded-xl border bg-card">
-                <h2 className="text-xl font-semibold mb-4">Upload WebP Image</h2>
-                
-                <div className="space-y-4">
-                  <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="image-upload">Select WebP Image</Label>
-                    <Input
-                      id="image-upload"
-                      type="file"
-                      accept="image/webp"
-                      onChange={handleFileChange}
-                      className="cursor-pointer"
-                    />
-                    <p className="text-xs text-muted-foreground">Only WebP images are accepted</p>
-                  </div>
-                  
-                  {previewUrl && (
-                    <div className="mt-4">
-                      <p className="text-sm font-medium mb-2">Preview:</p>
-                      <div className="rounded-md overflow-hidden border bg-background/50 p-2">
-                        <img
-                          src={previewUrl}
-                          alt="Preview"
-                          className="max-w-full h-auto max-h-[300px] mx-auto"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {selectedImage && (
-                    <div className="mt-4 space-y-4">
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <Label htmlFor="filename">Filename</Label>
-                        <div className="flex">
-                          <Input
-                            id="filename"
-                            value={filename}
-                            onChange={(e) => setFilename(e.target.value)}
-                            className="rounded-r-none"
-                          />
-                          <div className="flex items-center px-3 border border-l-0 rounded-r-md bg-muted text-muted-foreground text-sm">
-                            .png
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <Button 
-                        onClick={convertToPng} 
-                        className="w-full"
-                        disabled={isConverting || !selectedImage}
-                      >
-                        {isConverting ? "Converting..." : "Convert to PNG"}
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={reset}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Reset
-                      </Button>
-                    </div>
-                  )}
-                  
-                  {error && (
-                    <div className="bg-destructive/15 text-destructive rounded-md p-3 flex items-center text-sm mt-4">
-                      <FileWarning className="h-4 w-4 mr-2" />
-                      {error}
-                    </div>
-                  )}
-                </div>
-              </div>
+            <div className="p-6 rounded-xl border bg-card">
+              <h2 className="text-xl font-semibold mb-4">Upload WebP Image</h2>
               
-              <div className="p-6 rounded-xl border bg-muted/30">
-                <h3 className="text-lg font-medium mb-3">About WebP to PNG Conversion</h3>
-                <p className="text-sm text-muted-foreground space-y-1 mb-3">
-                  WebP is a modern image format developed by Google that provides superior compression compared to PNG and JPEG, but it's not universally supported by all browsers and image editors.
-                </p>
-                <p className="text-sm text-muted-foreground space-y-1">
-                  Converting from WebP to PNG:
-                </p>
-                <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1 ml-2">
-                  <li>Preserves transparency (if present in the original WebP)</li>
-                  <li>Provides better compatibility across devices and applications</li>
-                  <li>Ensures your images can be viewed and edited by any software</li>
-                  <li>Results in lossless quality (no compression artifacts)</li>
-                </ul>
-              </div>
-            </motion.div>
-
-            {/* Output Section */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-6"
-            >
-              <div className="p-6 rounded-xl border bg-card h-full">
-                <h2 className="text-xl font-semibold mb-4">Converted PNG</h2>
+              <div className="space-y-4">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="image-upload">Select WebP Image</Label>
+                  <Input
+                    id="image-upload"
+                    type="file"
+                    accept="image/webp"
+                    onChange={handleFileChange}
+                    className="cursor-pointer"
+                  />
+                  <p className="text-xs text-muted-foreground">Only WebP images are accepted</p>
+                </div>
                 
-                {convertedUrl ? (
-                  <div className="space-y-4">
+                {previewUrl && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium mb-2">Preview:</p>
                     <div className="rounded-md overflow-hidden border bg-background/50 p-2">
                       <img
-                        src={convertedUrl}
-                        alt="Converted PNG"
+                        src={previewUrl}
+                        alt="Preview"
                         className="max-w-full h-auto max-h-[300px] mx-auto"
                       />
                     </div>
-                    
-                    <div className="bg-muted/40 p-3 rounded-md">
-                      <p className="text-sm text-center">
-                        <strong>Conversion Complete:</strong> Your WebP image has been successfully converted to PNG format with all image data preserved.
-                      </p>
-                    </div>
-                    
-                    <Separator />
-                    
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Button 
-                        onClick={downloadPng}
-                        className="flex-1"
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        Download PNG
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        onClick={copyToClipboard}
-                        className="flex-1"
-                      >
-                        {isCopied ? "Copied!" : "Copy to Clipboard"}
-                      </Button>
-                    </div>
-                    
-                    <canvas ref={canvasRef} className="hidden" />
                   </div>
-                ) : (
-                  <div className="border rounded-md border-dashed h-[300px] flex items-center justify-center">
-                    <div className="text-center text-muted-foreground p-4">
-                      <Upload className="h-8 w-8 mx-auto mb-2" />
-                      <p>No converted image yet</p>
-                      <p className="text-sm mt-1">
-                        Upload a WebP image and click "Convert to PNG" to see the result here
-                      </p>
+                )}
+                
+                {selectedImage && (
+                  <div className="mt-4 space-y-4">
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="filename">Filename</Label>
+                      <div className="flex">
+                        <Input
+                          id="filename"
+                          value={filename}
+                          onChange={(e) => setFilename(e.target.value)}
+                          className="rounded-r-none"
+                        />
+                        <div className="flex items-center px-3 border border-l-0 rounded-r-md bg-muted text-muted-foreground text-sm">
+                          .png
+                        </div>
+                      </div>
                     </div>
+                    
+                    <Button 
+                      onClick={convertToPng} 
+                      className="w-full"
+                      disabled={isConverting || !selectedImage}
+                    >
+                      {isConverting ? "Converting..." : "Convert to PNG"}
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={reset}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Reset
+                    </Button>
+                  </div>
+                )}
+                
+                {error && (
+                  <div className="bg-destructive/15 text-destructive rounded-md p-3 flex items-center text-sm mt-4">
+                    <FileWarning className="h-4 w-4 mr-2" />
+                    {error}
                   </div>
                 )}
               </div>
-            </motion.div>
-          </div>
+            </div>
+            
+            <div className="p-6 rounded-xl border bg-muted/30">
+              <h3 className="text-lg font-medium mb-3">About WebP to PNG Conversion</h3>
+              <p className="text-sm text-muted-foreground space-y-1 mb-3">
+                WebP is a modern image format developed by Google that provides superior compression compared to PNG and JPEG, but it's not universally supported by all browsers and image editors.
+              </p>
+              <p className="text-sm text-muted-foreground space-y-1">
+                Converting from WebP to PNG:
+              </p>
+              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1 ml-2">
+                <li>Preserves transparency (if present in the original WebP)</li>
+                <li>Provides better compatibility across devices and applications</li>
+                <li>Ensures your images can be viewed and edited by any software</li>
+                <li>Results in lossless quality (no compression artifacts)</li>
+              </ul>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="space-y-6"
+          >
+            <div className="p-6 rounded-xl border bg-card h-full">
+              <h2 className="text-xl font-semibold mb-4">Converted PNG</h2>
+              
+              {convertedUrl ? (
+                <div className="space-y-4">
+                  <div className="rounded-md overflow-hidden border bg-background/50 p-2">
+                    <img
+                      src={convertedUrl}
+                      alt="Converted PNG"
+                      className="max-w-full h-auto max-h-[300px] mx-auto"
+                    />
+                  </div>
+                  
+                  <div className="bg-muted/40 p-3 rounded-md">
+                    <p className="text-sm text-center">
+                      <strong>Conversion Complete:</strong> Your WebP image has been successfully converted to PNG format with all image data preserved.
+                    </p>
+                  </div>
+                  
+                  <Separator />
+                  
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button 
+                      onClick={downloadPng}
+                      className="flex-1"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download PNG
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      onClick={copyToClipboard}
+                      className="flex-1"
+                    >
+                      {isCopied ? "Copied!" : "Copy to Clipboard"}
+                    </Button>
+                  </div>
+                  
+                  <canvas ref={canvasRef} className="hidden" />
+                </div>
+              ) : (
+                <div className="border rounded-md border-dashed h-[300px] flex items-center justify-center">
+                  <div className="text-center text-muted-foreground p-4">
+                    <Upload className="h-8 w-8 mx-auto mb-2" />
+                    <p>No converted image yet</p>
+                    <p className="text-sm mt-1">
+                      Upload a WebP image and click "Convert to PNG" to see the result here
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
         </div>
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
+    </ToolLayout>
   );
 };
 
