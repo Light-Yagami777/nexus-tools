@@ -4,6 +4,7 @@ import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
 import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
+import { AdBanner } from "@/components/AdBanner";
 import { 
   getFeaturedTools, 
   getNewTools, 
@@ -169,7 +170,7 @@ const Index = () => {
           <div className="text-center">
             <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">SPONSORED</span>
             <div className="h-24 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-primary/20">
-              <p className="text-muted-foreground">Premium Ad Space</p>
+              <AdBanner adFormat="horizontal" className="w-full h-full" />
             </div>
           </div>
         </div>
@@ -212,7 +213,7 @@ const Index = () => {
             <div className="text-center">
               <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">ADVERTISEMENT</span>
               <div className="h-32 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
-                <p className="text-muted-foreground">Premium Ad Banner</p>
+                <AdBanner adFormat="rectangle" className="w-full h-full" />
               </div>
             </div>
           </div>

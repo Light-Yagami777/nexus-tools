@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { AdBanner } from "./AdBanner";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -62,6 +63,11 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
             <motion.h1 className="text-3xl font-bold">
               {title}
             </motion.h1>
+          </motion.div>
+          
+          {/* Ad Banner at the top of each tool */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <AdBanner className="w-full min-h-[100px] bg-secondary/20 rounded-lg overflow-hidden" />
           </motion.div>
           
           {children}

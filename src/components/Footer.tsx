@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { 
   Github, 
@@ -19,6 +18,7 @@ import {
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AdBanner } from "./AdBanner";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -70,26 +70,23 @@ export const Footer = () => {
 
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-transparent to-secondary/20">
-      {/* Decorative elements */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-primary/20 blur-3xl" />
       <div className="absolute bottom-40 right-20 w-60 h-60 rounded-full bg-pink-500/10 blur-3xl" />
       <div className="absolute bottom-20 left-40 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl" />
       
-      {/* Ad Space */}
       <div className="relative z-10 max-w-7xl mx-auto mt-16 px-6 md:px-10">
         <div className="glass-card p-6 rounded-2xl mb-10 border border-primary/20 shadow-lg overflow-hidden">
           <div className="text-center">
             <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">ADVERTISEMENT</span>
             <div className="h-28 sm:h-36 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
-              <p className="text-muted-foreground">Ad Space Available</p>
+              <AdBanner adFormat="horizontal" className="w-full h-full" />
             </div>
           </div>
         </div>
       </div>
       
-      {/* Newsletter Section */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
         <div className="glass rounded-2xl p-8 md:p-10 lg:p-12 mb-16 border border-primary/20 shadow-lg overflow-hidden">
           <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full blur-xl"></div>
@@ -132,27 +129,24 @@ export const Footer = () => {
         </div>
       </div>
       
-      {/* Main Footer Content */}
       <div className="relative z-10 pt-16 pb-8 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
-          {/* Additional Ad Space */}
           <div className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="col-span-1 md:col-span-3 text-center mb-4">
               <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">SPONSORED</span>
             </div>
             <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md h-40 flex items-center justify-center">
-              <p className="text-muted-foreground">Advertisement Spot 1</p>
+              <AdBanner adFormat="rectangle" className="w-full h-full" />
             </div>
             <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md h-40 flex items-center justify-center">
-              <p className="text-muted-foreground">Advertisement Spot 2</p>
+              <AdBanner adFormat="rectangle" className="w-full h-full" />
             </div>
             <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md h-40 flex items-center justify-center">
-              <p className="text-muted-foreground">Advertisement Spot 3</p>
+              <AdBanner adFormat="rectangle" className="w-full h-full" />
             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-            {/* Logo Section */}
             <div className="lg:col-span-2 space-y-6">
               <Link to="/" className="flex items-center space-x-2">
                 <div className="bg-gradient-to-br from-primary to-primary/80 text-white p-2 rounded-lg shadow-md">
@@ -182,7 +176,6 @@ export const Footer = () => {
               </div>
             </div>
 
-            {/* Footer Links */}
             {footerLinks.map((section, i) => (
               <div key={i} className="space-y-4">
                 <h4 className="font-semibold text-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">{section.title}</h4>
@@ -203,7 +196,6 @@ export const Footer = () => {
             ))}
           </div>
 
-          {/* Bottom Section */}
           <div className="mt-16 pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
               © {currentYear} MultiTools. All rights reserved.
