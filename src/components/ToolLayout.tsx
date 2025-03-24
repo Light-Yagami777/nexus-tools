@@ -38,7 +38,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-32 px-6">
+        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-40 px-6">
           <Link to="/" className="back-button flex items-center text-primary hover:text-primary/80 mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
