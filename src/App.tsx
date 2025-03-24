@@ -34,6 +34,12 @@ import ToolLayout from "./components/ToolLayout";
 import ScreenRecorder from "./pages/tools/ScreenRecorder";
 import XmlSitemapValidator from "./pages/tools/XmlSitemapValidator";
 import SeoAnalyzer from "./pages/tools/SeoAnalyzer";
+import JwtDecoder from "./pages/tools/JwtDecoder";
+import CaseConverter from "./pages/tools/CaseConverter";
+import LoremIpsumGenerator from "./pages/tools/LoremIpsumGenerator";
+import TextToSpeech from "./pages/tools/TextToSpeech";
+import SpeechToText from "./pages/tools/SpeechToText";
+import UrlEncoderDecoder from "./pages/tools/UrlEncoderDecoder";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -91,6 +97,12 @@ const App = () => {
               <Route path="/tools/screen-recorder" element={<ScreenRecorder />} />
               <Route path="/tools/xml-sitemap-validator" element={<XmlSitemapValidator />} />
               <Route path="/tools/seo-analyzer" element={<SeoAnalyzer />} />
+              <Route path="/tools/jwt-decoder" element={<JwtDecoder />} />
+              <Route path="/tools/case-converter" element={<CaseConverter />} />
+              <Route path="/tools/lorem-ipsum" element={<LoremIpsumGenerator />} />
+              <Route path="/tools/text-to-speech" element={<TextToSpeech />} />
+              <Route path="/tools/speech-to-text" element={<SpeechToText />} />
+              <Route path="/tools/url-encoder-decoder" element={<UrlEncoderDecoder />} />
               
               {/* Tool pages with working placeholders */}
               <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />

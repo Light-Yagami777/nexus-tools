@@ -1,8 +1,6 @@
 
-import { Link } from "react-router-dom";
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
-import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ToolLayoutProps {
@@ -39,19 +37,6 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
         variants={containerVariants}
       >
         <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-40 px-6">
-          <motion.div
-            variants={itemVariants}
-            className="back-button-container mb-6"
-          >
-            <Link 
-              to="/" 
-              className="back-button inline-flex items-center text-primary hover:text-primary/80 text-lg font-medium bg-primary/10 px-4 py-2 rounded-lg transition-colors"
-            >
-              <ArrowLeft className="mr-2 h-5 w-5" />
-              Back to Tools
-            </Link>
-          </motion.div>
-          
           <motion.h1 
             variants={itemVariants}
             className="text-3xl font-bold mb-8"
