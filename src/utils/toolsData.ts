@@ -235,6 +235,14 @@ export const tools: Tool[] = [
     path: '/tools/text-to-speech',
   },
   {
+    id: 'speech-to-text',
+    name: 'Speech to Text',
+    description: 'Convert spoken language into written text',
+    category: 'Text Tools',
+    icon: 'mic',
+    path: '/tools/speech-to-text',
+  },
+  {
     id: 'url-encoder-decoder',
     name: 'URL Encoder/Decoder',
     description: 'Encode or decode URL strings',
@@ -279,7 +287,7 @@ export const tools: Tool[] = [
   {
     id: 'formatter',
     name: 'Formatter',
-    description: 'One tool for formatting ALL types of files',
+    description: 'One tool for formatting code files',
     category: 'Developer Tools',
     icon: 'code',
     path: '/tools/dev-formatting',
@@ -349,14 +357,6 @@ export const tools: Tool[] = [
     category: 'Developer Tools',
     icon: 'code',
     path: '/tools/markdown-to-html',
-  },
-  {
-    id: 'sql-formatter',
-    name: 'SQL Formatter',
-    description: 'Format and beautify SQL queries',
-    category: 'Developer Tools',
-    icon: 'database',
-    path: '/tools/sql-formatter',
   },
 
   // Math & Calculators
@@ -826,3 +826,4 @@ export const categories: ToolCategory[] = [
 export const getToolById = (id: string): Tool | undefined => {
   return tools.find(tool => tool.id === id);
 };
+

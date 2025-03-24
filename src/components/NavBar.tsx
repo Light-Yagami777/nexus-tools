@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Box } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,11 +57,11 @@ export const NavBar = () => {
         <Link to="/" className="flex items-center space-x-2">
           <div className="bg-primary text-white p-1.5 rounded-lg">
             <motion.div 
-              className="font-bold text-lg flex items-center justify-center w-8 h-8"
+              className="font-bold text-lg flex items-center justify-center w-6 h-6"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Box className="w-5 h-5" />
+              <Box className="w-4 h-4" />
             </motion.div>
           </div>
           <span className="font-semibold text-lg md:text-xl tracking-tight">Nexus Tools</span>
@@ -76,20 +77,24 @@ export const NavBar = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/categories">Categories</NavLink>
           <NavLink to="/about">About</NavLink>
+          <ThemeToggle />
         </nav>
 
         {/* Mobile Menu Button */}
-        <button
-          className="p-2 md:hidden focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        <div className="flex items-center space-x-2 md:hidden">
+          <ThemeToggle />
+          <button
+            className="p-2 focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

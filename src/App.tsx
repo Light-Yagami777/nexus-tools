@@ -108,12 +108,11 @@ const App = () => {
               <Route path="/tools/color-picker" element={<ToolPlaceholder toolName="Color Picker" toolDescription="Select and generate color codes for your projects. Convert between RGB, HEX, HSL, and more." />} />
               <Route path="/tools/css-minifier" element={<ToolPlaceholder toolName="CSS Minifier" toolDescription="Minify your CSS files to reduce file size and improve loading speed." />} />
               <Route path="/tools/js-minifier" element={<ToolPlaceholder toolName="JavaScript Minifier" toolDescription="Minify your JavaScript code to improve website performance and reduce bandwidth usage." />} />
-              <Route path="/tools/html-minifier" element={<ToolPlaceholder toolName="HTML Minifier" toolDescription="Minify your HTML code by removing unnecessary whitespace, comments, and optional tags." />} />
+              
               <Route path="/tools/base64" element={<ToolPlaceholder toolName="Base64 Encoder/Decoder" toolDescription="Encode and decode Base64 data. Convert text, images, and binary files to and from Base64 format." />} />
               <Route path="/tools/regex-tester" element={<ToolPlaceholder toolName="Regex Tester" toolDescription="Test and debug regular expressions with real-time highlighting and explanation." />} />
               <Route path="/tools/html-to-markdown" element={<ToolPlaceholder toolName="HTML to Markdown" toolDescription="Convert HTML to Markdown syntax for easier editing and version control." />} />
               <Route path="/tools/markdown-to-html" element={<ToolPlaceholder toolName="Markdown to HTML" toolDescription="Convert Markdown to HTML code. Preview and download the generated HTML." />} />
-              <Route path="/tools/sql-formatter" element={<ToolPlaceholder toolName="SQL Formatter" toolDescription="Format and beautify SQL queries for better readability and debugging." />} />
               
               <Route path="/tools/bmi-calculator" element={<ToolPlaceholder toolName="BMI Calculator" toolDescription="Calculate your Body Mass Index and understand what it means for your health." />} />
               <Route path="/tools/mortgage-calculator" element={<ToolPlaceholder toolName="Mortgage Calculator" toolDescription="Calculate mortgage payments and generate amortization schedules based on loan terms." />} />

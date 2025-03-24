@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const ThemeToggle = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -40,19 +41,25 @@ export const ThemeToggle = () => {
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleTheme}
-      className="rounded-full"
-      aria-label="Toggle dark mode"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
-      {isDarkMode ? (
-        <Sun className="h-[1.2rem] w-[1.2rem]" />
-      ) : (
-        <Moon className="h-[1.2rem] w-[1.2rem]" />
-      )}
-    </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleTheme}
+        className="rounded-full"
+        aria-label="Toggle dark mode"
+      >
+        {isDarkMode ? (
+          <Sun className="h-[1.2rem] w-[1.2rem]" />
+        ) : (
+          <Moon className="h-[1.2rem] w-[1.2rem]" />
+        )}
+      </Button>
+    </motion.div>
   );
 };
 

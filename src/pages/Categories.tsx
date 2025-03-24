@@ -40,25 +40,6 @@ const Categories = () => {
             <SearchBar onSearch={handleSearch} className="w-full" />
           </div>
           
-          <div className="mb-8 overflow-x-auto pb-2 flex items-center justify-center space-x-2 no-scrollbar">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => {
-                  setSelectedCategory(category);
-                  setSearchQuery("");
-                }}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
-                  selectedCategory === category
-                    ? "bg-primary text-white shadow-md"
-                    : "bg-secondary text-foreground/70 hover:bg-secondary/80"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-          
           <div className="mt-12">
             <h2 className="text-2xl font-semibold mb-8">
               {searchQuery ? "Search Results" : `${selectedCategory} Tools`}
