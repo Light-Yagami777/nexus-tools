@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -32,6 +31,9 @@ import { Tool } from "./utils/toolsData";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ToolLayout from "./components/ToolLayout";
+import ScreenRecorder from "./pages/tools/ScreenRecorder";
+import XmlSitemapValidator from "./pages/tools/XmlSitemapValidator";
+import SeoAnalyzer from "./pages/tools/SeoAnalyzer";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -86,13 +88,14 @@ const App = () => {
               <Route path="/tools/screenshot-to-pdf" element={<ScreenshotToPdf />} />
               <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
               <Route path="/tools/google-index-checker" element={<GoogleIndexChecker />} />
+              <Route path="/tools/screen-recorder" element={<ScreenRecorder />} />
+              <Route path="/tools/xml-sitemap-validator" element={<XmlSitemapValidator />} />
+              <Route path="/tools/seo-analyzer" element={<SeoAnalyzer />} />
               
               {/* Tool pages with working placeholders */}
               <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />
               <Route path="/tools/page-speed-checker" element={<ToolPlaceholder toolName="Page Speed Checker" toolDescription="Test your website loading speed and get recommendations for improvements. Boost user experience and SEO ranking." />} />
-              <Route path="/tools/xml-sitemap-validator" element={<ToolPlaceholder toolName="XML Sitemap Validator" toolDescription="Validate your XML sitemaps for errors and compliance with search engine requirements." />} />
               <Route path="/tools/mobile-friendly-test" element={<ToolPlaceholder toolName="Mobile-Friendly Test" toolDescription="Check if your site is mobile-friendly according to Google's standards. Identify and fix mobile usability issues." />} />
-              <Route path="/tools/seo-analyzer" element={<ToolPlaceholder toolName="SEO Analyzer" toolDescription="Comprehensive SEO analysis of your webpage. Get actionable insights to improve your search engine ranking." />} />
               
               <Route path="/tools/character-counter" element={<ToolPlaceholder toolName="Character Counter" toolDescription="Count characters with and without spaces. Track your character usage for social media posts, essays, and more." />} />
               <Route path="/tools/case-converter" element={<ToolPlaceholder toolName="Case Converter" toolDescription="Convert text between different cases: uppercase, lowercase, title case, sentence case, and more." />} />

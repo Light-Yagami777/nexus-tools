@@ -169,18 +169,11 @@ export const tools: Tool[] = [
   {
     id: 'xml-sitemap-validator',
     name: 'XML Sitemap Validator',
-    description: 'Validate your XML sitemaps',
+    description: 'Validate your XML sitemaps for errors',
     category: 'SEO Tools',
     icon: 'check',
     path: '/tools/xml-sitemap-validator',
-  },
-  {
-    id: 'mobile-friendly-test',
-    name: 'Mobile-Friendly Test',
-    description: 'Check if your site is mobile-friendly',
-    category: 'SEO Tools',
-    icon: 'smartphone',
-    path: '/tools/mobile-friendly-test',
+    isNew: true,
   },
   {
     id: 'seo-analyzer',
@@ -190,6 +183,14 @@ export const tools: Tool[] = [
     icon: 'search',
     path: '/tools/seo-analyzer',
     isNew: true,
+  },
+  {
+    id: 'mobile-friendly-test',
+    name: 'Mobile-Friendly Test',
+    description: 'Check if your site is mobile-friendly',
+    category: 'SEO Tools',
+    icon: 'smartphone',
+    path: '/tools/mobile-friendly-test',
   },
 
   // Text Tools
@@ -826,4 +827,3 @@ export const categories: ToolCategory[] = [
 export const getToolById = (id: string): Tool | undefined => {
   return tools.find(tool => tool.id === id);
 };
-
