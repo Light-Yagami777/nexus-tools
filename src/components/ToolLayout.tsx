@@ -2,6 +2,9 @@
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
 import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -9,6 +12,8 @@ interface ToolLayoutProps {
 }
 
 export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
+  const navigate = useNavigate();
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -26,6 +31,10 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
     visible: { opacity: 1, y: 0 }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -37,12 +46,23 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
         variants={containerVariants}
       >
         <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-40 px-6">
-          <motion.h1 
+          <motion.div
             variants={itemVariants}
-            className="text-3xl font-bold mb-8"
+            className="flex items-center mb-6"
           >
-            {title}
-          </motion.h1>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={handleBack}
+              className="mr-2"
+              aria-label="Go back"
+            >
+              <ArrowLeft size={20} />
+            </Button>
+            <motion.h1 className="text-3xl font-bold">
+              {title}
+            </motion.h1>
+          </motion.div>
           
           {children}
         </motion.div>
