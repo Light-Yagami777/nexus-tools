@@ -37,7 +37,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background dark:bg-[#0c0c14]">
       <NavBar />
       
       <motion.div 
@@ -55,19 +55,19 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
               variant="ghost" 
               size="icon" 
               onClick={handleBack}
-              className="mr-2"
+              className="mr-2 dark:text-white"
               aria-label="Go back"
             >
               <ArrowLeft size={20} />
             </Button>
-            <motion.h1 className="text-3xl font-bold">
+            <motion.h1 className="text-3xl font-bold dark:text-white">
               {title}
             </motion.h1>
           </motion.div>
           
           {/* Ad Banner at the top of each tool */}
           <motion.div variants={itemVariants} className="mb-6">
-            <AdBanner className="w-full min-h-[100px] bg-secondary/20 rounded-lg overflow-hidden" />
+            <AdBanner className="w-full min-h-[100px] bg-secondary/20 dark:bg-gray-800/30 rounded-lg overflow-hidden" />
           </motion.div>
           
           {children}
