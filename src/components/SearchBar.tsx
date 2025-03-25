@@ -62,8 +62,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
       <div
         className={`flex items-center relative transition-all duration-300 overflow-hidden ${
           isSearchFocused
-            ? "bg-background border border-primary/50 shadow-sm"
-            : "glass"
+            ? "bg-background border border-primary/50 shadow-sm dark:bg-[#1a1b25] dark:border-primary/30"
+            : "glass dark:bg-[#2a2b35] dark:border dark:border-[#3a3b45]"
         } rounded-full px-3 py-2`}
       >
         <Search className="h-4 w-4 text-muted-foreground" />
@@ -99,7 +99,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
             exit={{ opacity: 0, y: 10, scaleY: 0.95 }}
             transition={{ duration: 0.2 }}
             style={{ transformOrigin: "top" }}
-            className="absolute z-50 left-0 right-0 mt-2 glass shadow-lg rounded-lg max-h-96 overflow-y-auto"
+            className="absolute z-50 left-0 right-0 mt-2 glass shadow-lg rounded-lg max-h-96 overflow-y-auto dark:bg-[#1a1b25] dark:border dark:border-[#2a2b35]"
           >
             <ul className="py-2">
               {results.map((tool, index) => (
@@ -109,7 +109,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => handleToolClick(tool.path)}
-                  className="px-4 py-2 hover:bg-primary/5 cursor-pointer transition-colors"
+                  className="px-4 py-2 hover:bg-primary/5 dark:hover:bg-[#2a2b35] cursor-pointer transition-colors"
                 >
                   <div className="flex items-center">
                     <span className="font-medium">{tool.name}</span>

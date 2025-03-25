@@ -122,7 +122,7 @@ const Index = () => {
       </section>
       
       {/* Search Section - Centered */}
-      <section className="py-12 px-6 md:px-10 bg-gradient-subtle">
+      <section className="py-12 px-6 md:px-10 bg-gradient-subtle dark:bg-[#1a1b25]">
         <div className="max-w-7xl mx-auto flex justify-center">
           <motion.div
             initial="hidden"
@@ -142,7 +142,7 @@ const Index = () => {
               variants={itemVariants}
               className="w-full"
             >
-              <SearchBar onSearch={handleSearch} className="w-full" />
+              <SearchBar className="w-full" />
             </motion.div>
             
             <motion.div
@@ -154,7 +154,7 @@ const Index = () => {
                 <button
                   key={term}
                   onClick={() => setSearchQuery(term)}
-                  className="px-3 py-1 text-sm rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+                  className="px-3 py-1 text-sm rounded-full bg-secondary hover:bg-secondary/80 transition-colors dark:bg-[#2a2b35] dark:hover:bg-[#3a3b45]"
                 >
                   {term}
                 </button>
@@ -169,7 +169,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">SPONSORED</span>
-            <div className="h-24 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-primary/20">
+            <div className="h-24 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-primary/20 dark:bg-[#1a1b25] dark:border-[#2a2b35]">
               <AdBanner adFormat="horizontal" className="w-full h-full" />
             </div>
           </div>
@@ -207,12 +207,12 @@ const Index = () => {
       </section>
       
       {/* Ad Space - Mid Banner */}
-      <section className="py-8 px-6 md:px-10 bg-gradient-subtle">
+      <section className="py-8 px-6 md:px-10 bg-gradient-subtle dark:bg-[#1a1b25]">
         <div className="max-w-7xl mx-auto">
-          <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md">
+          <div className="glass-card p-4 rounded-xl border border-primary/10 shadow-md dark:bg-[#1a1b25] dark:border-[#2a2b35]">
             <div className="text-center">
               <span className="text-xs font-semibold text-primary/70 bg-primary/10 px-3 py-1 rounded-full">ADVERTISEMENT</span>
-              <div className="h-32 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
+              <div className="h-32 flex items-center justify-center my-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg dark:bg-[#1a1b25] dark:border dark:border-[#2a2b35]">
                 <AdBanner adFormat="rectangle" className="w-full h-full" />
               </div>
             </div>
@@ -222,7 +222,7 @@ const Index = () => {
       
       {/* New Tools Section */}
       {newTools.length > 0 && (
-        <section className="py-16 px-6 md:px-10 bg-gradient-subtle">
+        <section className="py-16 px-6 md:px-10 bg-gradient-subtle dark:bg-[#1a1b25]">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial="hidden"
