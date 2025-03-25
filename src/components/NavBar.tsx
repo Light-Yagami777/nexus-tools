@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Box } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
 
 export const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,12 +76,10 @@ export const NavBar = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/categories">Categories</NavLink>
           <NavLink to="/about">About</NavLink>
-          <ThemeToggle />
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="flex items-center space-x-2 md:hidden">
-          <ThemeToggle />
+        <div className="flex items-center md:hidden">
           <button
             className="p-2 focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
