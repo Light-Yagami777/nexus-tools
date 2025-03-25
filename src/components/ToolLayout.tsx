@@ -67,7 +67,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
           
           {/* Ad Banner at the top of each tool */}
           <motion.div variants={itemVariants} className="mb-6">
-            <AdBanner className="w-full min-h-[100px] bg-secondary/20 dark:bg-gray-800/30 rounded-lg overflow-hidden" />
+            <AdBanner className="w-full min-h-[100px] overflow-hidden" />
           </motion.div>
           
           {children}

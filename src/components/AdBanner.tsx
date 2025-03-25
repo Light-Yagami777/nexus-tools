@@ -35,7 +35,7 @@ export const AdBanner = ({
   }, []);
 
   return (
-    <div className={`ad-container ${className} dark:bg-[#1a1b25] dark:border dark:border-[#2a2b35]`} ref={adRef}>
+    <div className={`ad-container ${className} bg-secondary/20 dark:bg-[#1a1b25] dark:border dark:border-[#2a2b35]`} ref={adRef}>
       <div className="text-center text-xs text-gray-500 dark:text-gray-400 uppercase pt-1">Advertisement</div>
       <ins
         className="adsbygoogle"
