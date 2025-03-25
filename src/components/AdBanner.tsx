@@ -1,6 +1,13 @@
 
 import React, { useEffect, useRef } from 'react';
 
+// Add type definition for window.adsbygoogle
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
 interface AdBannerProps {
   adSlot?: string;
   adFormat?: 'auto' | 'fluid' | 'rectangle' | 'horizontal' | 'vertical';
@@ -17,8 +24,8 @@ export const AdBanner = ({
   useEffect(() => {
     try {
       // Only add the ad if we're in the browser and the adsense script is loaded
-      if (typeof window !== 'undefined' && adRef.current && (window as any).adsbygoogle) {
-        // Push the ad to the adsense queue
+      if (typeof window !== 'undefined' && adRef.current && window.adsbygoogle) {
+        // Push the ad to the adsense script queue
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         console.log('Ad initialized');
       }
@@ -28,7 +35,7 @@ export const AdBanner = ({
   }, []);
 
   return (
-    <div className={`ad-container ${className}`}>
+    <div className={`ad-container ${className}`} ref={adRef}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
@@ -36,7 +43,6 @@ export const AdBanner = ({
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
         data-full-width-responsive="true"
-        ref={adRef}
       />
     </div>
   );
