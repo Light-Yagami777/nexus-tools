@@ -7,10 +7,16 @@ import { FileText } from "lucide-react"; // Import a default icon
 interface ToolLayoutProps {
   children: React.ReactNode;
   title: string;
+  description?: string;
   icon?: React.ReactNode;
 }
 
-export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon }) => {
+export const ToolLayout: React.FC<ToolLayoutProps> = ({ 
+  children, 
+  title, 
+  description,
+  icon 
+}) => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -41,16 +47,24 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon })
         <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-16 px-6">
           <motion.div
             variants={itemVariants}
-            className="mb-6 flex items-center justify-center"
+            className="mb-6 flex flex-col items-center justify-center"
           >
             {icon ? (
-              <span className="mr-3 text-primary text-xl">{icon}</span>
+              <span className="mb-3 text-primary text-xl">{icon}</span>
             ) : (
-              <span className="mr-3 text-primary"><FileText size={24} /></span>
+              <span className="mb-3 text-primary"><FileText size={24} /></span>
             )}
             <motion.h1 className="text-3xl font-bold text-center">
               {title}
             </motion.h1>
+            {description && (
+              <motion.p 
+                variants={itemVariants}
+                className="mt-2 text-muted-foreground text-center max-w-2xl"
+              >
+                {description}
+              </motion.p>
+            )}
           </motion.div>
           
           {children}

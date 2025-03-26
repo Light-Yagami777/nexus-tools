@@ -69,17 +69,17 @@ const SitemapGenerator = () => {
   };
 
   return (
-    <ToolLayout title="XML Sitemap Generator" icon={<FileText size={24} />}>
+    <ToolLayout 
+      title="XML Sitemap Generator" 
+      description="Create XML sitemaps to help search engines discover and index your pages"
+      icon={<FileText size={24} />}
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
-            Create XML sitemaps to help search engines discover and index your pages
-          </p>
-
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Site Configuration</h2>
