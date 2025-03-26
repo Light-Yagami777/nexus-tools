@@ -38,7 +38,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon })
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-24 px-6">
+        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-16 px-6">
           <motion.div
             variants={itemVariants}
             className="mb-6 flex items-center justify-center"

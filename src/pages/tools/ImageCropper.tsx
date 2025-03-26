@@ -61,7 +61,7 @@ const ImageCropper = () => {
   };
 
   return (
-    <ToolLayout title="Image Cropper">
+    <ToolLayout title="Image Cropper" icon={<ImageIcon size={24} />}>
       <Card className="p-6">
         <div className="space-y-6">
           <div>
