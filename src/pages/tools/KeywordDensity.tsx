@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -8,9 +6,10 @@ import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { SearchCheck, Upload, BarChart2, Copy, Trash, FileText, ArrowRight, ChevronLeft } from 'lucide-react';
+import { SearchCheck, Upload, BarChart2, Copy, Trash, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import ToolLayout from '@/components/ToolLayout';
 
 interface KeywordData {
   keyword: string;
@@ -26,7 +25,6 @@ const KeywordDensity = () => {
   const [totalWords, setTotalWords] = useState(0);
   const [totalCharacters, setTotalCharacters] = useState(0);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -118,205 +116,182 @@ const KeywordDensity = () => {
     });
   };
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      <div className="flex-grow container mx-auto px-4 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="mb-6 flex items-center">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleBack} 
-              className="mr-2"
-              aria-label="Go back"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
-            <div className="text-center flex-grow">
-              <h1 className="text-3xl font-bold mb-2">Keyword Density Checker</h1>
-              <p className="text-muted-foreground">
-                Analyze keyword density and distribution in your content
-              </p>
-            </div>
-          </div>
+    <ToolLayout title="Keyword Density Checker" icon={<SearchCheck size={24} />}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
+          Analyze keyword density and distribution in your content to optimize for SEO
+        </p>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-4">
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Content</h2>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={handleClear}>
-                    <Trash className="h-4 w-4 mr-1" />
-                    Clear
-                  </Button>
-                  <Button size="sm" variant="outline" className="relative">
-                    <input
-                      type="file"
-                      accept=".txt,.md,.html"
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      onChange={handleFileUpload}
-                    />
-                    <Upload className="h-4 w-4 mr-1" />
-                    Upload
-                  </Button>
-                </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="p-4">
+            <div className="mb-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Content</h2>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={handleClear}>
+                  <Trash className="h-4 w-4 mr-1" />
+                  Clear
+                </Button>
+                <Button size="sm" variant="outline" className="relative">
+                  <input
+                    type="file"
+                    accept=".txt,.md,.html"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleFileUpload}
+                  />
+                  <Upload className="h-4 w-4 mr-1" />
+                  Upload
+                </Button>
               </div>
-              
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Paste your content here to analyze keyword density..."
-                className="min-h-[200px] mb-4"
+            </div>
+            
+            <Textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Paste your content here to analyze keyword density..."
+              className="min-h-[200px] mb-4"
+            />
+            
+            <div className="mb-4">
+              <Label className="mb-2 block">
+                Minimum keyword length: {minLength} characters
+              </Label>
+              <Slider
+                value={[minLength]}
+                min={1}
+                max={10}
+                step={1}
+                onValueChange={(value) => setMinLength(value[0])}
+                className="mb-6"
               />
               
-              <div className="mb-4">
-                <Label className="mb-2 block">
-                  Minimum keyword length: {minLength} characters
-                </Label>
-                <Slider
-                  value={[minLength]}
-                  min={1}
-                  max={10}
-                  step={1}
-                  onValueChange={(value) => setMinLength(value[0])}
-                  className="mb-6"
+              <div className="flex items-center mb-4">
+                <input
+                  type="checkbox"
+                  id="excludeCommon"
+                  checked={excludeCommonWords}
+                  onChange={(e) => setExcludeCommonWords(e.target.checked)}
+                  className="mr-2"
                 />
-                
-                <div className="flex items-center mb-4">
-                  <input
-                    type="checkbox"
-                    id="excludeCommon"
-                    checked={excludeCommonWords}
-                    onChange={(e) => setExcludeCommonWords(e.target.checked)}
-                    className="mr-2"
-                  />
-                  <Label htmlFor="excludeCommon">
-                    Exclude common words (a, the, is, etc.)
-                  </Label>
-                </div>
+                <Label htmlFor="excludeCommon">
+                  Exclude common words (a, the, is, etc.)
+                </Label>
               </div>
-              
-              <Button onClick={analyzeText} className="w-full">
-                <SearchCheck className="h-4 w-4 mr-1" />
-                Analyze Content
-              </Button>
-            </Card>
+            </div>
+            
+            <Button onClick={analyzeText} className="w-full">
+              <SearchCheck className="h-4 w-4 mr-1" />
+              Analyze Content
+            </Button>
+          </Card>
 
-            <Card className="p-4">
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Keyword Analysis</h2>
-                {keywords.length > 0 && (
-                  <Button size="sm" variant="outline" onClick={copyToClipboard}>
-                    <Copy className="h-4 w-4 mr-1" />
-                    Copy Results
-                  </Button>
+          <Card className="p-4">
+            <div className="mb-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Keyword Analysis</h2>
+              {keywords.length > 0 && (
+                <Button size="sm" variant="outline" onClick={copyToClipboard}>
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy Results
+                </Button>
+              )}
+            </div>
+            
+            {keywords.length > 0 ? (
+              <div>
+                <div className="flex justify-between mb-4 text-sm">
+                  <div>
+                    <span className="font-medium">Total Words:</span> {totalWords}
+                  </div>
+                  <div>
+                    <span className="font-medium">Total Characters:</span> {totalCharacters}
+                  </div>
+                </div>
+                
+                <div className="overflow-auto max-h-[400px] border rounded-md">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Keyword</TableHead>
+                        <TableHead className="text-right">Count</TableHead>
+                        <TableHead className="text-right">Density</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {keywords.slice(0, 50).map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">{item.keyword}</TableCell>
+                          <TableCell className="text-right">{item.count}</TableCell>
+                          <TableCell className="text-right">{item.density.toFixed(2)}%</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+                
+                {keywords.length > 50 && (
+                  <div className="mt-2 text-sm text-muted-foreground">
+                    Showing top 50 of {keywords.length} keywords.
+                  </div>
                 )}
               </div>
-              
-              {keywords.length > 0 ? (
-                <div>
-                  <div className="flex justify-between mb-4 text-sm">
-                    <div>
-                      <span className="font-medium">Total Words:</span> {totalWords}
-                    </div>
-                    <div>
-                      <span className="font-medium">Total Characters:</span> {totalCharacters}
-                    </div>
-                  </div>
-                  
-                  <div className="overflow-auto max-h-[400px] border rounded-md">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Keyword</TableHead>
-                          <TableHead className="text-right">Count</TableHead>
-                          <TableHead className="text-right">Density</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {keywords.slice(0, 50).map((item, index) => (
-                          <TableRow key={index}>
-                            <TableCell className="font-medium">{item.keyword}</TableCell>
-                            <TableCell className="text-right">{item.count}</TableCell>
-                            <TableCell className="text-right">{item.density.toFixed(2)}%</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                  
-                  {keywords.length > 50 && (
-                    <div className="mt-2 text-sm text-muted-foreground">
-                      Showing top 50 of {keywords.length} keywords.
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-[300px] text-center text-muted-foreground">
-                  <BarChart2 className="h-12 w-12 mb-4 opacity-50" />
-                  <p>Enter your content and click "Analyze Content" to see keyword density</p>
-                </div>
-              )}
-            </Card>
-          </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-[300px] text-center text-muted-foreground">
+                <BarChart2 className="h-12 w-12 mb-4 opacity-50" />
+                <p>Enter your content and click "Analyze Content" to see keyword density</p>
+              </div>
+            )}
+          </Card>
+        </div>
 
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">SEO Tips for Keyword Density</h2>
-            <Card className="p-6">
-              <ul className="list-disc list-inside space-y-2">
-                <li>Aim for a keyword density of 1-2% for primary keywords</li>
-                <li>Avoid keyword stuffing (overusing keywords), as it can hurt your SEO</li>
-                <li>Use related keywords and synonyms to improve content relevance</li>
-                <li>Focus on creating natural, reader-friendly content</li>
-                <li>Use keywords in important positions: headings, first paragraph, etc.</li>
-                <li>Consider keyword placement as well as density</li>
-              </ul>
-            </Card>
-          </div>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">SEO Tips for Keyword Density</h2>
+          <Card className="p-6">
+            <ul className="list-disc list-inside space-y-2">
+              <li>Aim for a keyword density of 1-2% for primary keywords</li>
+              <li>Avoid keyword stuffing (overusing keywords), as it can hurt your SEO</li>
+              <li>Use related keywords and synonyms to improve content relevance</li>
+              <li>Focus on creating natural, reader-friendly content</li>
+              <li>Use keywords in important positions: headings, first paragraph, etc.</li>
+              <li>Consider keyword placement as well as density</li>
+            </ul>
+          </Card>
+        </div>
 
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Try These Related Tools</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              <Link to="/tools/meta-tag-generator">
-                <Card className="p-4 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium">Meta Tag Generator</h3>
-                    <ArrowRight className="h-4 w-4 text-primary" />
-                  </div>
-                </Card>
-              </Link>
-              <Link to="/tools/sitemap-generator">
-                <Card className="p-4 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium">Sitemap Generator</h3>
-                    <ArrowRight className="h-4 w-4 text-primary" />
-                  </div>
-                </Card>
-              </Link>
-              <Link to="/tools/dev-formatting">
-                <Card className="p-4 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium">Dev Formatter</h3>
-                    <ArrowRight className="h-4 w-4 text-primary" />
-                  </div>
-                </Card>
-              </Link>
-            </div>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">Try These Related Tools</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <Link to="/tools/meta-tag-generator">
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium">Meta Tag Generator</h3>
+                  <ArrowRight className="h-4 w-4 text-primary" />
+                </div>
+              </Card>
+            </Link>
+            <Link to="/tools/sitemap-generator">
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium">Sitemap Generator</h3>
+                  <ArrowRight className="h-4 w-4 text-primary" />
+                </div>
+              </Card>
+            </Link>
+            <Link to="/tools/dev-formatting">
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium">Dev Formatter</h3>
+                  <ArrowRight className="h-4 w-4 text-primary" />
+                </div>
+              </Card>
+            </Link>
           </div>
-        </motion.div>
-      </div>
-      <Footer />
-    </div>
+        </div>
+      </motion.div>
+    </ToolLayout>
   );
 };
 

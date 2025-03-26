@@ -6,6 +6,7 @@ import { ToolGrid } from "@/components/ToolGrid";
 import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
 import { tools, searchTools } from "@/utils/toolsData";
+import { Grid3x3 } from "lucide-react";
 
 const AllTools = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,6 +20,10 @@ const AllTools = () => {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
@@ -27,7 +32,7 @@ const AllTools = () => {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       
-      <section className="pt-32 pb-16 px-6 md:px-10">
+      <section className="pt-40 pb-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -35,7 +40,10 @@ const AllTools = () => {
             transition={{ duration: 0.5 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">All Tools</h1>
+            <div className="flex items-center justify-center mb-4">
+              <Grid3x3 size={28} className="text-primary mr-2" />
+              <h1 className="text-4xl md:text-5xl font-bold">All Tools</h1>
+            </div>
             <p className="text-lg text-muted-foreground">
               Explore our complete collection of tools to simplify your everyday tasks.
             </p>

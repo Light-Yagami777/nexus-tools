@@ -2,14 +2,14 @@
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
 import { motion } from "framer-motion";
-import { AdBanner } from "./AdBanner";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
   title: string;
+  icon?: React.ReactNode;
 }
 
-export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
+export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -37,19 +37,15 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title }) => {
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-40 px-6">
+        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-48 px-6">
           <motion.div
             variants={itemVariants}
-            className="mb-6"
+            className="mb-8 flex items-center justify-center"
           >
-            <motion.h1 className="text-3xl font-bold dark:text-white">
+            {icon && <span className="mr-3 text-primary">{icon}</span>}
+            <motion.h1 className="text-3xl font-bold dark:text-white text-center">
               {title}
             </motion.h1>
-          </motion.div>
-          
-          {/* Ad Banner at the top of each tool */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <AdBanner className="w-full min-h-[100px] overflow-hidden" />
           </motion.div>
           
           {children}

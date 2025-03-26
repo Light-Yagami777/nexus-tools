@@ -9,6 +9,7 @@ import SitemapPreview from '@/components/sitemap/SitemapPreview';
 import SitemapBestPractices from '@/components/sitemap/SitemapBestPractices';
 import RelatedTools from '@/components/sitemap/RelatedTools';
 import { generateSitemapXML } from '@/utils/sitemapGenerator';
+import { FileText } from 'lucide-react';
 
 const SitemapGenerator = () => {
   const [baseUrl, setBaseUrl] = useState('');
@@ -68,7 +69,7 @@ const SitemapGenerator = () => {
   };
 
   return (
-    <ToolLayout title="XML Sitemap Generator">
+    <ToolLayout title="XML Sitemap Generator" icon={<FileText size={24} />}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
