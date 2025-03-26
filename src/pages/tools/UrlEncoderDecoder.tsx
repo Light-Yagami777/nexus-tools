@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Copy } from 'lucide-react';
+import { Copy, Link } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const UrlEncoderDecoder = () => {
@@ -60,7 +59,7 @@ const UrlEncoderDecoder = () => {
   };
 
   return (
-    <ToolLayout title="URL Encoder/Decoder">
+    <ToolLayout title="URL Encoder/Decoder" icon={<Link size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>

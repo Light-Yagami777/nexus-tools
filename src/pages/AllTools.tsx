@@ -32,7 +32,7 @@ const AllTools = () => {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       
-      <section className="pt-40 pb-16 px-6 md:px-10">
+      <section className="pt-24 pb-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ToolLayout from "@/components/ToolLayout";
@@ -8,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, AlertCircle, AlertTriangle, ArrowRight } from "lucide-react";
+import { Check, AlertCircle, AlertTriangle, ArrowRight, Search } from "lucide-react";
 
 const SeoAnalyzer = () => {
   const [url, setUrl] = useState("");
@@ -50,7 +49,6 @@ const SeoAnalyzer = () => {
       return;
     }
 
-    // Add http:// if missing
     let formattedUrl = url;
     if (!/^https?:\/\//i.test(url)) {
       formattedUrl = "https://" + url;
@@ -60,11 +58,8 @@ const SeoAnalyzer = () => {
     setResults(null);
 
     try {
-      // In a real implementation, this would call an API to analyze the URL
-      // For this demo, we'll simulate the analysis with sample results
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Generate a random score for each category
       const generateScore = () => Math.floor(Math.random() * 30) + 70;
       const contentScore = generateScore();
       const performanceScore = generateScore();
@@ -72,7 +67,6 @@ const SeoAnalyzer = () => {
       const mobileScore = generateScore();
       const overallScore = Math.floor((contentScore + performanceScore + technicalScore + mobileScore) / 4);
 
-      // Sample results with dynamic scores
       const sampleResults: SeoResults = {
         url: formattedUrl,
         date: new Date().toLocaleDateString(),
@@ -264,7 +258,7 @@ const SeoAnalyzer = () => {
   };
 
   return (
-    <ToolLayout title="SEO Analyzer">
+    <ToolLayout title="SEO Analyzer" icon={<Search size={24} />}>
       <Card className="p-6 mb-8">
         <div className="mb-6">
           <p className="text-lg mb-4">

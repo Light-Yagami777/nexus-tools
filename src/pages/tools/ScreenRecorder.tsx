@@ -1,10 +1,10 @@
-
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import ToolLayout from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { Video } from "lucide-react";
 
 const ScreenRecorder = () => {
   const [recording, setRecording] = useState(false);
@@ -91,7 +91,7 @@ const ScreenRecorder = () => {
   };
 
   return (
-    <ToolLayout title="Screen Recorder">
+    <ToolLayout title="Screen Recorder" icon={<Video size={24} />}>
       <Card className="p-6 mb-8">
         <div className="mb-6">
           <p className="text-lg mb-4">

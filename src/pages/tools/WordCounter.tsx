@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { motion } from "framer-motion";
+import { Type } from "lucide-react";
 
 const WordCounter = () => {
   const [text, setText] = useState("");
@@ -54,14 +54,13 @@ const WordCounter = () => {
   };
 
   return (
-    <ToolLayout title="Word Counter">
+    <ToolLayout title="Word Counter" icon={<Type size={24} />}>
       <motion.div
         initial="hidden"
         animate="visible"
         variants={staggerVariants}
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
       >
-        {/* Stats Cards */}
         <motion.div variants={itemVariants} className="glass-card p-6 rounded-2xl text-center">
           <h3 className="text-3xl font-bold text-primary mb-1">{stats.words}</h3>
           <p className="text-sm text-muted-foreground">Words</p>
@@ -78,7 +77,6 @@ const WordCounter = () => {
         </motion.div>
       </motion.div>
       
-      {/* Text Input */}
       <motion.div
         variants={itemVariants}
         className="mt-8 glass-card p-6 rounded-2xl"
@@ -91,7 +89,6 @@ const WordCounter = () => {
         />
       </motion.div>
       
-      {/* Detailed Stats */}
       <motion.div
         variants={itemVariants}
         className="mt-8 glass-card p-6 rounded-2xl"

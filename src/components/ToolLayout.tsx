@@ -2,6 +2,7 @@
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
 import { motion } from "framer-motion";
+import { FileText } from "lucide-react"; // Import a default icon
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -37,12 +38,16 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon })
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-48 px-6">
+        <motion.div variants={itemVariants} className="max-w-4xl mx-auto w-full pt-24 px-6">
           <motion.div
             variants={itemVariants}
-            className="mb-8 flex items-center justify-center"
+            className="mb-6 flex items-center justify-center"
           >
-            {icon && <span className="mr-3 text-primary">{icon}</span>}
+            {icon ? (
+              <span className="mr-3 text-primary text-xl">{icon}</span>
+            ) : (
+              <span className="mr-3 text-primary"><FileText size={24} /></span>
+            )}
             <motion.h1 className="text-3xl font-bold text-center">
               {title}
             </motion.h1>
