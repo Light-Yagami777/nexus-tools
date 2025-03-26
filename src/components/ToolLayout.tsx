@@ -28,7 +28,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon })
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background dark:bg-[#0c0c14]">
+    <div className="min-h-screen flex flex-col bg-background">
       <NavBar />
       
       <motion.div 
@@ -43,7 +43,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({ children, title, icon })
             className="mb-8 flex items-center justify-center"
           >
             {icon && <span className="mr-3 text-primary">{icon}</span>}
-            <motion.h1 className="text-3xl font-bold dark:text-white text-center">
+            <motion.h1 className="text-3xl font-bold text-center">
               {title}
             </motion.h1>
           </motion.div>

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -111,7 +112,7 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/70 dark:bg-black/70 backdrop-blur-md border border-white/20 dark:border-black/20;
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
   }
 
   .glass-card {
