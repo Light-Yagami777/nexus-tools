@@ -7,7 +7,7 @@ const APP_ID = "ca-app-pub-2731739499513187~3809479964";
 declare global {
   interface Window {
     adsbygoogle: any[];  // Changed from 'any' to 'any[]' to match expected type
-    google: {
+    google?: {           // Added '?' to make it optional like in vite-env.d.ts
       ima: any;
     };
   }
