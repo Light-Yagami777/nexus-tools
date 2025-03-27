@@ -6,7 +6,7 @@ const APP_ID = "ca-app-pub-2731739499513187~3809479964";
 // Declare global Google Mobile Ads SDK types
 declare global {
   interface Window {
-    adsbygoogle: any;
+    adsbygoogle: any[];  // Changed from 'any' to 'any[]' to match expected type
     google: {
       ima: any;
     };
@@ -31,7 +31,7 @@ export const showRewardedAd = async (): Promise<boolean> => {
       
       // Initialize the ad if needed
       if (!window.adsbygoogle) {
-        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle = [];  // Initialize as an array, not just any
       }
       
       // Try to show the rewarded ad

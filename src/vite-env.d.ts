@@ -4,6 +4,10 @@
 interface Window {
   SpeechRecognition: any;
   webkitSpeechRecognition: any;
+  adsbygoogle: any[];  // Added this to be consistent with adUtils.ts
+  google?: {
+    ima: any;
+  };
 }
 
 interface SpeechRecognition extends EventTarget {
