@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -8,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Html } from "lucide-react";
+import { FileCode } from "lucide-react";
 
 const MarkdownToHtml = () => {
   const [markdownInput, setMarkdownInput] = useState<string>("");
