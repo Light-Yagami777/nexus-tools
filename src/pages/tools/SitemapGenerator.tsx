@@ -7,9 +7,9 @@ import ToolLayout from '@/components/ToolLayout';
 import SitemapForm from '@/components/sitemap/SitemapForm';
 import SitemapPreview from '@/components/sitemap/SitemapPreview';
 import SitemapBestPractices from '@/components/sitemap/SitemapBestPractices';
-import RelatedTools from '@/components/sitemap/RelatedTools';
 import { generateSitemapXML } from '@/utils/sitemapGenerator';
 import { FileText } from 'lucide-react';
+import { showRewardedAd } from '@/utils/adUtils';
 
 const SitemapGenerator = () => {
   const [baseUrl, setBaseUrl] = useState('');
@@ -24,7 +24,7 @@ const SitemapGenerator = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleGenerateSitemap = () => {
+  const handleGenerateSitemap = async () => {
     if (!baseUrl) {
       toast({
         variant: "destructive",
@@ -43,6 +43,10 @@ const SitemapGenerator = () => {
       return;
     }
 
+    // Show rewarded ad before generating sitemap
+    const adShown = await showRewardedAd();
+    
+    // Continue with sitemap generation regardless of ad outcome
     const sitemapXML = generateSitemapXML({
       baseUrl,
       urls,
@@ -105,7 +109,6 @@ const SitemapGenerator = () => {
           </div>
 
           <SitemapBestPractices />
-          <RelatedTools />
         </motion.div>
       </div>
     </ToolLayout>

@@ -1,8 +1,7 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { NavBar } from "@/components/NavBar";
-import { Footer } from "@/components/Footer";
+import ToolLayout from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
 import { Image as LucideImageIcon, Upload, Download, Trash2, FileWarning, Info } from "lucide-react";
+import { showRewardedAd } from "@/utils/adUtils";
 
 const ImageCompressor = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -86,7 +86,7 @@ const ImageCompressor = () => {
     }
   };
 
-  const compressImage = () => {
+  const compressImage = async () => {
     if (!selectedImage) {
       setError("Please select an image to compress");
       toast({
@@ -99,6 +99,9 @@ const ImageCompressor = () => {
     
     setIsCompressing(true);
     setError(null);
+    
+    // Show rewarded ad before compression
+    await showRewardedAd();
     
     try {
       const canvas = document.createElement("canvas");
@@ -199,8 +202,11 @@ const ImageCompressor = () => {
     }
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (!compressedUrl) return;
+    
+    // Show rewarded ad before download
+    await showRewardedAd();
     
     // Determine file extension based on output format
     let ext = 'jpg';
@@ -248,27 +254,17 @@ const ImageCompressor = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <header className="text-center mb-12">
-              <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <LucideImageIcon className="h-6 w-6 text-primary" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">Image Compressor</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Reduce image file size without losing quality. Perfect for websites, emails, and saving storage space.
-              </p>
-            </header>
-          </motion.div>
-
+    <ToolLayout 
+      title="Image Compressor"
+      description="Reduce image file size without losing quality. Perfect for websites, emails, and saving storage space."
+      icon={<LucideImageIcon size={24} />}
+    >
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Input Section */}
             <motion.div
@@ -476,11 +472,9 @@ const ImageCompressor = () => {
               </div>
             </motion.div>
           </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+        </motion.div>
+      </div>
+    </ToolLayout>
   );
 };
 

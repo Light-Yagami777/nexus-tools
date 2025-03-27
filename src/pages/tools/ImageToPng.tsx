@@ -1,14 +1,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { NavBar } from "@/components/NavBar";
-import { Footer } from "@/components/Footer";
+import ToolLayout from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { Image as LucideImageIcon, Upload, Download, Trash2, FileWarning } from "lucide-react";
+import { showRewardedAd } from "@/utils/adUtils";
 
 const ImageToPng = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -65,7 +65,7 @@ const ImageToPng = () => {
     }
   };
 
-  const convertToPng = () => {
+  const convertToPng = async () => {
     if (!selectedImage) {
       setError("Please select an image to convert");
       toast({
@@ -78,6 +78,9 @@ const ImageToPng = () => {
     
     setIsConverting(true);
     setError(null);
+    
+    // Show rewarded ad before conversion
+    await showRewardedAd();
     
     try {
       const canvas = document.createElement("canvas");
@@ -134,8 +137,11 @@ const ImageToPng = () => {
     }
   };
 
-  const downloadPng = () => {
+  const downloadPng = async () => {
     if (!convertedUrl) return;
+    
+    // Show rewarded ad before download
+    await showRewardedAd();
     
     const link = document.createElement("a");
     link.href = convertedUrl;
@@ -193,27 +199,17 @@ const ImageToPng = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <header className="text-center mb-12">
-              <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <LucideImageIcon className="h-6 w-6 text-primary" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">Image to PNG Converter</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Convert your images to PNG format with this free online tool. Maintain transparency and quality without any watermarks.
-              </p>
-            </header>
-          </motion.div>
-
+    <ToolLayout
+      title="Image to PNG Converter"
+      description="Convert your images to PNG format with this free online tool. Maintain transparency and quality without any watermarks."
+      icon={<LucideImageIcon size={24} />}
+    >
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Input Section */}
             <motion.div
@@ -352,11 +348,9 @@ const ImageToPng = () => {
               </div>
             </motion.div>
           </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+        </motion.div>
+      </div>
+    </ToolLayout>
   );
 };
 
