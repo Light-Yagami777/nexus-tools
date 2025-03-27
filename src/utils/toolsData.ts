@@ -90,14 +90,6 @@ export const tools: Tool[] = [
     path: '/tools/gif-maker',
   },
   {
-    id: 'image-cropper',
-    name: 'Image Cropper',
-    description: 'Crop your images to any size or aspect ratio',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-cropper',
-  },
-  {
     id: 'screenshot-to-pdf',
     name: 'Screenshot to PDF',
     description: 'Convert screenshots to PDF documents',
@@ -157,6 +149,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'link',
     path: '/tools/backlink-checker',
+    isNew: true,
   },
   {
     id: 'page-speed-checker',
@@ -165,6 +158,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'zap',
     path: '/tools/page-speed-checker',
+    isNew: true,
   },
   {
     id: 'xml-sitemap-validator',
@@ -191,6 +185,7 @@ export const tools: Tool[] = [
     category: 'SEO Tools',
     icon: 'smartphone',
     path: '/tools/mobile-friendly-test',
+    isNew: true,
   },
 
   // Text Tools
@@ -210,6 +205,7 @@ export const tools: Tool[] = [
     category: 'Text Tools',
     icon: 'text',
     path: '/tools/character-counter',
+    isNew: true,
   },
   {
     id: 'case-converter',
@@ -258,6 +254,7 @@ export const tools: Tool[] = [
     category: 'Text Tools',
     icon: 'git-branch',
     path: '/tools/text-diff',
+    isNew: true,
   },
   {
     id: 'text-formatter',
@@ -266,6 +263,7 @@ export const tools: Tool[] = [
     category: 'Text Tools',
     icon: 'text',
     path: '/tools/text-formatter',
+    isNew: true,
   },
   {
     id: 'markdown-editor',
@@ -274,6 +272,7 @@ export const tools: Tool[] = [
     category: 'Text Tools',
     icon: 'edit',
     path: '/tools/markdown-editor',
+    isNew: true,
   },
   {
     id: 'string-utilities',
@@ -282,6 +281,7 @@ export const tools: Tool[] = [
     category: 'Text Tools',
     icon: 'text',
     path: '/tools/string-utilities',
+    isNew: true,
   },
 
   // Developer Tools

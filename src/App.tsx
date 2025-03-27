@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,7 +21,6 @@ import KeywordDensity from "./pages/tools/KeywordDensity";
 import MetaTagGenerator from "./pages/tools/MetaTagGenerator";
 import SitemapGenerator from "./pages/tools/SitemapGenerator";
 import GifMaker from "./pages/tools/GifMaker";
-import ImageCropper from "./pages/tools/ImageCropper";
 import ScreenshotToPdf from "./pages/tools/ScreenshotToPdf";
 import RobotsTxtGenerator from "./pages/tools/RobotsTxtGenerator";
 import GoogleIndexChecker from "./pages/tools/GoogleIndexChecker";
@@ -40,6 +40,15 @@ import LoremIpsumGenerator from "./pages/tools/LoremIpsumGenerator";
 import TextToSpeech from "./pages/tools/TextToSpeech";
 import SpeechToText from "./pages/tools/SpeechToText";
 import UrlEncoderDecoder from "./pages/tools/UrlEncoderDecoder";
+// New imports for the tools we're adding
+import BacklinkChecker from "./pages/tools/BacklinkChecker";
+import PageSpeedChecker from "./pages/tools/PageSpeedChecker";
+import MobileFriendlyTest from "./pages/tools/MobileFriendlyTest";
+import CharacterCounter from "./pages/tools/CharacterCounter";
+import TextDiffChecker from "./pages/tools/TextDiffChecker";
+import TextFormatter from "./pages/tools/TextFormatter";
+import MarkdownEditor from "./pages/tools/MarkdownEditor";
+import StringUtilities from "./pages/tools/StringUtilities";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -90,7 +99,6 @@ const App = () => {
               <Route path="/tools/meta-tag-generator" element={<MetaTagGenerator />} />
               <Route path="/tools/sitemap-generator" element={<SitemapGenerator />} />
               <Route path="/tools/gif-maker" element={<GifMaker />} />
-              <Route path="/tools/image-cropper" element={<ImageCropper />} />
               <Route path="/tools/screenshot-to-pdf" element={<ScreenshotToPdf />} />
               <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
               <Route path="/tools/google-index-checker" element={<GoogleIndexChecker />} />
@@ -104,22 +112,18 @@ const App = () => {
               <Route path="/tools/speech-to-text" element={<SpeechToText />} />
               <Route path="/tools/url-encoder-decoder" element={<UrlEncoderDecoder />} />
               
-              {/* Tool pages with working placeholders */}
-              <Route path="/tools/backlink-checker" element={<ToolPlaceholder toolName="Backlink Checker" toolDescription="Analyze backlinks pointing to your website. Evaluate link quality, diversity, and identify potential opportunities." />} />
-              <Route path="/tools/page-speed-checker" element={<ToolPlaceholder toolName="Page Speed Checker" toolDescription="Test your website loading speed and get recommendations for improvements. Boost user experience and SEO ranking." />} />
-              <Route path="/tools/mobile-friendly-test" element={<ToolPlaceholder toolName="Mobile-Friendly Test" toolDescription="Check if your site is mobile-friendly according to Google's standards. Identify and fix mobile usability issues." />} />
+              {/* New tool pages we are adding */}
+              <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+              <Route path="/tools/page-speed-checker" element={<PageSpeedChecker />} />
+              <Route path="/tools/mobile-friendly-test" element={<MobileFriendlyTest />} />
+              <Route path="/tools/character-counter" element={<CharacterCounter />} />
+              <Route path="/tools/text-diff" element={<TextDiffChecker />} />
+              <Route path="/tools/text-formatter" element={<TextFormatter />} />
+              <Route path="/tools/markdown-editor" element={<MarkdownEditor />} />
+              <Route path="/tools/string-utilities" element={<StringUtilities />} />
               
-              <Route path="/tools/character-counter" element={<ToolPlaceholder toolName="Character Counter" toolDescription="Count characters with and without spaces. Track your character usage for social media posts, essays, and more." />} />
-              <Route path="/tools/case-converter" element={<ToolPlaceholder toolName="Case Converter" toolDescription="Convert text between different cases: uppercase, lowercase, title case, sentence case, and more." />} />
-              <Route path="/tools/lorem-ipsum" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate dummy text for your designs. Customize length, format, and style to fit your project needs." />} />
-              <Route path="/tools/text-to-speech" element={<ToolPlaceholder toolName="Text to Speech" toolDescription="Convert text to natural-sounding speech. Choose from multiple voices and download as audio files." />} />
-              <Route path="/tools/speech-to-text" element={<ToolPlaceholder toolName="Speech to Text" toolDescription="Convert spoken language into written text. Transcribe audio files or record directly in your browser." />} />
-              <Route path="/tools/url-encoder-decoder" element={<ToolPlaceholder toolName="URL Encoder/Decoder" toolDescription="Encode or decode URL strings for safe transmission in HTTP requests and responses." />} />
-              <Route path="/tools/text-diff" element={<ToolPlaceholder toolName="Text Diff Checker" toolDescription="Compare two texts and find differences. Highlight additions, deletions, and modifications between versions." />} />
-              <Route path="/tools/text-formatter" element={<ToolPlaceholder toolName="Text Formatter" toolDescription="Format and beautify your text with options for indentation, line breaks, and spacing." />} />
-              <Route path="/tools/markdown-editor" element={<ToolPlaceholder toolName="Markdown Editor" toolDescription="Write and preview markdown in real-time. Export to HTML or formatted text for documentation." />} />
-              <Route path="/tools/string-utilities" element={<ToolPlaceholder toolName="String Utilities" toolDescription="Various string manipulation utilities including trim, replace, extract, and more." />} />
-              
+              {/* Placeholder tools */}
+              {/* Remove image-cropper from the placeholders list */}
               <Route path="/tools/color-picker" element={<ToolPlaceholder toolName="Color Picker" toolDescription="Select and generate color codes for your projects. Convert between RGB, HEX, HSL, and more." />} />
               <Route path="/tools/css-minifier" element={<ToolPlaceholder toolName="CSS Minifier" toolDescription="Minify your CSS files to reduce file size and improve loading speed." />} />
               <Route path="/tools/js-minifier" element={<ToolPlaceholder toolName="JavaScript Minifier" toolDescription="Minify your JavaScript code to improve website performance and reduce bandwidth usage." />} />
