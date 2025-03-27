@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,7 +39,6 @@ import LoremIpsumGenerator from "./pages/tools/LoremIpsumGenerator";
 import TextToSpeech from "./pages/tools/TextToSpeech";
 import SpeechToText from "./pages/tools/SpeechToText";
 import UrlEncoderDecoder from "./pages/tools/UrlEncoderDecoder";
-// New imports for the tools we're adding
 import BacklinkChecker from "./pages/tools/BacklinkChecker";
 import PageSpeedChecker from "./pages/tools/PageSpeedChecker";
 import MobileFriendlyTest from "./pages/tools/MobileFriendlyTest";
@@ -49,6 +47,24 @@ import TextDiffChecker from "./pages/tools/TextDiffChecker";
 import TextFormatter from "./pages/tools/TextFormatter";
 import MarkdownEditor from "./pages/tools/MarkdownEditor";
 import StringUtilities from "./pages/tools/StringUtilities";
+import ColorPicker from "./pages/tools/ColorPicker";
+import HtmlMinifier from "./pages/tools/HtmlMinifier";
+import CssMinifier from "./pages/tools/CssMinifier";
+import JsMinifier from "./pages/tools/JsMinifier";
+import Base64 from "./pages/tools/Base64";
+import RegexTester from "./pages/tools/RegexTester";
+import HtmlToMarkdown from "./pages/tools/HtmlToMarkdown";
+import MarkdownToHtml from "./pages/tools/MarkdownToHtml";
+import BmiCalculator from "./pages/tools/BmiCalculator";
+import MortgageCalculator from "./pages/tools/MortgageCalculator";
+import PercentageCalculator from "./pages/tools/PercentageCalculator";
+import ScientificCalculator from "./pages/tools/ScientificCalculator";
+import AgeCalculator from "./pages/tools/AgeCalculator";
+import DiscountCalculator from "./pages/tools/DiscountCalculator";
+import TimeCalculator from "./pages/tools/TimeCalculator";
+import TipCalculator from "./pages/tools/TipCalculator";
+import CurrencyConverter from "./pages/tools/CurrencyConverter";
+import BinaryDecimalConverter from "./pages/tools/BinaryDecimalConverter";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -122,29 +138,28 @@ const App = () => {
               <Route path="/tools/markdown-editor" element={<MarkdownEditor />} />
               <Route path="/tools/string-utilities" element={<StringUtilities />} />
               
+              {/* Newly implemented tool pages */}
+              <Route path="/tools/color-picker" element={<ColorPicker />} />
+              <Route path="/tools/html-minifier" element={<HtmlMinifier />} />
+              <Route path="/tools/css-minifier" element={<CssMinifier />} />
+              <Route path="/tools/js-minifier" element={<JsMinifier />} />
+              <Route path="/tools/base64" element={<Base64 />} />
+              <Route path="/tools/regex-tester" element={<RegexTester />} />
+              <Route path="/tools/html-to-markdown" element={<HtmlToMarkdown />} />
+              <Route path="/tools/markdown-to-html" element={<MarkdownToHtml />} />
+              <Route path="/tools/bmi-calculator" element={<BmiCalculator />} />
+              <Route path="/tools/mortgage-calculator" element={<MortgageCalculator />} />
+              <Route path="/tools/percentage-calculator" element={<PercentageCalculator />} />
+              <Route path="/tools/scientific-calculator" element={<ScientificCalculator />} />
+              <Route path="/tools/age-calculator" element={<AgeCalculator />} />
+              <Route path="/tools/discount-calculator" element={<DiscountCalculator />} />
+              <Route path="/tools/time-calculator" element={<TimeCalculator />} />
+              <Route path="/tools/tip-calculator" element={<TipCalculator />} />
+              <Route path="/tools/currency-converter" element={<CurrencyConverter />} />
+              <Route path="/tools/binary-decimal" element={<BinaryDecimalConverter />} />
+              
               {/* Placeholder tools */}
-              {/* Remove image-cropper from the placeholders list */}
-              <Route path="/tools/color-picker" element={<ToolPlaceholder toolName="Color Picker" toolDescription="Select and generate color codes for your projects. Convert between RGB, HEX, HSL, and more." />} />
-              <Route path="/tools/css-minifier" element={<ToolPlaceholder toolName="CSS Minifier" toolDescription="Minify your CSS files to reduce file size and improve loading speed." />} />
-              <Route path="/tools/js-minifier" element={<ToolPlaceholder toolName="JavaScript Minifier" toolDescription="Minify your JavaScript code to improve website performance and reduce bandwidth usage." />} />
-              
-              <Route path="/tools/base64" element={<ToolPlaceholder toolName="Base64 Encoder/Decoder" toolDescription="Encode and decode Base64 data. Convert text, images, and binary files to and from Base64 format." />} />
-              <Route path="/tools/regex-tester" element={<ToolPlaceholder toolName="Regex Tester" toolDescription="Test and debug regular expressions with real-time highlighting and explanation." />} />
-              <Route path="/tools/html-to-markdown" element={<ToolPlaceholder toolName="HTML to Markdown" toolDescription="Convert HTML to Markdown syntax for easier editing and version control." />} />
-              <Route path="/tools/markdown-to-html" element={<ToolPlaceholder toolName="Markdown to HTML" toolDescription="Convert Markdown to HTML code. Preview and download the generated HTML." />} />
-              
-              <Route path="/tools/bmi-calculator" element={<ToolPlaceholder toolName="BMI Calculator" toolDescription="Calculate your Body Mass Index and understand what it means for your health." />} />
-              <Route path="/tools/mortgage-calculator" element={<ToolPlaceholder toolName="Mortgage Calculator" toolDescription="Calculate mortgage payments and generate amortization schedules based on loan terms." />} />
-              <Route path="/tools/percentage-calculator" element={<ToolPlaceholder toolName="Percentage Calculator" toolDescription="Calculate percentages easily. Find percentage increases, decreases, and differences." />} />
-              <Route path="/tools/scientific-calculator" element={<ToolPlaceholder toolName="Scientific Calculator" toolDescription="Perform complex mathematical calculations with advanced functions and operations." />} />
-              <Route path="/tools/age-calculator" element={<ToolPlaceholder toolName="Age Calculator" toolDescription="Calculate precise age between two dates in years, months, and days." />} />
-              <Route path="/tools/discount-calculator" element={<ToolPlaceholder toolName="Discount Calculator" toolDescription="Calculate discounts and final prices after applying percentage or fixed amount reductions." />} />
-              <Route path="/tools/time-calculator" element={<ToolPlaceholder toolName="Time Calculator" toolDescription="Add or subtract times and convert between different time formats and time zones." />} />
-              <Route path="/tools/tip-calculator" element={<ToolPlaceholder toolName="Tip Calculator" toolDescription="Calculate tips for restaurants and services. Split bills among multiple people." />} />
-              <Route path="/tools/currency-converter" element={<ToolPlaceholder toolName="Currency Converter" toolDescription="Convert between different currencies using up-to-date exchange rates." />} />
-              <Route path="/tools/binary-decimal" element={<ToolPlaceholder toolName="Binary Decimal Converter" toolDescription="Convert between binary, decimal, hexadecimal, and octal number systems." />} />
-              
-              <Route path="/tools/unit-converter" element={<ToolPlaceholder toolName="Unit Converter" toolDescription="Convert between different units of measurement across multiple categories." />} />
+              {/* Only keeping placeholders for tools we haven't implemented */}
               <Route path="/tools/length-converter" element={<ToolPlaceholder toolName="Length Converter" toolDescription="Convert between different units of length such as meters, feet, inches, and more." />} />
               <Route path="/tools/weight-converter" element={<ToolPlaceholder toolName="Weight Converter" toolDescription="Convert between different units of weight including kilograms, pounds, ounces, and more." />} />
               <Route path="/tools/temperature-converter" element={<ToolPlaceholder toolName="Temperature Converter" toolDescription="Convert between Celsius, Fahrenheit, Kelvin, and other temperature units." />} />
@@ -163,7 +178,6 @@ const App = () => {
               <Route path="/tools/ssl-checker" element={<ToolPlaceholder toolName="SSL Checker" toolDescription="Check SSL certificates of websites for validity, expiration, and security issues." />} />
               <Route path="/tools/random-string-generator" element={<ToolPlaceholder toolName="Random String Generator" toolDescription="Generate random strings with customizable length, character sets, and patterns." />} />
               <Route path="/tools/password-strength" element={<ToolPlaceholder toolName="Password Strength Checker" toolDescription="Evaluate the strength of your passwords against common security standards and best practices." />} />
-              <Route path="/tools/jwt-decoder" element={<ToolPlaceholder toolName="JWT Decoder" toolDescription="Decode and verify JSON Web Tokens to inspect their contents and validate signatures." />} />
               
               <Route path="/tools/youtube-thumbnail" element={<ToolPlaceholder toolName="YouTube Thumbnail Downloader" toolDescription="Download thumbnails from YouTube videos in different resolutions." />} />
               <Route path="/tools/social-media-image-resizer" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
@@ -184,7 +198,6 @@ const App = () => {
               <Route path="/tools/lorem-ipsum-generator" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate placeholder text in various formats and lengths for design mockups." />} />
               <Route path="/tools/pomodoro-timer" element={<ToolPlaceholder toolName="Pomodoro Timer" toolDescription="Boost productivity with the Pomodoro technique. Customize work and break intervals." />} />
               <Route path="/tools/notes" element={<ToolPlaceholder toolName="Quick Notes" toolDescription="Take quick notes in your browser with auto-save and organization features." />} />
-              <Route path="/tools/screen-recorder" element={<ToolPlaceholder toolName="Screen Recorder" toolDescription="Record your screen directly in browser with audio narration and editing options." />} />
               <Route path="/tools/meme-generator" element={<ToolPlaceholder toolName="Meme Generator" toolDescription="Create custom memes with popular templates or upload your own images." />} />
               
               <Route path="/categories" element={<Categories />} />
