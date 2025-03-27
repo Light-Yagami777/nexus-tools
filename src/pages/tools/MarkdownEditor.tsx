@@ -311,7 +311,7 @@ function greet() {
                     <li><code>---</code> (Horizontal rule)</li>
                     <li><code>`Code`</code></li>
                     <li><code>```code block```</code></li>
-                    <li><code>> Blockquote</code></li>
+                    <li><code>&gt; Blockquote</code></li>
                     <li><code>| Table | Header |</code></li>
                   </ul>
                 </div>
