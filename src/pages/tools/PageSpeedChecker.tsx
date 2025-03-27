@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Zap, Clock, Smartphone, Desktop, Info } from "lucide-react";
+import { Zap, Clock, Smartphone, Monitor, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import { showRewardedAd } from "@/utils/adUtils";
 
@@ -185,7 +185,7 @@ const PageSpeedChecker = () => {
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Desktop className="h-5 w-5 text-primary" />
+                    <Monitor className="h-5 w-5 text-primary" />
                     <span className="font-medium">Desktop</span>
                   </div>
                   
