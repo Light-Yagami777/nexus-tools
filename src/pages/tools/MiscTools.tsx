@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Card } from '@/components/ui/card';
@@ -10,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { Dice, Timer, Edit, Video, Image, Clock, FileText, Plus, Minus, Trash, Copy, Play, Pause, RotateCcw } from 'lucide-react';
+import { Dice1, Timer, Edit, Video, Image, Clock, FileText, Plus, Minus, Trash, Copy, Play, Pause, RotateCcw } from 'lucide-react';
 
 type MiscToolType = 
   | 'randomNumber' 
@@ -406,25 +405,25 @@ const MiscTools = () => {
         return {
           title: "Random Number Generator",
           description: "Generate random numbers within a specified range with options for uniqueness and distribution.",
-          icon: <Dice size={24} />
+          icon: <Dice1 size={24} />
         };
       case 'uuidGenerator':
         return {
           title: "UUID Generator",
           description: "Generate UUIDs/GUIDs in various formats for database and application use.",
-          icon: <Dice size={24} />
+          icon: <Dice1 size={24} />
         };
       case 'coinFlip':
         return {
           title: "Coin Flip",
           description: "Flip a virtual coin for making decisions with randomized outcomes.",
-          icon: <Dice size={24} />
+          icon: <Dice1 size={24} />
         };
       case 'diceRoller':
         return {
           title: "Dice Roller",
           description: "Roll virtual dice with customizable number of sides and dice count.",
-          icon: <Dice size={24} />
+          icon: <Dice1 size={24} />
         };
       case 'nameGenerator':
         return {
@@ -460,7 +459,7 @@ const MiscTools = () => {
         return {
           title: "Miscellaneous Tools",
           description: "A collection of useful tools for everyday tasks.",
-          icon: <Dice size={24} />
+          icon: <Dice1 size={24} />
         };
     }
   };
