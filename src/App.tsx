@@ -69,6 +69,12 @@ import UnitConverter from "./pages/tools/UnitConverter";
 import SecurityTools from "./pages/tools/SecurityTools";
 import SocialMediaTools from "./pages/tools/SocialMediaTools";
 import MiscTools from "./pages/tools/MiscTools";
+import RandomNumberGenerator from "./pages/tools/RandomNumberGenerator";
+import UuidGenerator from "./pages/tools/UuidGenerator";
+import CoinFlip from "./pages/tools/CoinFlip";
+import DiceRoller from "./pages/tools/DiceRoller";
+import PomoTimer from "./pages/tools/PomoTimer";
+import HashtagGenerator from "./pages/tools/HashtagGenerator";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -162,6 +168,14 @@ const App = () => {
               <Route path="/tools/pressure-converter" element={<UnitConverter />} />
               <Route path="/tools/angle-converter" element={<UnitConverter />} />
               
+              {/* New Individual Tool Routes */}
+              <Route path="/tools/random-number-generator" element={<RandomNumberGenerator />} />
+              <Route path="/tools/uuid-generator" element={<UuidGenerator />} />
+              <Route path="/tools/coin-flip" element={<CoinFlip />} />
+              <Route path="/tools/dice-roller" element={<DiceRoller />} />
+              <Route path="/tools/pomodoro-timer" element={<PomoTimer />} />
+              <Route path="/tools/hashtag-generator" element={<HashtagGenerator />} />
+              
               {/* Security Tools */}
               <Route path="/tools/md5-generator" element={<SecurityTools />} />
               <Route path="/tools/sha256-generator" element={<SecurityTools />} />
@@ -175,8 +189,6 @@ const App = () => {
               {/* Social Media Tools */}
               <Route path="/tools/youtube-thumbnail" element={<SocialMediaTools />} />
               <Route path="/tools/social-media-image-resizer" element={<SocialMediaTools />} />
-              <Route path="/tools/hashtag-generator" element={<SocialMediaTools />} />
-              <Route path="/tools/twitter-card-generator" element={<SocialMediaTools />} />
               <Route path="/tools/instagram-font-generator" element={<SocialMediaTools />} />
               <Route path="/tools/og-image-generator" element={<SocialMediaTools />} />
               <Route path="/tools/social-media-color-picker" element={<SocialMediaTools />} />
@@ -185,13 +197,6 @@ const App = () => {
               <Route path="/tools/post-scheduler" element={<SocialMediaTools />} />
               
               {/* Miscellaneous Tools */}
-              <Route path="/tools/random-number-generator" element={<MiscTools />} />
-              <Route path="/tools/uuid-generator" element={<MiscTools />} />
-              <Route path="/tools/coin-flip" element={<MiscTools />} />
-              <Route path="/tools/dice-roller" element={<MiscTools />} />
-              <Route path="/tools/name-generator" element={<MiscTools />} />
-              <Route path="/tools/lorem-ipsum-generator" element={<MiscTools />} />
-              <Route path="/tools/pomodoro-timer" element={<MiscTools />} />
               <Route path="/tools/notes" element={<MiscTools />} />
               <Route path="/tools/meme-generator" element={<MiscTools />} />
               
