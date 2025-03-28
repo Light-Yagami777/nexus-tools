@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Copy, Check, Trash, Upload, Code, FileType, ArrowRight, ChevronLeft } from 'lucide-react';
+import { Copy, Check, Trash, Upload, Code, FileType, ArrowRight, ChevronLeft, Dices } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link, useNavigate } from 'react-router-dom';
