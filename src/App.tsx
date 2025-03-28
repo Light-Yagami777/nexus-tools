@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -65,6 +66,21 @@ import TimeCalculator from "./pages/tools/TimeCalculator";
 import TipCalculator from "./pages/tools/TipCalculator";
 import CurrencyConverter from "./pages/tools/CurrencyConverter";
 import BinaryDecimalConverter from "./pages/tools/BinaryDecimalConverter";
+import UnitConverter from "./pages/tools/UnitConverter";
+import LengthConverter from "./pages/tools/LengthConverter";
+import WeightConverter from "./pages/tools/WeightConverter";
+import TemperatureConverter from "./pages/tools/TemperatureConverter";
+import SpeedConverter from "./pages/tools/SpeedConverter";
+import VolumeConverter from "./pages/tools/VolumeConverter";
+import AreaConverter from "./pages/tools/AreaConverter";
+import DataStorageConverter from "./pages/tools/DataStorageConverter";
+import PressureConverter from "./pages/tools/PressureConverter";
+import AngleConverter from "./pages/tools/AngleConverter";
+import MD5HashGenerator from "./pages/tools/MD5HashGenerator";
+import SHA256HashGenerator from "./pages/tools/SHA256HashGenerator";
+import HashIdentifier from "./pages/tools/HashIdentifier";
+import EncryptionDecryption from "./pages/tools/EncryptionDecryption";
+import CSRFTokenGenerator from "./pages/tools/CSRFTokenGenerator";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -158,23 +174,26 @@ const App = () => {
               <Route path="/tools/currency-converter" element={<CurrencyConverter />} />
               <Route path="/tools/binary-decimal" element={<BinaryDecimalConverter />} />
               
-              {/* Placeholder tools */}
-              {/* Only keeping placeholders for tools we haven't implemented */}
-              <Route path="/tools/length-converter" element={<ToolPlaceholder toolName="Length Converter" toolDescription="Convert between different units of length such as meters, feet, inches, and more." />} />
-              <Route path="/tools/weight-converter" element={<ToolPlaceholder toolName="Weight Converter" toolDescription="Convert between different units of weight including kilograms, pounds, ounces, and more." />} />
-              <Route path="/tools/temperature-converter" element={<ToolPlaceholder toolName="Temperature Converter" toolDescription="Convert between Celsius, Fahrenheit, Kelvin, and other temperature units." />} />
-              <Route path="/tools/speed-converter" element={<ToolPlaceholder toolName="Speed Converter" toolDescription="Convert between different units of speed such as mph, km/h, m/s, and knots." />} />
-              <Route path="/tools/volume-converter" element={<ToolPlaceholder toolName="Volume Converter" toolDescription="Convert between different units of volume like liters, gallons, cubic meters, and more." />} />
-              <Route path="/tools/area-converter" element={<ToolPlaceholder toolName="Area Converter" toolDescription="Convert between different units of area including square meters, acres, hectares, and more." />} />
-              <Route path="/tools/data-storage-converter" element={<ToolPlaceholder toolName="Data Storage Converter" toolDescription="Convert between different digital storage units from bits to petabytes." />} />
-              <Route path="/tools/pressure-converter" element={<ToolPlaceholder toolName="Pressure Converter" toolDescription="Convert between different pressure units like pascals, bars, psi, and more." />} />
-              <Route path="/tools/angle-converter" element={<ToolPlaceholder toolName="Angle Converter" toolDescription="Convert between different angle units including degrees, radians, and gradians." />} />
+              {/* Unit Converter Tools */}
+              <Route path="/tools/unit-converter" element={<UnitConverter />} />
+              <Route path="/tools/length-converter" element={<LengthConverter />} />
+              <Route path="/tools/weight-converter" element={<WeightConverter />} />
+              <Route path="/tools/temperature-converter" element={<TemperatureConverter />} />
+              <Route path="/tools/speed-converter" element={<SpeedConverter />} />
+              <Route path="/tools/volume-converter" element={<VolumeConverter />} />
+              <Route path="/tools/area-converter" element={<AreaConverter />} />
+              <Route path="/tools/data-storage-converter" element={<DataStorageConverter />} />
+              <Route path="/tools/pressure-converter" element={<PressureConverter />} />
+              <Route path="/tools/angle-converter" element={<AngleConverter />} />
               
-              <Route path="/tools/md5-generator" element={<ToolPlaceholder toolName="MD5 Hash Generator" toolDescription="Generate MD5 hashes from text or files. Verify data integrity with checksum comparison." />} />
-              <Route path="/tools/sha256-generator" element={<ToolPlaceholder toolName="SHA256 Hash Generator" toolDescription="Generate secure SHA256 hashes for passwords, files, and data verification." />} />
-              <Route path="/tools/hash-identifier" element={<ToolPlaceholder toolName="Hash Identifier" toolDescription="Identify different types of cryptographic hashes by pattern recognition." />} />
-              <Route path="/tools/encryption" element={<ToolPlaceholder toolName="Encryption/Decryption" toolDescription="Encrypt and decrypt text with a password using strong encryption algorithms." />} />
-              <Route path="/tools/csrf-token-generator" element={<ToolPlaceholder toolName="CSRF Token Generator" toolDescription="Generate secure CSRF tokens for web applications to prevent cross-site request forgery attacks." />} />
+              {/* Security & Encryption Tools */}
+              <Route path="/tools/md5-generator" element={<MD5HashGenerator />} />
+              <Route path="/tools/sha256-generator" element={<SHA256HashGenerator />} />
+              <Route path="/tools/hash-identifier" element={<HashIdentifier />} />
+              <Route path="/tools/encryption" element={<EncryptionDecryption />} />
+              <Route path="/tools/csrf-token-generator" element={<CSRFTokenGenerator />} />
+              
+              {/* Placeholder tools */}
               <Route path="/tools/ssl-checker" element={<ToolPlaceholder toolName="SSL Checker" toolDescription="Check SSL certificates of websites for validity, expiration, and security issues." />} />
               <Route path="/tools/random-string-generator" element={<ToolPlaceholder toolName="Random String Generator" toolDescription="Generate random strings with customizable length, character sets, and patterns." />} />
               <Route path="/tools/password-strength" element={<ToolPlaceholder toolName="Password Strength Checker" toolDescription="Evaluate the strength of your passwords against common security standards and best practices." />} />

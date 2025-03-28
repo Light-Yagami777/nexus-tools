@@ -5,10 +5,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Copy, Check, Trash, Upload, Code, FileType, ArrowRight, ChevronLeft, Dices } from 'lucide-react';
+import { Copy, Check, Trash, Upload, Code, FileType, ArrowRight, Dices } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type FileType = 'json' | 'html' | 'css' | 'javascript' | 'sql' | 'xml' | 'markdown' | 'text';
 
@@ -20,7 +20,6 @@ const DevFormatting = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -257,10 +256,6 @@ const DevFormatting = () => {
     reader.readAsText(file);
   };
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   const relatedFormatters = [
     { id: 'html-minifier', name: 'HTML Minifier', path: '/tools/html-minifier' },
     { id: 'css-minifier', name: 'CSS Minifier', path: '/tools/css-minifier' },
@@ -287,23 +282,11 @@ const DevFormatting = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-6 flex items-center">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleBack} 
-              className="mr-2"
-              aria-label="Go back"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
-            <div className="text-center flex-grow">
-              <h1 className="text-3xl font-bold mb-2">Formatter</h1>
-              <p className="text-muted-foreground">
-                One tool for formatting ALL types of files - JSON, HTML, CSS, JavaScript, SQL, XML, Markdown and more
-              </p>
-            </div>
+          <div className="mb-6 text-center">
+            <h1 className="text-3xl font-bold mb-2">Formatter</h1>
+            <p className="text-muted-foreground">
+              One tool for formatting ALL types of files - JSON, HTML, CSS, JavaScript, SQL, XML, Markdown and more
+            </p>
           </div>
 
           <Tabs defaultValue="json" onValueChange={(value) => setFileType(value as FileType)} className="mb-6">
