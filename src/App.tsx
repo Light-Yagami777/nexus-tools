@@ -65,10 +65,6 @@ import TimeCalculator from "./pages/tools/TimeCalculator";
 import TipCalculator from "./pages/tools/TipCalculator";
 import CurrencyConverter from "./pages/tools/CurrencyConverter";
 import BinaryDecimalConverter from "./pages/tools/BinaryDecimalConverter";
-import UnitConverter from "./pages/tools/UnitConverter";
-import SecurityTools from "./pages/tools/SecurityTools";
-import SocialMediaTools from "./pages/tools/SocialMediaTools";
-import MiscTools from "./pages/tools/MiscTools";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -83,6 +79,16 @@ const ScrollToTop = () => {
 const queryClient = new QueryClient();
 
 const App = () => {
+  const ToolPlaceholder = ({ toolName, toolDescription = "This tool is coming soon! We're working hard to implement it." }: { toolName: string, toolDescription?: string }) => (
+    <ToolLayout title={toolName}>
+      <div className="p-8 rounded-xl border bg-card text-card-foreground shadow-sm">
+        <p className="text-lg text-center">
+          {toolDescription}
+        </p>
+      </div>
+    </ToolLayout>
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -122,7 +128,7 @@ const App = () => {
               <Route path="/tools/speech-to-text" element={<SpeechToText />} />
               <Route path="/tools/url-encoder-decoder" element={<UrlEncoderDecoder />} />
               
-              {/* Existing tool pages */}
+              {/* New tool pages we are adding */}
               <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
               <Route path="/tools/page-speed-checker" element={<PageSpeedChecker />} />
               <Route path="/tools/mobile-friendly-test" element={<MobileFriendlyTest />} />
@@ -131,6 +137,8 @@ const App = () => {
               <Route path="/tools/text-formatter" element={<TextFormatter />} />
               <Route path="/tools/markdown-editor" element={<MarkdownEditor />} />
               <Route path="/tools/string-utilities" element={<StringUtilities />} />
+              
+              {/* Newly implemented tool pages */}
               <Route path="/tools/color-picker" element={<ColorPicker />} />
               <Route path="/tools/html-minifier" element={<HtmlMinifier />} />
               <Route path="/tools/css-minifier" element={<CssMinifier />} />
@@ -150,50 +158,47 @@ const App = () => {
               <Route path="/tools/currency-converter" element={<CurrencyConverter />} />
               <Route path="/tools/binary-decimal" element={<BinaryDecimalConverter />} />
               
-              {/* New Converter Tools */}
-              <Route path="/tools/unit-converter" element={<UnitConverter />} />
-              <Route path="/tools/length-converter" element={<UnitConverter />} />
-              <Route path="/tools/weight-converter" element={<UnitConverter />} />
-              <Route path="/tools/temperature-converter" element={<UnitConverter />} />
-              <Route path="/tools/speed-converter" element={<UnitConverter />} />
-              <Route path="/tools/volume-converter" element={<UnitConverter />} />
-              <Route path="/tools/area-converter" element={<UnitConverter />} />
-              <Route path="/tools/data-storage-converter" element={<UnitConverter />} />
-              <Route path="/tools/pressure-converter" element={<UnitConverter />} />
-              <Route path="/tools/angle-converter" element={<UnitConverter />} />
+              {/* Placeholder tools */}
+              {/* Only keeping placeholders for tools we haven't implemented */}
+              <Route path="/tools/length-converter" element={<ToolPlaceholder toolName="Length Converter" toolDescription="Convert between different units of length such as meters, feet, inches, and more." />} />
+              <Route path="/tools/weight-converter" element={<ToolPlaceholder toolName="Weight Converter" toolDescription="Convert between different units of weight including kilograms, pounds, ounces, and more." />} />
+              <Route path="/tools/temperature-converter" element={<ToolPlaceholder toolName="Temperature Converter" toolDescription="Convert between Celsius, Fahrenheit, Kelvin, and other temperature units." />} />
+              <Route path="/tools/speed-converter" element={<ToolPlaceholder toolName="Speed Converter" toolDescription="Convert between different units of speed such as mph, km/h, m/s, and knots." />} />
+              <Route path="/tools/volume-converter" element={<ToolPlaceholder toolName="Volume Converter" toolDescription="Convert between different units of volume like liters, gallons, cubic meters, and more." />} />
+              <Route path="/tools/area-converter" element={<ToolPlaceholder toolName="Area Converter" toolDescription="Convert between different units of area including square meters, acres, hectares, and more." />} />
+              <Route path="/tools/data-storage-converter" element={<ToolPlaceholder toolName="Data Storage Converter" toolDescription="Convert between different digital storage units from bits to petabytes." />} />
+              <Route path="/tools/pressure-converter" element={<ToolPlaceholder toolName="Pressure Converter" toolDescription="Convert between different pressure units like pascals, bars, psi, and more." />} />
+              <Route path="/tools/angle-converter" element={<ToolPlaceholder toolName="Angle Converter" toolDescription="Convert between different angle units including degrees, radians, and gradians." />} />
               
-              {/* Security Tools */}
-              <Route path="/tools/md5-generator" element={<SecurityTools />} />
-              <Route path="/tools/sha256-generator" element={<SecurityTools />} />
-              <Route path="/tools/hash-identifier" element={<SecurityTools />} />
-              <Route path="/tools/encryption" element={<SecurityTools />} />
-              <Route path="/tools/csrf-token-generator" element={<SecurityTools />} />
-              <Route path="/tools/ssl-checker" element={<SecurityTools />} />
-              <Route path="/tools/random-string-generator" element={<SecurityTools />} />
-              <Route path="/tools/password-strength" element={<SecurityTools />} />
+              <Route path="/tools/md5-generator" element={<ToolPlaceholder toolName="MD5 Hash Generator" toolDescription="Generate MD5 hashes from text or files. Verify data integrity with checksum comparison." />} />
+              <Route path="/tools/sha256-generator" element={<ToolPlaceholder toolName="SHA256 Hash Generator" toolDescription="Generate secure SHA256 hashes for passwords, files, and data verification." />} />
+              <Route path="/tools/hash-identifier" element={<ToolPlaceholder toolName="Hash Identifier" toolDescription="Identify different types of cryptographic hashes by pattern recognition." />} />
+              <Route path="/tools/encryption" element={<ToolPlaceholder toolName="Encryption/Decryption" toolDescription="Encrypt and decrypt text with a password using strong encryption algorithms." />} />
+              <Route path="/tools/csrf-token-generator" element={<ToolPlaceholder toolName="CSRF Token Generator" toolDescription="Generate secure CSRF tokens for web applications to prevent cross-site request forgery attacks." />} />
+              <Route path="/tools/ssl-checker" element={<ToolPlaceholder toolName="SSL Checker" toolDescription="Check SSL certificates of websites for validity, expiration, and security issues." />} />
+              <Route path="/tools/random-string-generator" element={<ToolPlaceholder toolName="Random String Generator" toolDescription="Generate random strings with customizable length, character sets, and patterns." />} />
+              <Route path="/tools/password-strength" element={<ToolPlaceholder toolName="Password Strength Checker" toolDescription="Evaluate the strength of your passwords against common security standards and best practices." />} />
               
-              {/* Social Media Tools */}
-              <Route path="/tools/youtube-thumbnail" element={<SocialMediaTools />} />
-              <Route path="/tools/social-media-image-resizer" element={<SocialMediaTools />} />
-              <Route path="/tools/hashtag-generator" element={<SocialMediaTools />} />
-              <Route path="/tools/twitter-card-generator" element={<SocialMediaTools />} />
-              <Route path="/tools/instagram-font-generator" element={<SocialMediaTools />} />
-              <Route path="/tools/og-image-generator" element={<SocialMediaTools />} />
-              <Route path="/tools/social-media-color-picker" element={<SocialMediaTools />} />
-              <Route path="/tools/twitter-character-counter" element={<SocialMediaTools />} />
-              <Route path="/tools/social-profile-analyzer" element={<SocialMediaTools />} />
-              <Route path="/tools/post-scheduler" element={<SocialMediaTools />} />
+              <Route path="/tools/youtube-thumbnail" element={<ToolPlaceholder toolName="YouTube Thumbnail Downloader" toolDescription="Download thumbnails from YouTube videos in different resolutions." />} />
+              <Route path="/tools/social-media-image-resizer" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
+              <Route path="/tools/hashtag-generator" element={<ToolPlaceholder toolName="Hashtag Generator" toolDescription="Generate relevant hashtags for your content based on keywords and trending topics." />} />
+              <Route path="/tools/twitter-card-generator" element={<ToolPlaceholder toolName="Twitter Card Generator" toolDescription="Create Twitter card previews for your website or blog posts to enhance social sharing." />} />
+              <Route path="/tools/instagram-font-generator" element={<ToolPlaceholder toolName="Instagram Font Generator" toolDescription="Create fancy text for Instagram bios and captions that stand out from the crowd." />} />
+              <Route path="/tools/og-image-generator" element={<ToolPlaceholder toolName="OG Image Generator" toolDescription="Create Open Graph images for social sharing with customizable templates and designs." />} />
+              <Route path="/tools/social-media-color-picker" element={<ToolPlaceholder toolName="Social Media Color Picker" toolDescription="Get brand colors for social media platforms to ensure consistent branding across channels." />} />
+              <Route path="/tools/twitter-character-counter" element={<ToolPlaceholder toolName="Twitter Character Counter" toolDescription="Count characters for Twitter posts with visual feedback on length limitations." />} />
+              <Route path="/tools/social-profile-analyzer" element={<ToolPlaceholder toolName="Social Profile Analyzer" toolDescription="Analyze social media profiles for engagement metrics and optimization opportunities." />} />
+              <Route path="/tools/post-scheduler" element={<ToolPlaceholder toolName="Post Scheduler" toolDescription="Find the optimal times to post on social media based on audience activity patterns." />} />
               
-              {/* Miscellaneous Tools */}
-              <Route path="/tools/random-number-generator" element={<MiscTools />} />
-              <Route path="/tools/uuid-generator" element={<MiscTools />} />
-              <Route path="/tools/coin-flip" element={<MiscTools />} />
-              <Route path="/tools/dice-roller" element={<MiscTools />} />
-              <Route path="/tools/name-generator" element={<MiscTools />} />
-              <Route path="/tools/lorem-ipsum-generator" element={<MiscTools />} />
-              <Route path="/tools/pomodoro-timer" element={<MiscTools />} />
-              <Route path="/tools/notes" element={<MiscTools />} />
-              <Route path="/tools/meme-generator" element={<MiscTools />} />
+              <Route path="/tools/random-number-generator" element={<ToolPlaceholder toolName="Random Number Generator" toolDescription="Generate random numbers within a specified range with options for uniqueness and distribution." />} />
+              <Route path="/tools/uuid-generator" element={<ToolPlaceholder toolName="UUID Generator" toolDescription="Generate UUIDs/GUIDs in various formats for database and application use." />} />
+              <Route path="/tools/coin-flip" element={<ToolPlaceholder toolName="Coin Flip" toolDescription="Flip a virtual coin for making decisions with randomized outcomes." />} />
+              <Route path="/tools/dice-roller" element={<ToolPlaceholder toolName="Dice Roller" toolDescription="Roll virtual dice with customizable number of sides and dice count." />} />
+              <Route path="/tools/name-generator" element={<ToolPlaceholder toolName="Name Generator" toolDescription="Generate random names for characters, businesses, products, and more." />} />
+              <Route path="/tools/lorem-ipsum-generator" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate placeholder text in various formats and lengths for design mockups." />} />
+              <Route path="/tools/pomodoro-timer" element={<ToolPlaceholder toolName="Pomodoro Timer" toolDescription="Boost productivity with the Pomodoro technique. Customize work and break intervals." />} />
+              <Route path="/tools/notes" element={<ToolPlaceholder toolName="Quick Notes" toolDescription="Take quick notes in your browser with auto-save and organization features." />} />
+              <Route path="/tools/meme-generator" element={<ToolPlaceholder toolName="Meme Generator" toolDescription="Create custom memes with popular templates or upload your own images." />} />
               
               <Route path="/categories" element={<Categories />} />
               <Route path="/about" element={<About />} />
