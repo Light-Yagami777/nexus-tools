@@ -68,7 +68,6 @@ import BinaryDecimalConverter from "./pages/tools/BinaryDecimalConverter";
 import UnitConverter from "./pages/tools/UnitConverter";
 import SecurityTools from "./pages/tools/SecurityTools";
 import SocialMediaTools from "./pages/tools/SocialMediaTools";
-import MiscTools from "./pages/tools/MiscTools";
 import RandomNumberGenerator from "./pages/tools/RandomNumberGenerator";
 import UuidGenerator from "./pages/tools/UuidGenerator";
 import CoinFlip from "./pages/tools/CoinFlip";
@@ -195,10 +194,6 @@ const App = () => {
               <Route path="/tools/twitter-character-counter" element={<SocialMediaTools />} />
               <Route path="/tools/social-profile-analyzer" element={<SocialMediaTools />} />
               <Route path="/tools/post-scheduler" element={<SocialMediaTools />} />
-              
-              {/* Miscellaneous Tools */}
-              <Route path="/tools/notes" element={<MiscTools />} />
-              <Route path="/tools/meme-generator" element={<MiscTools />} />
               
               <Route path="/categories" element={<Categories />} />
               <Route path="/about" element={<About />} />

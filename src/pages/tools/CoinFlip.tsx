@@ -21,8 +21,8 @@ const CoinFlip = () => {
       setResult(newResult);
       setIsFlipping(false);
       
-      // Update history and stats
-      const newHistory = [...flipHistory, newResult];
+      // Update history and stats - fix type issue by explicitly typing the new array
+      const newHistory: Array<'heads' | 'tails'> = [...flipHistory, newResult];
       setFlipHistory(newHistory);
       
       setFlipStats({
