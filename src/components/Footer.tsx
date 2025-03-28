@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { 
   Github, 
@@ -13,7 +14,8 @@ import {
   ShieldCheck,
   Clock,
   Globe,
-  Sparkles
+  Sparkles,
+  Box
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -30,7 +32,7 @@ export const Footer = () => {
     { icon: <Instagram className="h-5 w-5" />, href: "https://instagram.com", label: "Instagram", color: "hover:bg-pink-600" },
     { icon: <Linkedin className="h-5 w-5" />, href: "https://linkedin.com", label: "LinkedIn", color: "hover:bg-blue-700" },
     { icon: <Youtube className="h-5 w-5" />, href: "https://youtube.com", label: "YouTube", color: "hover:bg-red-600" },
-    { icon: <Mail className="h-5 w-5" />, href: "mailto:contact@multitools.com", label: "Email", color: "hover:bg-green-600" }
+    { icon: <Mail className="h-5 w-5" />, href: "mailto:contact@nexustools.com", label: "Email", color: "hover:bg-green-600" }
   ];
 
   const footerLinks = [
@@ -149,13 +151,15 @@ export const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
             <div className="lg:col-span-2 space-y-6">
               <Link to="/" className="flex items-center space-x-2">
-                <div className="bg-gradient-to-br from-primary to-primary/80 text-white p-2 rounded-lg shadow-md">
-                  <span className="font-bold text-lg">MT</span>
+                <div className="bg-primary text-white p-2 rounded-lg shadow-md">
+                  <span className="font-bold text-lg flex items-center justify-center w-6 h-6">
+                    <Box className="w-4 h-4" />
+                  </span>
                 </div>
-                <span className="font-semibold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">MultiTools</span>
+                <span className="font-semibold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Nexus Tools</span>
               </Link>
               <p className="text-sm text-muted-foreground max-w-md">
-                MultiTools provides a comprehensive collection of useful web tools designed to simplify your daily tasks,
+                Nexus Tools provides a comprehensive collection of useful web tools designed to simplify your daily tasks,
                 enhance productivity, and solve common digital problems - all for free.
               </p>
               <div className="flex items-center space-x-3">
@@ -198,7 +202,7 @@ export const Footer = () => {
 
           <div className="mt-16 pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} MultiTools. All rights reserved.
+              © {currentYear} Nexus Tools. All rights reserved.
             </p>
             <div className="flex items-center mt-4 md:mt-0 space-x-4">
               <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
