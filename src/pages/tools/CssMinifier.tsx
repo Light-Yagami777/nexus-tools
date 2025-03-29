@@ -72,7 +72,7 @@ const CssMinifier = () => {
   };
 
   return (
-    <ToolLayout title="CSS Minifier">
+    <ToolLayout title="CSS Minifier" extraPadding={true} icon={<Code size={24} />}>
       <Card className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">

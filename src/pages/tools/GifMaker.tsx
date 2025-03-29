@@ -4,7 +4,7 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Upload, Image as ImageIcon } from "lucide-react";
+import { Upload, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 const GifMaker = () => {
@@ -67,7 +67,7 @@ const GifMaker = () => {
   };
 
   return (
-    <ToolLayout title="GIF Maker">
+    <ToolLayout title="GIF Maker" extraPadding={true} icon={<ImageIcon size={24} />}>
       <Card className="p-6">
         <div className="space-y-6">
           <div>

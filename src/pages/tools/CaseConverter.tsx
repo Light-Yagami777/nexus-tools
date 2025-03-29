@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Copy } from 'lucide-react';
+import { Copy, TextCursorInput } from 'lucide-react';
 
 const CaseConverter = () => {
   const [inputText, setInputText] = useState('');
@@ -110,7 +110,7 @@ const CaseConverter = () => {
   ];
 
   return (
-    <ToolLayout title="Case Converter">
+    <ToolLayout title="Case Converter" extraPadding={true} icon={<TextCursorInput size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>

@@ -50,7 +50,7 @@ const CoinFlip: React.FC = () => {
   };
 
   return (
-    <ToolLayout title="Coin Flip">
+    <ToolLayout title="Coin Flip" extraPadding={true} icon={<CircleDollarSign size={24} />}>
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <CircleDollarSign className="h-5 w-5 text-primary" />

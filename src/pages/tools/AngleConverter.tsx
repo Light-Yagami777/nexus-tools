@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { motion } from 'framer-motion';
-import { ArrowDown, RotateCcw } from 'lucide-react';
+import { ArrowDown, Compass } from 'lucide-react';
 
 type AngleUnit = 'degree' | 'radian' | 'gradian' | 'minute' | 'second' | 'mil' | 'revolution';
 
@@ -80,13 +80,16 @@ const AngleConverter = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
-      <div className="flex-grow container mx-auto px-4 py-8">
+      <div className="flex-grow container mx-auto px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-6 text-center">
+          <div className="mb-6 text-center pt-10">
+            <div className="flex justify-center mb-3">
+              <Compass className="h-8 w-8 text-primary" />
+            </div>
             <h1 className="text-3xl font-bold mb-2">Angle Converter</h1>
             <p className="text-muted-foreground">
               Convert between different angle measurement units

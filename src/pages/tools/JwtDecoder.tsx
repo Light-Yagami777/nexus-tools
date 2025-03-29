@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import { Key } from 'lucide-react';
 
 const JwtDecoder = () => {
   const [jwtToken, setJwtToken] = useState('');
@@ -56,7 +57,7 @@ const JwtDecoder = () => {
   };
 
   return (
-    <ToolLayout title="JWT Decoder">
+    <ToolLayout title="JWT Decoder" extraPadding={true} icon={<Key size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>

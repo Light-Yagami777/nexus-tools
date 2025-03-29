@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Play, Pause, StopCircle } from 'lucide-react';
+import { Play, Pause, StopCircle, Megaphone } from 'lucide-react';
 import { toast } from 'sonner';
 
 const TextToSpeech = () => {
@@ -91,7 +91,7 @@ const TextToSpeech = () => {
   };
 
   return (
-    <ToolLayout title="Text to Speech">
+    <ToolLayout title="Text to Speech" extraPadding={true} icon={<Megaphone size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>

@@ -72,13 +72,16 @@ const LengthConverter = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
-      <div className="flex-grow container mx-auto px-4 py-8">
+      <div className="flex-grow container mx-auto px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-6 text-center">
+          <div className="mb-6 text-center pt-10">
+            <div className="flex justify-center mb-3">
+              <Ruler className="h-8 w-8 text-primary" />
+            </div>
             <h1 className="text-3xl font-bold mb-2">Length Converter</h1>
             <p className="text-muted-foreground">
               Convert between different units of length quickly and accurately

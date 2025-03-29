@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Code } from "lucide-react";
+import { FileHtml } from "lucide-react";
 
 const HtmlMinifier = () => {
   const [input, setInput] = useState<string>("");
@@ -99,7 +99,7 @@ const HtmlMinifier = () => {
   };
 
   return (
-    <ToolLayout title="HTML Minifier">
+    <ToolLayout title="HTML Minifier" extraPadding={true} icon={<FileHtml size={24} />}>
       <Card className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { Copy, RefreshCw } from 'lucide-react';
+import { Copy, RefreshCw, FileText } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -73,7 +73,7 @@ const LoremIpsumGenerator = () => {
   };
 
   return (
-    <ToolLayout title="Lorem Ipsum Generator">
+    <ToolLayout title="Lorem Ipsum Generator" extraPadding={true} icon={<FileText size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>
