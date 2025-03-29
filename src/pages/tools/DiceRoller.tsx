@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dice, RefreshCw } from 'lucide-react';
+import { Dice1, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DiceRoll {
@@ -98,7 +98,7 @@ const DiceRoller: React.FC = () => {
     <ToolLayout title="Dice Roller">
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Dice className="h-5 w-5 text-primary" />
+          <Dice1 className="h-5 w-5 text-primary" />
           <h2 className="text-xl font-semibold">Dice Roller</h2>
         </div>
         
