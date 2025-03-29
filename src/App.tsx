@@ -81,6 +81,13 @@ import SHA256HashGenerator from "./pages/tools/SHA256HashGenerator";
 import HashIdentifier from "./pages/tools/HashIdentifier";
 import EncryptionDecryption from "./pages/tools/EncryptionDecryption";
 import CSRFTokenGenerator from "./pages/tools/CSRFTokenGenerator";
+// Import our newly implemented tools
+import SSLChecker from "./pages/tools/SSLChecker";
+import RandomStringGenerator from "./pages/tools/RandomStringGenerator";
+import PasswordStrengthChecker from "./pages/tools/PasswordStrengthChecker";
+import YouTubeThumbnailDownloader from "./pages/tools/YouTubeThumbnailDownloader";
+import CoinFlip from "./pages/tools/CoinFlip";
+import DiceRoller from "./pages/tools/DiceRoller";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -193,12 +200,15 @@ const App = () => {
               <Route path="/tools/encryption" element={<EncryptionDecryption />} />
               <Route path="/tools/csrf-token-generator" element={<CSRFTokenGenerator />} />
               
-              {/* Placeholder tools */}
-              <Route path="/tools/ssl-checker" element={<ToolPlaceholder toolName="SSL Checker" toolDescription="Check SSL certificates of websites for validity, expiration, and security issues." />} />
-              <Route path="/tools/random-string-generator" element={<ToolPlaceholder toolName="Random String Generator" toolDescription="Generate random strings with customizable length, character sets, and patterns." />} />
-              <Route path="/tools/password-strength" element={<ToolPlaceholder toolName="Password Strength Checker" toolDescription="Evaluate the strength of your passwords against common security standards and best practices." />} />
+              {/* Our newly implemented tools */}
+              <Route path="/tools/ssl-checker" element={<SSLChecker />} />
+              <Route path="/tools/random-string-generator" element={<RandomStringGenerator />} />
+              <Route path="/tools/password-strength" element={<PasswordStrengthChecker />} />
+              <Route path="/tools/youtube-thumbnail" element={<YouTubeThumbnailDownloader />} />
+              <Route path="/tools/coin-flip" element={<CoinFlip />} />
+              <Route path="/tools/dice-roller" element={<DiceRoller />} />
               
-              <Route path="/tools/youtube-thumbnail" element={<ToolPlaceholder toolName="YouTube Thumbnail Downloader" toolDescription="Download thumbnails from YouTube videos in different resolutions." />} />
+              {/* Placeholder tools for the remaining ones */}
               <Route path="/tools/social-media-image-resizer" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
               <Route path="/tools/hashtag-generator" element={<ToolPlaceholder toolName="Hashtag Generator" toolDescription="Generate relevant hashtags for your content based on keywords and trending topics." />} />
               <Route path="/tools/twitter-card-generator" element={<ToolPlaceholder toolName="Twitter Card Generator" toolDescription="Create Twitter card previews for your website or blog posts to enhance social sharing." />} />
@@ -211,8 +221,6 @@ const App = () => {
               
               <Route path="/tools/random-number-generator" element={<ToolPlaceholder toolName="Random Number Generator" toolDescription="Generate random numbers within a specified range with options for uniqueness and distribution." />} />
               <Route path="/tools/uuid-generator" element={<ToolPlaceholder toolName="UUID Generator" toolDescription="Generate UUIDs/GUIDs in various formats for database and application use." />} />
-              <Route path="/tools/coin-flip" element={<ToolPlaceholder toolName="Coin Flip" toolDescription="Flip a virtual coin for making decisions with randomized outcomes." />} />
-              <Route path="/tools/dice-roller" element={<ToolPlaceholder toolName="Dice Roller" toolDescription="Roll virtual dice with customizable number of sides and dice count." />} />
               <Route path="/tools/name-generator" element={<ToolPlaceholder toolName="Name Generator" toolDescription="Generate random names for characters, businesses, products, and more." />} />
               <Route path="/tools/lorem-ipsum-generator" element={<ToolPlaceholder toolName="Lorem Ipsum Generator" toolDescription="Generate placeholder text in various formats and lengths for design mockups." />} />
               <Route path="/tools/pomodoro-timer" element={<ToolPlaceholder toolName="Pomodoro Timer" toolDescription="Boost productivity with the Pomodoro technique. Customize work and break intervals." />} />
