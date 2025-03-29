@@ -60,7 +60,7 @@ const RandomStringGenerator: React.FC = () => {
   };
 
   return (
-    <ToolLayout title="Random String Generator">
+    <ToolLayout title="Random String Generator" extraPadding={true} icon={<Shuffle size={24} />}>
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Shuffle className="h-5 w-5 text-primary" />

@@ -64,7 +64,7 @@ const SSLChecker: React.FC = () => {
   };
 
   return (
-    <ToolLayout title="SSL Certificate Checker">
+    <ToolLayout title="SSL Certificate Checker" extraPadding={true} icon={<Shield size={24} />}>
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Shield className="h-5 w-5 text-primary" />

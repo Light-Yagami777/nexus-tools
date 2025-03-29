@@ -95,7 +95,7 @@ const DiceRoller: React.FC = () => {
   };
 
   return (
-    <ToolLayout title="Dice Roller">
+    <ToolLayout title="Dice Roller" extraPadding={true}>
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Dice1 className="h-5 w-5 text-primary" />
