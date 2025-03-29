@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -7,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { FileHtml } from "lucide-react";
+import { FileCode } from "lucide-react";
 
 const HtmlMinifier = () => {
   const [input, setInput] = useState<string>("");
@@ -99,7 +98,7 @@ const HtmlMinifier = () => {
   };
 
   return (
-    <ToolLayout title="HTML Minifier" extraPadding={true} icon={<FileHtml size={24} />}>
+    <ToolLayout title="HTML Minifier" extraPadding={true} icon={<FileCode size={24} />}>
       <Card className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">
