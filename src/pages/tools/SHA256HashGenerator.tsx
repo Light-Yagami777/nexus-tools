@@ -1,15 +1,6 @@
-
-import React, { useState, useRef } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { Hash, Copy, Check, Upload, RefreshCw, Shield } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Key } from 'lucide-react';
 
 const SHA256HashGenerator = () => {
   const [inputText, setInputText] = useState<string>('');
@@ -32,14 +23,11 @@ const SHA256HashGenerator = () => {
     setIsGenerating(true);
     
     try {
-      // Convert string to ArrayBuffer
       const encoder = new TextEncoder();
       const data = encoder.encode(inputText);
       
-      // Generate SHA-256 hash using SubtleCrypto API
       const hashBuffer = await crypto.subtle.digest('SHA-256', data);
       
-      // Convert ArrayBuffer to hex string
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
       
@@ -96,8 +84,12 @@ const SHA256HashGenerator = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="SHA256 Hash Generator" 
+      description="Generate SHA256 hashes from text"
+      icon={<Key className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -214,8 +206,7 @@ const SHA256HashGenerator = () => {
           </Card>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

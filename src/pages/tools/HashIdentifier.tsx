@@ -1,14 +1,6 @@
-
-import React, { useState } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { Search, ShieldAlert, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { KeyRound } from 'lucide-react';
 
 type HashType = {
   name: string;
@@ -22,7 +14,6 @@ const HashIdentifier = () => {
   const [hashInput, setHashInput] = useState<string>('');
   const [identifiedHashes, setIdentifiedHashes] = useState<HashType[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-  const { toast } = useToast();
 
   const hashTypes: HashType[] = [
     { name: 'MD5', description: 'Message Digest 5', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'high' },
@@ -56,18 +47,15 @@ const HashIdentifier = () => {
 
     setIsAnalyzing(true);
     
-    // Clean input
     const cleanedHash = hashInput.trim();
     const matchedHashes: HashType[] = [];
     
-    // Check against all hash patterns
     for (const hashType of hashTypes) {
       if (hashType.regex.test(cleanedHash) && (hashType.length === 0 || cleanedHash.length === hashType.length)) {
         matchedHashes.push(hashType);
       }
     }
     
-    // Sort by confidence
     matchedHashes.sort((a, b) => {
       const confidenceOrder = { high: 0, medium: 1, low: 2 };
       return confidenceOrder[a.confidence] - confidenceOrder[b.confidence];
@@ -101,8 +89,12 @@ const HashIdentifier = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="Hash Identifier" 
+      description="Identify different types of hashes"
+      icon={<KeyRound className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -204,8 +196,7 @@ const HashIdentifier = () => {
           </Card>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

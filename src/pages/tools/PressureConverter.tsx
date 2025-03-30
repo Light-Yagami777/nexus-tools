@@ -1,13 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { motion } from 'framer-motion';
-import { ArrowDown, Gauge } from 'lucide-react';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Thermometer } from 'lucide-react';
 
 type PressureUnit = 'pascal' | 'kilopascal' | 'megapascal' | 'bar' | 'psi' | 'ksi' | 'atmosphere' | 'torr' | 'mmHg' | 'inHg';
 
@@ -17,7 +10,6 @@ const PressureConverter = () => {
   const [toUnit, setToUnit] = useState<PressureUnit>('psi');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to pascals
   const conversionFactors: Record<PressureUnit, number> = {
     'pascal': 1,
     'kilopascal': 1000,
@@ -43,10 +35,8 @@ const PressureConverter = () => {
       return;
     }
     
-    // Convert to base unit (pascals)
     const inPascals = input * conversionFactors[fromUnit];
     
-    // Convert from base unit to target unit
     const converted = inPascals / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
@@ -87,8 +77,12 @@ const PressureConverter = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="Pressure Converter" 
+      description="Convert between different units of pressure"
+      icon={<Thermometer className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -200,8 +194,7 @@ const PressureConverter = () => {
           </div>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

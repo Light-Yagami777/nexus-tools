@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { Shield, Copy, Check, RefreshCw, Code } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Shield } from 'lucide-react';
 
 const CSRFTokenGenerator = () => {
   const [token, setToken] = useState<string>('');
@@ -45,14 +37,12 @@ const CSRFTokenGenerator = () => {
   };
 
   const updateExamples = (newToken: string) => {
-    // HTML form example
     const htmlCode = `<form action="/process" method="POST">
   <input type="hidden" name="csrf_token" value="${newToken}">
   <!-- other form fields -->
   <button type="submit">Submit</button>
 </form>`;
 
-    // PHP example
     const phpCode = `<?php
 // Store the token in session
 session_start();
@@ -64,7 +54,6 @@ if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
 }
 ?>`;
 
-    // JavaScript example
     const jsCode = `// Add CSRF token to all AJAX requests
 const csrfToken = '${newToken}';
 
@@ -101,8 +90,12 @@ axios.defaults.headers.common['X-CSRF-Token'] = csrfToken;`;
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="CSRF Token Generator" 
+      description="Generate CSRF tokens for web security"
+      icon={<Shield className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -291,8 +284,7 @@ axios.defaults.headers.common['X-CSRF-Token'] = csrfToken;`;
           </Card>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

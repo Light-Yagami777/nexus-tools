@@ -1,13 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { motion } from 'framer-motion';
-import { ArrowDown, Maximize2 } from 'lucide-react';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { SquareStack } from 'lucide-react';
 
 type AreaUnit = 'square-meter' | 'square-kilometer' | 'square-centimeter' | 'square-millimeter' | 'square-mile' | 'square-yard' | 'square-foot' | 'square-inch' | 'hectare' | 'acre';
 
@@ -17,7 +10,6 @@ const AreaConverter = () => {
   const [toUnit, setToUnit] = useState<AreaUnit>('acre');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to square meters
   const conversionFactors: Record<AreaUnit, number> = {
     'square-meter': 1,
     'square-kilometer': 1000000,
@@ -43,10 +35,8 @@ const AreaConverter = () => {
       return;
     }
     
-    // Convert to base unit (square meters)
     const inSquareMeters = input * conversionFactors[fromUnit];
     
-    // Convert from base unit to target unit
     const converted = inSquareMeters / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
@@ -87,8 +77,12 @@ const AreaConverter = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="Area Converter" 
+      description="Convert between different units of area"
+      icon={<SquareStack className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -207,8 +201,7 @@ const AreaConverter = () => {
           </div>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

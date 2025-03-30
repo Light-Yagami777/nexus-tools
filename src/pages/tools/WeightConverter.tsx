@@ -1,13 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { motion } from 'framer-motion';
-import { ArrowDown, Scale } from 'lucide-react';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Scale } from 'lucide-react';
 
 type WeightUnit = 'kilogram' | 'gram' | 'milligram' | 'metric-ton' | 'pound' | 'ounce' | 'stone' | 'us-ton';
 
@@ -17,7 +10,6 @@ const WeightConverter = () => {
   const [toUnit, setToUnit] = useState<WeightUnit>('pound');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to kilograms
   const conversionFactors: Record<WeightUnit, number> = {
     'kilogram': 1,
     'gram': 0.001,
@@ -41,10 +33,8 @@ const WeightConverter = () => {
       return;
     }
     
-    // Convert to base unit (kilograms)
     const inKilograms = input * conversionFactors[fromUnit];
     
-    // Convert from base unit to target unit
     const converted = inKilograms / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
@@ -70,8 +60,12 @@ const WeightConverter = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="Weight Converter" 
+      description="Convert between different units of weight"
+      icon={<Scale className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -178,8 +172,7 @@ const WeightConverter = () => {
           </div>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

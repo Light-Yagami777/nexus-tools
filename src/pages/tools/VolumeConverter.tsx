@@ -1,13 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
-import { NavBar } from '@/components/NavBar';
-import { Footer } from '@/components/Footer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { motion } from 'framer-motion';
-import { ArrowDown, FlaskConical } from 'lucide-react';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { FlaskConical } from 'lucide-react';
 
 type VolumeUnit = 'liter' | 'milliliter' | 'cubic-meter' | 'cubic-centimeter' | 'gallon' | 'quart' | 'pint' | 'cup' | 'fluid-ounce' | 'tablespoon' | 'teaspoon';
 
@@ -17,7 +10,6 @@ const VolumeConverter = () => {
   const [toUnit, setToUnit] = useState<VolumeUnit>('gallon');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to liters
   const conversionFactors: Record<VolumeUnit, number> = {
     'liter': 1,
     'milliliter': 0.001,
@@ -44,10 +36,8 @@ const VolumeConverter = () => {
       return;
     }
     
-    // Convert to base unit (liters)
     const inLiters = input * conversionFactors[fromUnit];
     
-    // Convert from base unit to target unit
     const converted = inLiters / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
@@ -90,8 +80,12 @@ const VolumeConverter = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <ToolLayout 
+      title="Volume Converter" 
+      description="Convert between different units of volume"
+      icon={<FlaskConical className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="flex-grow container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -209,8 +203,7 @@ const VolumeConverter = () => {
           </div>
         </motion.div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 
