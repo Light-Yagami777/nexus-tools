@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
-import ToolLayout from '@/components/ToolLayout';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Text } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -110,7 +110,12 @@ const CaseConverter = () => {
   ];
 
   return (
-    <ToolLayout title="Case Converter" extraPadding={true} icon={<TextCursorInput size={24} />}>
+    <ToolLayout 
+      title="Case Converter" 
+      description="Convert text between different letter cases"
+      icon={<Text className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="space-y-6">
         <Card>
           <CardHeader>

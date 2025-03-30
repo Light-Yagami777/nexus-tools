@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -76,7 +77,7 @@ const AngleConverter = () => {
       title="Angle Converter" 
       description="Convert between different angle measurement units"
       icon={<Compass className="h-6 w-6" />}
-      extraPadding={true}
+      extraPadding={false}
     >
       <Card className="p-6 max-w-lg mx-auto">
         <div className="space-y-6">

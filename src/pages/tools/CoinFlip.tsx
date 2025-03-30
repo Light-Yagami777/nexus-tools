@@ -1,12 +1,8 @@
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { CircleDollarSign } from 'lucide-react';
 
-import React, { useState } from 'react';
-import ToolLayout from '@/components/ToolLayout';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { CircleDollarSign, RefreshCw, RotateCw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-const CoinFlip: React.FC = () => {
+const CoinFlip = () => {
   const [isFlipping, setIsFlipping] = useState(false);
   const [result, setResult] = useState<'heads' | 'tails' | null>(null);
   const [flipCount, setFlipCount] = useState(0);
@@ -19,7 +15,6 @@ const CoinFlip: React.FC = () => {
     const newFlipCount = flipCount + 1;
     setFlipCount(newFlipCount);
     
-    // Wait a bit for animation effect
     setTimeout(() => {
       const outcome = Math.random() < 0.5 ? 'heads' : 'tails';
       setResult(outcome);
@@ -50,7 +45,12 @@ const CoinFlip: React.FC = () => {
   };
 
   return (
-    <ToolLayout title="Coin Flip" extraPadding={true} icon={<CircleDollarSign size={24} />}>
+    <ToolLayout 
+      title="Coin Flip" 
+      description="Flip a virtual coin for random decisions"
+      icon={<CircleDollarSign className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <CircleDollarSign className="h-5 w-5 text-primary" />

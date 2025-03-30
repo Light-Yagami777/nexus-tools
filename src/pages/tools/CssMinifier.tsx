@@ -1,13 +1,13 @@
-
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Code } from 'lucide-react';
 import { useState } from "react";
-import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Code } from "lucide-react";
 
 const CssMinifier = () => {
   const [input, setInput] = useState<string>("");
@@ -72,7 +72,12 @@ const CssMinifier = () => {
   };
 
   return (
-    <ToolLayout title="CSS Minifier" extraPadding={true} icon={<Code size={24} />}>
+    <ToolLayout 
+      title="CSS Minifier" 
+      description="Minify CSS code to reduce file size"
+      icon={<Code className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <Card className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">

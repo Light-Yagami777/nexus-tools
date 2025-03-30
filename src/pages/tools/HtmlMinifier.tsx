@@ -1,12 +1,6 @@
-import { useState } from "react";
-import { ToolLayout } from "@/components/ToolLayout";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
-import { FileCode } from "lucide-react";
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { FileCode } from 'lucide-react';
 
 const HtmlMinifier = () => {
   const [input, setInput] = useState<string>("");
@@ -98,7 +92,12 @@ const HtmlMinifier = () => {
   };
 
   return (
-    <ToolLayout title="HTML Minifier" extraPadding={true} icon={<FileCode size={24} />}>
+    <ToolLayout 
+      title="HTML Minifier" 
+      description="Minify HTML code to reduce file size"
+      icon={<FileCode className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <Card className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">

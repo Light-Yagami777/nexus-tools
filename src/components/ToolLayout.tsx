@@ -9,7 +9,7 @@ interface ToolLayoutProps {
   title: string;
   description?: string;
   icon?: React.ReactNode;
-  extraPadding?: boolean; // Add option for extra padding
+  extraPadding?: boolean; 
 }
 
 export const ToolLayout: React.FC<ToolLayoutProps> = ({ 
@@ -17,7 +17,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   title, 
   description,
   icon,
-  extraPadding = false // Default to false
+  extraPadding = false 
 }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,8 +36,8 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
     visible: { opacity: 1, y: 0 }
   };
 
-  // Calculate padding based on the prop
-  const topPadding = extraPadding ? "pt-24" : "pt-16";
+  // Always add enough padding to clear the navbar
+  const topPadding = extraPadding ? "pt-28" : "pt-24";
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

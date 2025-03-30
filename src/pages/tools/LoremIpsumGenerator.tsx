@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
-import ToolLayout from '@/components/ToolLayout';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Type } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -22,7 +22,6 @@ const LoremIpsumGenerator = () => {
   const [includeHtml, setIncludeHtml] = useState<boolean>(false);
   const [generatedText, setGeneratedText] = useState<string>("");
 
-  // Sample lorem ipsum paragraphs
   const loremIpsumParagraphs = [
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio.",
     "Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio. Donec varius, lectus id viverra malesuada, quam nunc dictum diam, eget gravida ligula magna eu ligula. Sed ut ipsum aliquam, iaculis purus eu, varius risus.",
@@ -73,7 +72,12 @@ const LoremIpsumGenerator = () => {
   };
 
   return (
-    <ToolLayout title="Lorem Ipsum Generator" extraPadding={true} icon={<FileText size={24} />}>
+    <ToolLayout 
+      title="Lorem Ipsum Generator" 
+      description="Generate placeholder text for your designs"
+      icon={<Type className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="space-y-6">
         <Card>
           <CardHeader>

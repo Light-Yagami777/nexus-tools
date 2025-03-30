@@ -80,7 +80,7 @@ const UnitConverter = () => {
       title="Unit Converter" 
       description="Collection of tools to convert between different units of measurement"
       icon={<Calculator className="h-6 w-6" />}
-      extraPadding={true}
+      extraPadding={false}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {converters.map((converter, index) => (

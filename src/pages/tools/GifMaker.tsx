@@ -1,6 +1,6 @@
-
-import { useState } from "react";
-import { ToolLayout } from "@/components/ToolLayout";
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Film } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -67,7 +67,12 @@ const GifMaker = () => {
   };
 
   return (
-    <ToolLayout title="GIF Maker" extraPadding={true} icon={<ImageIcon size={24} />}>
+    <ToolLayout 
+      title="GIF Maker" 
+      description="Create animated GIFs from images or videos"
+      icon={<Film className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <Card className="p-6">
         <div className="space-y-6">
           <div>

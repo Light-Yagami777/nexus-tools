@@ -131,14 +131,21 @@
     @apply nexus-gradient bg-clip-text text-transparent;
   }
 
-  /* Add tool page container class for consistent padding across tool pages */
+  /* Improved responsive tool page container */
   .tool-page-container {
-    @apply pt-12 px-6 md:px-10;
+    @apply px-4 sm:px-6 md:px-10;
   }
   
   /* Back button style for tool pages */
   .back-button {
     @apply inline-flex items-center text-primary hover:text-primary/80 font-medium mb-4 transition-colors;
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 640px) {
+    .tool-page-container {
+      @apply px-3;
+    }
   }
 }
 

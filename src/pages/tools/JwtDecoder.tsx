@@ -1,11 +1,5 @@
-
-import React, { useState } from 'react';
-import ToolLayout from '@/components/ToolLayout';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from 'sonner';
+import React from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
 import { Key } from 'lucide-react';
 
 const JwtDecoder = () => {
@@ -57,7 +51,12 @@ const JwtDecoder = () => {
   };
 
   return (
-    <ToolLayout title="JWT Decoder" extraPadding={true} icon={<Key size={24} />}>
+    <ToolLayout 
+      title="JWT Decoder" 
+      description="Decode and verify JWT tokens"
+      icon={<Key className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="space-y-6">
         <Card>
           <CardHeader>

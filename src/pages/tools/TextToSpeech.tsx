@@ -1,6 +1,6 @@
-
 import React, { useState, useRef } from 'react';
-import ToolLayout from '@/components/ToolLayout';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Speaker } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -91,7 +91,12 @@ const TextToSpeech = () => {
   };
 
   return (
-    <ToolLayout title="Text to Speech" extraPadding={true} icon={<Megaphone size={24} />}>
+    <ToolLayout 
+      title="Text to Speech" 
+      description="Convert text to spoken audio"
+      icon={<Speaker className="h-6 w-6" />}
+      extraPadding={true}
+    >
       <div className="space-y-6">
         <Card>
           <CardHeader>

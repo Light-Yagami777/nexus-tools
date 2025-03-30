@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -146,7 +147,7 @@ const MetaTagGenerator = () => {
       title="Meta Tag Generator" 
       description="Create optimized meta tags for better SEO and social media sharing"
       icon={<Tags className="h-6 w-6" />}
-      extraPadding={true}
+      extraPadding={false}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
