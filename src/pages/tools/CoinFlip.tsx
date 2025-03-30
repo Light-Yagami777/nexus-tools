@@ -1,6 +1,10 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { CircleDollarSign } from 'lucide-react';
+import { CircleDollarSign, RefreshCw, RotateCw } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CoinFlip = () => {
   const [isFlipping, setIsFlipping] = useState(false);

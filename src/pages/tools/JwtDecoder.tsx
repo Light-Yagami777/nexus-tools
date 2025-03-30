@@ -1,6 +1,12 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Key } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 const JwtDecoder = () => {
   const [jwtToken, setJwtToken] = useState('');

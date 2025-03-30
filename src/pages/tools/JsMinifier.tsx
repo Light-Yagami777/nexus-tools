@@ -1,6 +1,13 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { FileCode } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 const JsMinifier = () => {
   const [input, setInput] = useState<string>("");
