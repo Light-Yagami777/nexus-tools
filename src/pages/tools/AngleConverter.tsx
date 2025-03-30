@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { motion } from 'framer-motion';
 import { ArrowDown, Compass } from 'lucide-react';
 import { ToolLayout } from '@/components/ToolLayout';
 
@@ -16,7 +14,6 @@ const AngleConverter = () => {
   const [toUnit, setToUnit] = useState<AngleUnit>('radian');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to degrees
   const conversionFactors: Record<AngleUnit, number> = {
     'degree': 1,
     'radian': 57.2958,
@@ -39,10 +36,8 @@ const AngleConverter = () => {
       return;
     }
     
-    // Convert to base unit (degrees)
     const inDegrees = input * conversionFactors[fromUnit];
     
-    // Convert from base unit to target unit
     const converted = inDegrees / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
