@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { motion } from 'framer-motion';
 import { ArrowDown, Ruler } from 'lucide-react';
 import { ToolLayout } from '@/components/ToolLayout';
 
@@ -14,6 +16,7 @@ const LengthConverter = () => {
   const [toUnit, setToUnit] = useState<LengthUnit>('kilometer');
   const [result, setResult] = useState<string>('');
 
+  // Conversion factors to meters
   const conversionFactors: Record<LengthUnit, number> = {
     meter: 1,
     kilometer: 1000,
@@ -37,8 +40,10 @@ const LengthConverter = () => {
       return;
     }
     
+    // Convert to base unit (meters)
     const inMeters = input * conversionFactors[fromUnit];
     
+    // Convert from base unit to target unit
     const converted = inMeters / conversionFactors[toUnit];
     
     setResult(converted.toLocaleString('en-US', {
