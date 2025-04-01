@@ -1,101 +1,95 @@
-import React from 'react';
-import { ToolLayout } from '@/components/ToolLayout';
-import { KeyRound } from 'lucide-react';
 
-type HashType = {
-  name: string;
-  description: string;
-  regex: RegExp;
-  length: number;
-  confidence: 'high' | 'medium' | 'low';
-};
+import React, { useState } from 'react';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Key, Search, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { motion } from 'framer-motion';
+import { toast } from "sonner";
+
+// Hash patterns for identification
+const hashPatterns = [
+  { name: "MD5", regex: /^[a-f0-9]{32}$/i, bits: 128 },
+  { name: "SHA-1", regex: /^[a-f0-9]{40}$/i, bits: 160 },
+  { name: "SHA-256", regex: /^[a-f0-9]{64}$/i, bits: 256 },
+  { name: "SHA-512", regex: /^[a-f0-9]{128}$/i, bits: 512 },
+  { name: "SHA3-256", regex: /^[a-f0-9]{64}$/i, bits: 256 },
+  { name: "SHA3-512", regex: /^[a-f0-9]{128}$/i, bits: 512 },
+  { name: "RIPEMD-160", regex: /^[a-f0-9]{40}$/i, bits: 160 },
+  { name: "Bcrypt", regex: /^\$2[ayb]\$[0-9]{2}\$[A-Za-z0-9\.\/]{53}$/i, bits: null },
+  { name: "MySQL", regex: /^\*[A-F0-9]{40}$/i, bits: null },
+  { name: "Base64", regex: /^[a-zA-Z0-9+\/]+=*$/i, bits: null },
+  { name: "CRC32", regex: /^[a-f0-9]{8}$/i, bits: 32 }
+];
 
 const HashIdentifier = () => {
-  const [hashInput, setHashInput] = useState<string>('');
-  const [identifiedHashes, setIdentifiedHashes] = useState<HashType[]>([]);
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-
-  const hashTypes: HashType[] = [
-    { name: 'MD5', description: 'Message Digest 5', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'high' },
-    { name: 'SHA-1', description: 'Secure Hash Algorithm 1', regex: /^[a-f0-9]{40}$/i, length: 40, confidence: 'high' },
-    { name: 'SHA-256', description: 'Secure Hash Algorithm 256', regex: /^[a-f0-9]{64}$/i, length: 64, confidence: 'high' },
-    { name: 'SHA-384', description: 'Secure Hash Algorithm 384', regex: /^[a-f0-9]{96}$/i, length: 96, confidence: 'high' },
-    { name: 'SHA-512', description: 'Secure Hash Algorithm 512', regex: /^[a-f0-9]{128}$/i, length: 128, confidence: 'high' },
-    { name: 'RIPEMD-160', description: 'RACE Integrity Primitives Evaluation Message Digest', regex: /^[a-f0-9]{40}$/i, length: 40, confidence: 'medium' },
-    { name: 'Whirlpool', description: 'Whirlpool Hash', regex: /^[a-f0-9]{128}$/i, length: 128, confidence: 'medium' },
-    { name: 'MD4', description: 'Message Digest 4', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'medium' },
-    { name: 'MD2', description: 'Message Digest 2', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'medium' },
-    { name: 'CRC32', description: 'Cyclic Redundancy Check 32', regex: /^[a-f0-9]{8}$/i, length: 8, confidence: 'high' },
-    { name: 'LM Hash', description: 'LAN Manager Hash', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'low' },
-    { name: 'NTLM', description: 'NT LAN Manager', regex: /^[a-f0-9]{32}$/i, length: 32, confidence: 'low' },
-    { name: 'MySQL', description: 'MySQL Hash', regex: /^[a-f0-9]{16}$/i, length: 16, confidence: 'high' },
-    { name: 'SHA-224', description: 'Secure Hash Algorithm 224', regex: /^[a-f0-9]{56}$/i, length: 56, confidence: 'high' },
-    { name: 'Base64', description: 'Base64 Encoded String', regex: /^[A-Za-z0-9+/]+={0,2}$/, length: 0, confidence: 'medium' },
-    { name: 'Bcrypt', description: 'Bcrypt Hash', regex: /^\$2[ayb]\$[0-9]{2}\$[A-Za-z0-9./]{53}$/, length: 60, confidence: 'high' },
-    { name: 'PBKDF2', description: 'Password-Based Key Derivation Function 2', regex: /^[a-f0-9]{64,}$/i, length: 64, confidence: 'low' },
-  ];
+  const [inputHash, setInputHash] = useState<string>('');
+  const [identificationResults, setIdentificationResults] = useState<Array<any>>([]);
+  const [isIdentifying, setIsIdentifying] = useState<boolean>(false);
 
   const identifyHash = () => {
-    if (!hashInput.trim()) {
-      toast({
-        variant: "destructive",
-        title: "Input Required",
-        description: "Please enter a hash value to identify."
-      });
+    if (!inputHash.trim()) {
+      toast.error('Please enter a hash value');
       return;
     }
 
-    setIsAnalyzing(true);
+    setIsIdentifying(true);
     
-    const cleanedHash = hashInput.trim();
-    const matchedHashes: HashType[] = [];
+    const hash = inputHash.trim();
+    const matchedPatterns = [];
     
-    for (const hashType of hashTypes) {
-      if (hashType.regex.test(cleanedHash) && (hashType.length === 0 || cleanedHash.length === hashType.length)) {
-        matchedHashes.push(hashType);
+    // Check against each pattern
+    for (const pattern of hashPatterns) {
+      if (pattern.regex.test(hash)) {
+        matchedPatterns.push({
+          name: pattern.name,
+          bits: pattern.bits,
+          confidence: calculateConfidence(hash, pattern)
+        });
       }
     }
     
-    matchedHashes.sort((a, b) => {
-      const confidenceOrder = { high: 0, medium: 1, low: 2 };
-      return confidenceOrder[a.confidence] - confidenceOrder[b.confidence];
-    });
+    // Sort by confidence
+    matchedPatterns.sort((a, b) => b.confidence - a.confidence);
     
-    setIdentifiedHashes(matchedHashes);
+    setIdentificationResults(matchedPatterns);
+    setIsIdentifying(false);
     
-    if (matchedHashes.length > 0) {
-      toast({
-        title: "Hash Identified",
-        description: `Found ${matchedHashes.length} possible hash types.`
-      });
+    if (matchedPatterns.length === 0) {
+      toast.error('Could not identify the hash format');
     } else {
-      toast({
-        variant: "destructive",
-        title: "No Matches Found",
-        description: "Could not identify the hash type. Please check your input."
-      });
+      toast.success(`Identified ${matchedPatterns.length} possible hash formats`);
     }
+  };
+  
+  const calculateConfidence = (hash: string, pattern: any) => {
+    // Simple confidence scoring
+    let confidence = 75; // Base confidence
     
-    setIsAnalyzing(false);
+    // Adjust based on length and pattern specificity
+    if (pattern.name === "Bcrypt" && hash.startsWith("$2")) confidence += 20;
+    if (pattern.name === "MySQL" && hash.startsWith("*")) confidence += 20;
+    if (pattern.name === "SHA-256" && hash.length === 64) confidence += 5;
+    if (pattern.name === "MD5" && hash.length === 32) confidence += 5;
+    
+    return Math.min(confidence, 100);
   };
 
-  const getConfidenceColor = (confidence: 'high' | 'medium' | 'low') => {
-    switch (confidence) {
-      case 'high': return 'text-green-600 dark:text-green-400';
-      case 'medium': return 'text-amber-600 dark:text-amber-400';
-      case 'low': return 'text-red-600 dark:text-red-400';
-      default: return '';
-    }
+  const clearInput = () => {
+    setInputHash('');
+    setIdentificationResults([]);
   };
 
   return (
     <ToolLayout 
       title="Hash Identifier" 
-      description="Identify different types of hashes"
-      icon={<KeyRound className="h-6 w-6" />}
+      description="Identify the type of hash"
+      icon={<Key className="h-6 w-6" />}
       extraPadding={true}
     >
-      <div className="flex-grow container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,93 +98,95 @@ const HashIdentifier = () => {
           <div className="mb-6 text-center">
             <h1 className="text-3xl font-bold mb-2">Hash Identifier</h1>
             <p className="text-muted-foreground">
-              Identify different types of cryptographic hashes
+              Identify the type of hash function used to generate a hash
             </p>
           </div>
-
-          <Card className="p-6 max-w-2xl mx-auto">
-            <div className="mb-6">
+          
+          <Card className="p-6 mb-6">
+            <div>
               <Label htmlFor="hash-input">Enter Hash Value</Label>
-              <div className="flex mt-2">
+              <div className="mt-2 flex gap-2">
                 <Input
                   id="hash-input"
-                  placeholder="Paste your hash here..."
-                  value={hashInput}
-                  onChange={(e) => setHashInput(e.target.value)}
-                  className="flex-grow"
+                  placeholder="e.g., 5f4dcc3b5aa765d61d8327deb882cf99"
+                  value={inputHash}
+                  onChange={(e) => setInputHash(e.target.value)}
+                  className="font-mono"
                 />
-                <Button 
-                  onClick={identifyHash} 
-                  disabled={isAnalyzing} 
-                  className="ml-2"
-                >
-                  <Search className="h-4 w-4 mr-2" />
-                  Identify
+                <Button onClick={identifyHash} disabled={isIdentifying}>
+                  {isIdentifying ? (
+                    'Identifying...'
+                  ) : (
+                    <><Search className="h-4 w-4 mr-2" /> Identify</>
+                  )}
                 </Button>
               </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h2 className="text-lg font-semibold mb-3">Results</h2>
-              
-              {identifiedHashes.length === 0 ? (
-                <div className="p-4 bg-muted rounded-md flex items-center justify-center text-center">
-                  <p>Enter a hash value above to identify its type</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {identifiedHashes.map((hash, index) => (
-                    <div key={index} className="p-3 bg-muted rounded-md">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium">{hash.name}</h3>
-                          <p className="text-sm text-muted-foreground">{hash.description}</p>
-                        </div>
-                        <div className={`flex items-center ${getConfidenceColor(hash.confidence)}`}>
-                          {hash.confidence === 'high' ? (
-                            <ShieldCheck className="h-4 w-4 mr-1" />
-                          ) : (
-                            <ShieldAlert className="h-4 w-4 mr-1" />
-                          )}
-                          <span className="text-sm capitalize">{hash.confidence} confidence</span>
-                        </div>
-                      </div>
-                      <div className="mt-2 text-sm">
-                        <span className="font-medium">Length:</span> {hash.length} characters
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className="mt-4 flex gap-2">
+                <Button variant="outline" onClick={clearInput}>Clear</Button>
+              </div>
             </div>
           </Card>
+          
+          {identificationResults.length > 0 && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Identification Results</h2>
+              <div className="space-y-4">
+                {identificationResults.map((result, index) => (
+                  <div 
+                    key={index}
+                    className={`p-4 rounded-md border ${
+                      index === 0 ? 'bg-primary/10 border-primary/20' : 'bg-muted border-muted-foreground/20'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        {result.confidence > 70 ? (
+                          <ShieldCheck className="h-5 w-5 mr-2 text-primary" />
+                        ) : (
+                          <ShieldAlert className="h-5 w-5 mr-2 text-muted-foreground" />
+                        )}
+                        <span className="font-medium">{result.name}</span>
+                      </div>
+                      <span className="text-sm bg-muted-foreground/10 px-2 py-1 rounded text-muted-foreground">
+                        {result.confidence}% confidence
+                      </span>
+                    </div>
+                    <div className="mt-2 text-sm text-muted-foreground">
+                      {result.bits && <span>Bit length: {result.bits} bits</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
-          <Card className="p-6 mt-8 max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Common Hash Types</h2>
-            
-            <div className="space-y-3">
-              <div>
-                <h3 className="font-medium">MD5</h3>
-                <p className="text-sm">32 characters, hexadecimal. Commonly used but highly insecure.</p>
-                <p className="text-xs font-mono mt-1 bg-muted p-1 rounded">Example: 5d41402abc4b2a76b9719d911017c592</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium">SHA-1</h3>
-                <p className="text-sm">40 characters, hexadecimal. Considered cryptographically broken.</p>
-                <p className="text-xs font-mono mt-1 bg-muted p-1 rounded">Example: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium">SHA-256</h3>
-                <p className="text-sm">64 characters, hexadecimal. Widely used in security applications.</p>
-                <p className="text-xs font-mono mt-1 bg-muted p-1 rounded">Example: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium">bcrypt</h3>
-                <p className="text-sm">~60 characters, starts with "$2a$", "$2b$", or "$2y$". Strong password hashing.</p>
-                <p className="text-xs font-mono mt-1 bg-muted p-1 rounded overflow-x-auto">Example: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy</p>
+          <Card className="p-6 mt-8">
+            <h2 className="text-xl font-semibold mb-4">About Hash Identification</h2>
+            <div className="space-y-4">
+              <p>
+                Hash functions convert data of arbitrary size into fixed-size values. Different hash algorithms 
+                produce outputs with recognizable patterns, typically varying in length and character composition.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-medium mb-2">Common Hash Types</h3>
+                  <ul className="space-y-1 text-sm">
+                    <li><span className="font-medium">MD5:</span> 32 hexadecimal characters</li>
+                    <li><span className="font-medium">SHA-1:</span> 40 hexadecimal characters</li>
+                    <li><span className="font-medium">SHA-256:</span> 64 hexadecimal characters</li>
+                    <li><span className="font-medium">SHA-512:</span> 128 hexadecimal characters</li>
+                    <li><span className="font-medium">Bcrypt:</span> Starts with $2a$, $2b$ or $2y$</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium mb-2">Security Recommendations</h3>
+                  <ul className="space-y-1 text-sm">
+                    <li>Avoid using MD5 and SHA-1 for passwords (vulnerable)</li>
+                    <li>For passwords, use bcrypt, Argon2, or PBKDF2</li>
+                    <li>For data integrity, SHA-256 or SHA-512 are suitable</li>
+                    <li>Always use salt with password hashes</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </Card>

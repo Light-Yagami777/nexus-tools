@@ -1,6 +1,14 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Shield } from 'lucide-react';
+import { Shield, Check, Copy } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 const CSRFTokenGenerator = () => {
   const [token, setToken] = useState<string>('');

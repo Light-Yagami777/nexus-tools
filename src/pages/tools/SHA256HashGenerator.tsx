@@ -1,6 +1,13 @@
-import React from 'react';
+
+import React, { useState, useRef } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Key } from 'lucide-react';
+import { Key, Copy, Check, Upload, Shield, RefreshCw } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 const SHA256HashGenerator = () => {
   const [inputText, setInputText] = useState<string>('');

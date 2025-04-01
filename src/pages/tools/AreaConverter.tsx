@@ -1,6 +1,12 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { SquareStack } from 'lucide-react';
+import { SquareStack, ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type AreaUnit = 'square-meter' | 'square-kilometer' | 'square-centimeter' | 'square-millimeter' | 'square-mile' | 'square-yard' | 'square-foot' | 'square-inch' | 'hectare' | 'acre';
 

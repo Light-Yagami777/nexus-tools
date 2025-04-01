@@ -1,237 +1,390 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Image, Upload, Check } from 'lucide-react';
+import { ImageIcon, Upload, Download, RefreshCw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { motion } from 'framer-motion';
+
+// Define platform-specific sizes
+const PLATFORM_SIZES = {
+  instagram: [
+    { name: "Post (Square)", width: 1080, height: 1080 },
+    { name: "Post (Landscape)", width: 1080, height: 566 },
+    { name: "Post (Portrait)", width: 1080, height: 1350 },
+    { name: "Story", width: 1080, height: 1920 },
+    { name: "Profile Picture", width: 320, height: 320 }
+  ],
+  facebook: [
+    { name: "Post (Square)", width: 1200, height: 1200 },
+    { name: "Post (Landscape)", width: 1200, height: 630 },
+    { name: "Cover Photo", width: 851, height: 315 },
+    { name: "Profile Picture", width: 170, height: 170 }
+  ],
+  twitter: [
+    { name: "Post", width: 1200, height: 675 },
+    { name: "Header", width: 1500, height: 500 },
+    { name: "Profile Picture", width: 400, height: 400 }
+  ],
+  linkedin: [
+    { name: "Post", width: 1200, height: 627 },
+    { name: "Cover Photo", width: 1584, height: 396 },
+    { name: "Profile Picture", width: 400, height: 400 }
+  ]
+};
+
+type Platform = 'instagram' | 'facebook' | 'twitter' | 'linkedin';
 
 const SocialMediaImageResizer = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [platform, setPlatform] = useState<string>("facebook");
-  const [outputUrl, setOutputUrl] = useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('instagram');
+  const [selectedSize, setSelectedSize] = useState<string>(PLATFORM_SIZES.instagram[0].name);
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [isResizing, setIsResizing] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const platformSizes = {
-    facebook: { width: 1200, height: 630, label: "Facebook Post (1200×630)" },
-    instagram: { width: 1080, height: 1080, label: "Instagram Post (1080×1080)" },
-    twitter: { width: 1200, height: 675, label: "Twitter Post (1200×675)" },
-    linkedin: { width: 1200, height: 627, label: "LinkedIn Post (1200×627)" },
-    pinterest: { width: 1000, height: 1500, label: "Pinterest Pin (1000×1500)" },
-    youtube: { width: 1280, height: 720, label: "YouTube Thumbnail (1280×720)" },
-    facebook_profile: { width: 170, height: 170, label: "Facebook Profile (170×170)" },
-    twitter_profile: { width: 400, height: 400, label: "Twitter Profile (400×400)" },
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select an image file');
-        return;
-      }
-      
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      setOutputUrl(null);
+    if (!file) return;
+    
+    // Check if file is an image
+    if (!file.type.match('image.*')) {
+      toast.error('Please select an image file');
+      return;
     }
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        setOriginalImage(img.src);
+        // Automatically resize when image is loaded
+        resizeImage(img);
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleResize = async () => {
-    if (!selectedFile || !platform) return;
+  const getCurrentSizeConfig = () => {
+    const sizeConfig = PLATFORM_SIZES[selectedPlatform].find(size => size.name === selectedSize);
+    return sizeConfig || PLATFORM_SIZES[selectedPlatform][0];
+  };
+
+  const resizeImage = (imgElement: HTMLImageElement | null = null) => {
+    if (!originalImage && !imgElement) return;
     
-    setIsProcessing(true);
+    setIsResizing(true);
     
     try {
-      const { width, height } = platformSizes[platform as keyof typeof platformSizes];
-      
-      // Create a new image from the file
-      const img = new Image();
-      img.src = URL.createObjectURL(selectedFile);
-      
-      await new Promise((resolve) => {
-        img.onload = resolve;
-      });
-      
-      // Create a canvas with the target dimensions
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      
-      if (ctx) {
-        // Draw image to canvas with correct sizing
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, width, height);
-        
-        // Calculate dimensions to maintain aspect ratio
-        const scale = Math.max(width / img.width, height / img.height);
-        const scaledWidth = img.width * scale;
-        const scaledHeight = img.height * scale;
-        const x = (width - scaledWidth) / 2;
-        const y = (height - scaledHeight) / 2;
-        
-        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-        
-        // Get the resized image as URL
-        const resizedUrl = canvas.toDataURL('image/jpeg', 0.9);
-        setOutputUrl(resizedUrl);
-        toast.success('Image resized successfully!');
+      const img = imgElement || new Image();
+      if (!imgElement) {
+        img.src = originalImage as string;
       }
+      
+      const sizeConfig = getCurrentSizeConfig();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      // Set canvas dimensions
+      canvas.width = sizeConfig.width;
+      canvas.height = sizeConfig.height;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw white background
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Calculate dimensions to maintain aspect ratio
+      const imgRatio = img.width / img.height;
+      const canvasRatio = canvas.width / canvas.height;
+      
+      let drawWidth, drawHeight, x, y;
+      
+      if (imgRatio > canvasRatio) {
+        // Image is wider than canvas ratio
+        drawHeight = canvas.height;
+        drawWidth = drawHeight * imgRatio;
+        x = (canvas.width - drawWidth) / 2;
+        y = 0;
+      } else {
+        // Image is taller than canvas ratio
+        drawWidth = canvas.width;
+        drawHeight = drawWidth / imgRatio;
+        x = 0;
+        y = (canvas.height - drawHeight) / 2;
+      }
+      
+      // Draw image centered
+      ctx.drawImage(img, x, y, drawWidth, drawHeight);
+      
+      // Get data URL
+      const dataUrl = canvas.toDataURL('image/png');
+      setCroppedImage(dataUrl);
+      
     } catch (error) {
-      toast.error('Failed to resize image');
+      toast.error('Error resizing image');
       console.error(error);
     } finally {
-      setIsProcessing(false);
+      setIsResizing(false);
     }
   };
 
-  const handleDownload = () => {
-    if (!outputUrl) return;
+  const downloadImage = () => {
+    if (!croppedImage) return;
     
     const link = document.createElement('a');
-    link.href = outputUrl;
-    link.download = `${platform}_${selectedFile?.name || 'image.jpg'}`;
+    link.href = croppedImage;
+    link.download = `${selectedPlatform}-${selectedSize.replace(/\s+/g, '-').toLowerCase()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success('Image downloaded');
+    
+    toast.success('Image downloaded successfully');
+  };
+
+  const handlePlatformChange = (value: string) => {
+    setSelectedPlatform(value as Platform);
+    setSelectedSize(PLATFORM_SIZES[value as Platform][0].name);
+    if (originalImage) {
+      // Wait for state update
+      setTimeout(() => {
+        const img = new Image();
+        img.onload = () => resizeImage(img);
+        img.src = originalImage;
+      }, 0);
+    }
+  };
+
+  const handleSizeChange = (value: string) => {
+    setSelectedSize(value);
+    if (originalImage) {
+      // Wait for state update
+      setTimeout(() => {
+        const img = new Image();
+        img.onload = () => resizeImage(img);
+        img.src = originalImage;
+      }, 0);
+    }
+  };
+
+  const resetImage = () => {
+    setOriginalImage(null);
+    setCroppedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
-    <ToolLayout 
-      title="Social Media Image Resizer" 
+    <ToolLayout
+      title="Social Media Image Resizer"
       description="Resize images for different social media platforms"
-      icon={<Image className="h-6 w-6" />}
+      icon={<ImageIcon className="h-6 w-6" />}
       extraPadding={true}
     >
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Upload Image</CardTitle>
-          <CardDescription>Select an image to resize for social media</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid gap-4">
-              <Label htmlFor="image-input">Select Image</Label>
-              <input
-                id="image-input"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <Button 
-                variant="outline" 
-                onClick={() => document.getElementById('image-input')?.click()}
-                className="h-32 border-dashed border-2 flex flex-col items-center justify-center gap-2"
-              >
-                <Upload className="h-8 w-8 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
-                  {selectedFile ? selectedFile.name : 'Click to select an image'}
-                </span>
-              </Button>
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl font-bold mb-2">Social Media Image Resizer</h1>
+          <p className="text-muted-foreground">
+            Quickly resize your images for different social platforms
+          </p>
+        </div>
 
-            <div className="grid gap-4">
-              <Label htmlFor="platform">Select Platform</Label>
-              <Select
-                value={platform}
-                onValueChange={setPlatform}
-              >
-                <SelectTrigger id="platform">
-                  <SelectValue placeholder="Select platform" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(platformSizes).map(([key, { label }]) => (
-                    <SelectItem key={key} value={key}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button 
-              onClick={handleResize} 
-              disabled={!selectedFile || isProcessing}
-              className="w-full"
-            >
-              {isProcessing ? 'Processing...' : 'Resize Image'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {previewUrl && (
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Original Image</CardTitle>
+        <div className="grid gap-6 md:grid-cols-5">
+          <Card className="md:col-span-2 p-6">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle>Settings</CardTitle>
+              <CardDescription>
+                Select platform and upload your image
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="relative h-[300px] w-full border rounded-md overflow-hidden">
-                <img 
-                  src={previewUrl} 
-                  alt="Preview" 
-                  className="object-contain h-full w-full"
-                />
+            <CardContent className="p-0 space-y-6">
+              <div>
+                <Label htmlFor="platform">Platform</Label>
+                <Select defaultValue={selectedPlatform} onValueChange={handlePlatformChange}>
+                  <SelectTrigger id="platform" className="mt-2">
+                    <SelectValue placeholder="Select platform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="instagram">Instagram</SelectItem>
+                    <SelectItem value="facebook">Facebook</SelectItem>
+                    <SelectItem value="twitter">Twitter</SelectItem>
+                    <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+              
+              <div>
+                <Label htmlFor="size">Image Size</Label>
+                <Select defaultValue={selectedSize} onValueChange={handleSizeChange}>
+                  <SelectTrigger id="size" className="mt-2">
+                    <SelectValue placeholder="Select size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PLATFORM_SIZES[selectedPlatform].map((size) => (
+                      <SelectItem key={size.name} value={size.name}>
+                        {size.name} ({size.width}×{size.height})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="pt-2">
+                <div className="relative">
+                  <Button variant="outline" className="w-full relative">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileUpload}
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Image
+                  </Button>
+                </div>
+              </div>
+              
+              {originalImage && (
+                <div className="space-y-2">
+                  <Button 
+                    variant="secondary" 
+                    onClick={() => resizeImage()} 
+                    disabled={isResizing}
+                    className="w-full"
+                  >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Resize
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    onClick={resetImage}
+                    className="w-full"
+                  >
+                    Clear
+                  </Button>
+                </div>
+              )}
+              
+              {croppedImage && (
+                <Button 
+                  onClick={downloadImage}
+                  className="w-full"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+              )}
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Resized Image
-                {outputUrl && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handleDownload}
-                    className="ml-2"
-                  >
-                    <Check className="h-4 w-4 mr-1" /> Download
-                  </Button>
-                )}
-              </CardTitle>
+          
+          <Card className="md:col-span-3 p-6">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle>Preview</CardTitle>
+              <CardDescription>
+                {originalImage 
+                  ? `${getCurrentSizeConfig().width}×${getCurrentSizeConfig().height} pixels`
+                  : 'Upload an image to see the preview'
+                }
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="relative h-[300px] w-full border rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
-                {outputUrl ? (
-                  <img 
-                    src={outputUrl} 
-                    alt="Resized" 
-                    className="object-contain h-full w-full"
-                  />
-                ) : (
-                  <p className="text-muted-foreground text-sm">Click "Resize Image" to see the result</p>
-                )}
-              </div>
+            <CardContent className="p-0">
+              <Tabs defaultValue="resized" className="w-full">
+                <TabsList className="grid grid-cols-2 mb-4">
+                  <TabsTrigger value="resized">Resized</TabsTrigger>
+                  <TabsTrigger value="original">Original</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="resized" className="mt-0">
+                  <div className="bg-muted/30 rounded-md overflow-hidden flex items-center justify-center">
+                    {croppedImage ? (
+                      <div 
+                        className="relative border border-border rounded-md overflow-hidden shadow-sm"
+                        style={{ maxWidth: '100%', maxHeight: '400px' }}
+                      >
+                        <img 
+                          src={croppedImage} 
+                          alt="Resized" 
+                          className="max-w-full max-h-[400px] object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-[300px] w-full flex items-center justify-center text-muted-foreground">
+                        {isResizing ? 'Resizing...' : 'Resized image will appear here'}
+                      </div>
+                    )}
+                  </div>
+                  <canvas ref={canvasRef} style={{ display: 'none' }} />
+                </TabsContent>
+                
+                <TabsContent value="original" className="mt-0">
+                  <div className="bg-muted/30 rounded-md overflow-hidden flex items-center justify-center">
+                    {originalImage ? (
+                      <div 
+                        className="relative border border-border rounded-md overflow-hidden shadow-sm"
+                        style={{ maxWidth: '100%', maxHeight: '400px' }}
+                      >
+                        <img 
+                          src={originalImage} 
+                          alt="Original" 
+                          className="max-w-full max-h-[400px] object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-[300px] w-full flex items-center justify-center text-muted-foreground">
+                        Upload an image to see the original
+                      </div>
+                    )}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
-      )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>About Image Resizing for Social Media</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          <p className="mb-4">
-            Using correctly sized images for social media platforms is crucial for making your content look professional and engaging. 
-            Each platform has different recommended dimensions for optimal display across various devices.
-          </p>
-          <p>
-            This tool helps you quickly resize your images to the recommended dimensions for each platform, 
-            ensuring your visuals look great when shared on social media.
-          </p>
-        </CardContent>
-      </Card>
+        
+        <Card className="p-6 mt-6">
+          <CardHeader className="p-0 pb-4">
+            <CardTitle>Image Size Guide</CardTitle>
+            <CardDescription>
+              Recommended dimensions for popular social platforms
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {Object.entries(PLATFORM_SIZES).map(([platform, sizes]) => (
+                <div key={platform} className="space-y-2">
+                  <h3 className="font-medium capitalize">{platform}</h3>
+                  <ul className="space-y-1 text-sm">
+                    {sizes.map((size) => (
+                      <li key={size.name} className="flex justify-between">
+                        <span>{size.name}</span>
+                        <span className="text-muted-foreground">{size.width}×{size.height}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </ToolLayout>
   );
 };
