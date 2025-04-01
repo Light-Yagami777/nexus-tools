@@ -22,7 +22,7 @@ const MD5HashGenerator = () => {
     setIsGenerating(true);
 
     try {
-      // Calculate MD5 hash directly without setTimeout
+      // Calculate MD5 hash
       const md5Hash = CryptoJS.MD5(text).toString();
       setHash(md5Hash);
       toast.success('MD5 hash generated successfully!');
