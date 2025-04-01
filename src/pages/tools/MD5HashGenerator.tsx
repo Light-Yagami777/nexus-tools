@@ -22,15 +22,24 @@ const MD5HashGenerator = () => {
     setIsGenerating(true);
 
     try {
-      // Use CryptoJS to generate the MD5 hash
-      const md5Hash = CryptoJS.MD5(text).toString();
-      
-      setHash(md5Hash);
-      toast.success('MD5 hash generated successfully!');
+      // Use setTimeout to ensure UI updates before heavy computation
+      setTimeout(() => {
+        try {
+          // Use CryptoJS to generate the MD5 hash
+          const md5Hash = CryptoJS.MD5(text).toString();
+          
+          setHash(md5Hash);
+          toast.success('MD5 hash generated successfully!');
+        } catch (error) {
+          console.error('Error generating MD5 hash:', error);
+          toast.error('Error generating MD5 hash. Please try again.');
+        } finally {
+          setIsGenerating(false);
+        }
+      }, 50);
     } catch (error) {
-      console.error('Error generating MD5 hash:', error);
-      toast.error('Error generating MD5 hash. Please try again.');
-    } finally {
+      console.error('Error in hash generation process:', error);
+      toast.error('Unexpected error occurred. Please try again.');
       setIsGenerating(false);
     }
   };
@@ -70,10 +79,14 @@ const MD5HashGenerator = () => {
             placeholder="Enter text here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="resize-none font-mono"
+            className="resize-none font-mono min-h-[120px]"
           />
           <div className="flex space-x-2">
-            <Button onClick={generateHash} disabled={isGenerating || !text.trim()}>
+            <Button 
+              onClick={generateHash} 
+              disabled={isGenerating || !text.trim()}
+              className="relative"
+            >
               {isGenerating ? 'Generating...' : 'Generate'}
             </Button>
             <Button variant="outline" onClick={clearText} disabled={isGenerating}>Clear</Button>

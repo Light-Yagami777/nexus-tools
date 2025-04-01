@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -15,7 +16,32 @@ import {
   Home,
   Dices,
   Braces,
-  QrCode
+  QrCode,
+  Search,
+  Zap,
+  Link as LinkIcon,
+  Smartphone,
+  Text,
+  GitBranch,
+  Edit,
+  Clock,
+  DollarSign,
+  Hash,
+  Twitter,
+  Instagram,
+  Users,
+  MessageSquare,
+  BarChart,
+  Shuffle,
+  Shield,
+  Youtube,
+  HardDrive,
+  Thermometer,
+  Lock,
+  Mic,
+  Volume2,
+  Calendar,
+  UserRound
 } from "lucide-react";
 
 interface ToolCardProps {
@@ -32,6 +58,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
     switch (tool.icon) {
       case "image": return <Image {...iconProps} />;
       case "text": return <FileText {...iconProps} />;
+      case "code": return <Code {...iconProps} />;
       case "braces": return <Braces {...iconProps} />;
       case "key": return <Key {...iconProps} />;
       case "qr-code": return <QrCode {...iconProps} />;
@@ -40,6 +67,30 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
       case "palette": return <Palette {...iconProps} />;
       case "home": return <Home {...iconProps} />;
       case "dice": return <Dices {...iconProps} />;
+      case "search": return <Search {...iconProps} />;
+      case "zap": return <Zap {...iconProps} />;
+      case "link": return <LinkIcon {...iconProps} />;
+      case "smartphone": return <Smartphone {...iconProps} />;
+      case "git-branch": return <GitBranch {...iconProps} />;
+      case "edit": return <Edit {...iconProps} />;
+      case "clock": return <Clock {...iconProps} />;
+      case "dollar-sign": return <DollarSign {...iconProps} />;
+      case "hash": return <Hash {...iconProps} />;
+      case "twitter": return <Twitter {...iconProps} />;
+      case "instagram": return <Instagram {...iconProps} />;
+      case "users": return <Users {...iconProps} />;
+      case "file-text": return <FileText {...iconProps} />;
+      case "hard-drive": return <HardDrive {...iconProps} />;
+      case "thermometer": return <Thermometer {...iconProps} />;
+      case "lock": return <Lock {...iconProps} />;
+      case "mic": return <Mic {...iconProps} />;
+      case "volume-2": return <Volume2 {...iconProps} />;
+      case "shield": return <Shield {...iconProps} />;
+      case "shuffle": return <Shuffle {...iconProps} />;
+      case "youtube": return <Youtube {...iconProps} />;
+      case "user": return <UserRound {...iconProps} />;
+      case "calendar": return <Calendar {...iconProps} />;
+      case "video": return <MessageSquare {...iconProps} />;
       default: return <Activity {...iconProps} />;
     }
   };

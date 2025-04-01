@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { motion } from 'framer-motion';
-import { ArrowDown, Database } from 'lucide-react';
+import { ArrowDown, HardDrive } from 'lucide-react';
 import { ToolLayout } from '@/components/ToolLayout';
 
 type StorageUnit = 'bit' | 'byte' | 'kibibyte' | 'mebibyte' | 'gibibyte' | 'tebibyte' | 'pebibyte';
@@ -80,7 +80,7 @@ const DataStorageConverter = () => {
     <ToolLayout 
       title="Data Storage Converter" 
       description="Convert between different digital storage units"
-      icon={<Database className="h-6 w-6" />}
+      icon={<HardDrive className="h-6 w-6" />}
       extraPadding={true}
     >
       <Card className="p-6 max-w-lg mx-auto">
