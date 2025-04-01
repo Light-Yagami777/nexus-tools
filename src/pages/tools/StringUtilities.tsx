@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Copy, Text, Search, RefreshCw, ArrowRightLeft, Scissors } from "lucide-react";
+import { Copy, Text, Search, RefreshCw, ArrowRightLeft, Scissors, Space } from "lucide-react";
 
 const StringUtilities = () => {
   const [input, setInput] = useState("");
@@ -16,6 +17,8 @@ const StringUtilities = () => {
   const [replaceText, setReplaceText] = useState("");
   const [extractPattern, setExtractPattern] = useState("");
   const [trimOption, setTrimOption] = useState<"both" | "start" | "end" | "all">("both");
+  const [spaceType, setSpaceType] = useState<"single" | "double" | "custom">("single");
+  const [customSpacing, setCustomSpacing] = useState<number>(2);
 
   const copyToClipboard = () => {
     if (!output) {
@@ -33,8 +36,7 @@ const StringUtilities = () => {
       })
       .catch(err => {
         toast("Failed to copy", {
-          description: "Could not copy text to clipboard.",
-          variant: "destructive"
+          description: "Could not copy text to clipboard."
         });
       });
   };
@@ -42,16 +44,14 @@ const StringUtilities = () => {
   const handleReplace = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
 
     if (!findText) {
       toast("Find text is empty", {
-        description: "Please enter text to find.",
-        variant: "destructive"
+        description: "Please enter text to find."
       });
       return;
     }
@@ -69,8 +69,7 @@ const StringUtilities = () => {
       });
     } catch (error) {
       toast("Replacement failed", {
-        description: "An error occurred. Check if your find text is valid.",
-        variant: "destructive"
+        description: "An error occurred. Check if your find text is valid."
       });
     }
   };
@@ -78,8 +77,7 @@ const StringUtilities = () => {
   const handleTrim = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
@@ -111,16 +109,14 @@ const StringUtilities = () => {
   const handleExtract = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
 
     if (!extractPattern) {
       toast("Pattern is empty", {
-        description: "Please enter a pattern to extract.",
-        variant: "destructive"
+        description: "Please enter a pattern to extract."
       });
       return;
     }
@@ -138,14 +134,12 @@ const StringUtilities = () => {
       } else {
         setOutput('');
         toast("No matches found", {
-          description: "The pattern did not match any text.",
-          variant: "destructive"
+          description: "The pattern did not match any text."
         });
       }
     } catch (error) {
       toast("Extraction failed", {
-        description: "Invalid regular expression or an error occurred.",
-        variant: "destructive"
+        description: "Invalid regular expression or an error occurred."
       });
     }
   };
@@ -153,8 +147,7 @@ const StringUtilities = () => {
   const handleReverse = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
@@ -171,8 +164,7 @@ const StringUtilities = () => {
   const handleRandomCase = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
@@ -192,8 +184,7 @@ const StringUtilities = () => {
   const handleWordCount = () => {
     if (!input) {
       toast("Empty input", {
-        description: "Please enter some text to process.",
-        variant: "destructive"
+        description: "Please enter some text to process."
       });
       return;
     }
@@ -207,6 +198,31 @@ const StringUtilities = () => {
     
     toast("Count complete", {
       description: `Found ${words} words in your text.`
+    });
+  };
+
+  const handleAddSpaces = () => {
+    if (!input) {
+      toast("Empty input", {
+        description: "Please enter some text to process."
+      });
+      return;
+    }
+    
+    let spacingAmount = 1;
+    if (spaceType === "double") {
+      spacingAmount = 2;
+    } else if (spaceType === "custom") {
+      spacingAmount = customSpacing;
+    }
+    
+    // Add spaces between characters
+    const result = input.split('').join(' '.repeat(spacingAmount));
+    
+    setOutput(result);
+    
+    toast("Spacing added", {
+      description: `Added ${spacingAmount} space${spacingAmount !== 1 ? 's' : ''} between each character.`
     });
   };
 
@@ -251,7 +267,7 @@ const StringUtilities = () => {
         
         <Card className="p-6">
           <Tabs defaultValue="replace" className="w-full">
-            <TabsList className="mb-4 grid grid-cols-2 lg:grid-cols-6 w-full">
+            <TabsList className="mb-4 grid grid-cols-2 lg:grid-cols-7 w-full">
               <TabsTrigger value="replace" className="flex items-center gap-1">
                 <ArrowRightLeft className="h-4 w-4" />
                 <span>Replace</span>
@@ -275,6 +291,10 @@ const StringUtilities = () => {
               <TabsTrigger value="wordCount" className="flex items-center gap-1">
                 <Text className="h-4 w-4" />
                 <span>Word Count</span>
+              </TabsTrigger>
+              <TabsTrigger value="addSpaces" className="flex items-center gap-1">
+                <Space className="h-4 w-4" />
+                <span>Add Spaces</span>
               </TabsTrigger>
             </TabsList>
             
@@ -424,6 +444,62 @@ const StringUtilities = () => {
                 <Button onClick={handleWordCount} disabled={!input}>
                   Count Words & Characters
                 </Button>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="addSpaces">
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Adds spaces between each character in the text.
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <Button 
+                    variant={spaceType === "single" ? "default" : "outline"} 
+                    onClick={() => setSpaceType("single")}
+                    className="h-auto py-3"
+                  >
+                    Single Space
+                  </Button>
+                  
+                  <Button 
+                    variant={spaceType === "double" ? "default" : "outline"} 
+                    onClick={() => setSpaceType("double")}
+                    className="h-auto py-3"
+                  >
+                    Double Space
+                  </Button>
+                  
+                  <Button 
+                    variant={spaceType === "custom" ? "default" : "outline"} 
+                    onClick={() => setSpaceType("custom")}
+                    className="h-auto py-3"
+                  >
+                    Custom
+                  </Button>
+                </div>
+                
+                {spaceType === "custom" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="custom-spacing">Number of spaces</Label>
+                    <Input
+                      id="custom-spacing"
+                      type="number"
+                      min="1"
+                      max="10"
+                      value={customSpacing}
+                      onChange={(e) => setCustomSpacing(parseInt(e.target.value) || 1)}
+                    />
+                  </div>
+                )}
+                
+                <Button onClick={handleAddSpaces} disabled={!input}>
+                  Add Spaces Between Characters
+                </Button>
+                
+                <div className="text-sm text-muted-foreground mt-2">
+                  <p>Example: "Hello" → "H e l l o" (with single spacing)</p>
+                </div>
               </div>
             </TabsContent>
           </Tabs>

@@ -16,6 +16,7 @@ const BinaryDecimalConverter = () => {
   const [octalInput, setOctalInput] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>("binary-to-decimal");
   const [conversionExplanation, setConversionExplanation] = useState<string>("");
+  const [isCalculating, setIsCalculating] = useState<boolean>(false);
 
   const validateBinary = (value: string): boolean => {
     return /^[01]*$/.test(value);
@@ -59,14 +60,16 @@ const BinaryDecimalConverter = () => {
 
   const convertBinaryToDecimal = () => {
     if (!binaryInput) {
-      toast.error("Please enter a binary number");
+      toast("Please enter a binary number");
       return;
     }
 
+    setIsCalculating(true);
     try {
       const decimal = parseInt(binaryInput, 2);
       if (isNaN(decimal)) {
-        toast.error("Invalid binary number");
+        toast("Invalid binary number");
+        setIsCalculating(false);
         return;
       }
       
@@ -76,26 +79,39 @@ const BinaryDecimalConverter = () => {
 
       // Generate explanation
       let explanation = "Binary to decimal conversion:\n";
-      explanation += binaryInput.split('').reverse().map((bit, index) => {
-        return `${bit} × 2^${index} = ${bit === '1' ? Math.pow(2, index) : 0}`;
+      const bits = binaryInput.split('').reverse();
+      
+      explanation += bits.map((bit, index) => {
+        const value = bit === '1' ? Math.pow(2, index) : 0;
+        return `${bit} × 2^${index} = ${value}`;
       }).reverse().join('\n');
       
       explanation += `\n\nSum = ${decimal}`;
       setConversionExplanation(explanation);
-      toast.success("Conversion successful");
+      toast("Conversion successful");
     } catch (error) {
-      toast.error("Invalid binary number");
+      toast("Invalid binary number");
+      console.error(error);
+    } finally {
+      setIsCalculating(false);
     }
   };
 
   const convertDecimalToBinary = () => {
     if (!decimalInput) {
-      toast.error("Please enter a decimal number");
+      toast("Please enter a decimal number");
       return;
     }
 
+    setIsCalculating(true);
     try {
       const decimal = parseInt(decimalInput);
+      if (isNaN(decimal)) {
+        toast("Invalid decimal number");
+        setIsCalculating(false);
+        return;
+      }
+      
       setBinaryInput(decimal.toString(2));
       setHexInput(decimal.toString(16).toUpperCase());
       setOctalInput(decimal.toString(8));
@@ -114,19 +130,30 @@ const BinaryDecimalConverter = () => {
       
       explanation += `\n${steps.join('\n')}\n\nReading remainders from bottom to top: ${decimal.toString(2)}`;
       setConversionExplanation(explanation);
+      toast("Conversion successful");
     } catch (error) {
-      toast.error("Invalid decimal number");
+      toast("Invalid decimal number");
+      console.error(error);
+    } finally {
+      setIsCalculating(false);
     }
   };
 
   const convertHexToDecimal = () => {
     if (!hexInput) {
-      toast.error("Please enter a hexadecimal number");
+      toast("Please enter a hexadecimal number");
       return;
     }
 
+    setIsCalculating(true);
     try {
       const decimal = parseInt(hexInput, 16);
+      if (isNaN(decimal)) {
+        toast("Invalid hexadecimal number");
+        setIsCalculating(false);
+        return;
+      }
+      
       setDecimalInput(decimal.toString());
       setBinaryInput(decimal.toString(2));
       setOctalInput(decimal.toString(8));
@@ -140,19 +167,30 @@ const BinaryDecimalConverter = () => {
       
       explanation += `\n\nSum = ${decimal}`;
       setConversionExplanation(explanation);
+      toast("Conversion successful");
     } catch (error) {
-      toast.error("Invalid hexadecimal number");
+      toast("Invalid hexadecimal number");
+      console.error(error);
+    } finally {
+      setIsCalculating(false);
     }
   };
 
   const convertOctalToDecimal = () => {
     if (!octalInput) {
-      toast.error("Please enter an octal number");
+      toast("Please enter an octal number");
       return;
     }
 
+    setIsCalculating(true);
     try {
       const decimal = parseInt(octalInput, 8);
+      if (isNaN(decimal)) {
+        toast("Invalid octal number");
+        setIsCalculating(false);
+        return;
+      }
+      
       setDecimalInput(decimal.toString());
       setBinaryInput(decimal.toString(2));
       setHexInput(decimal.toString(16).toUpperCase());
@@ -165,8 +203,12 @@ const BinaryDecimalConverter = () => {
       
       explanation += `\n\nSum = ${decimal}`;
       setConversionExplanation(explanation);
+      toast("Conversion successful");
     } catch (error) {
-      toast.error("Invalid octal number");
+      toast("Invalid octal number");
+      console.error(error);
+    } finally {
+      setIsCalculating(false);
     }
   };
 
@@ -176,7 +218,7 @@ const BinaryDecimalConverter = () => {
     setHexInput("");
     setOctalInput("");
     setConversionExplanation("");
-    toast.success("All fields cleared");
+    toast("All fields cleared");
   };
 
   return (
@@ -218,8 +260,8 @@ const BinaryDecimalConverter = () => {
                   </p>
                 </div>
                 
-                <Button onClick={convertBinaryToDecimal} className="w-full">
-                  Convert from Binary
+                <Button onClick={convertBinaryToDecimal} disabled={isCalculating || !binaryInput} className="w-full">
+                  {isCalculating ? "Converting..." : "Convert from Binary"}
                 </Button>
               </TabsContent>
               
@@ -238,8 +280,8 @@ const BinaryDecimalConverter = () => {
                   </p>
                 </div>
                 
-                <Button onClick={convertDecimalToBinary} className="w-full">
-                  Convert from Decimal
+                <Button onClick={convertDecimalToBinary} disabled={isCalculating || !decimalInput} className="w-full">
+                  {isCalculating ? "Converting..." : "Convert from Decimal"}
                 </Button>
               </TabsContent>
               
@@ -258,8 +300,8 @@ const BinaryDecimalConverter = () => {
                   </p>
                 </div>
                 
-                <Button onClick={convertHexToDecimal} className="w-full">
-                  Convert from Hexadecimal
+                <Button onClick={convertHexToDecimal} disabled={isCalculating || !hexInput} className="w-full">
+                  {isCalculating ? "Converting..." : "Convert from Hexadecimal"}
                 </Button>
               </TabsContent>
               
@@ -278,8 +320,8 @@ const BinaryDecimalConverter = () => {
                   </p>
                 </div>
                 
-                <Button onClick={convertOctalToDecimal} className="w-full">
-                  Convert from Octal
+                <Button onClick={convertOctalToDecimal} disabled={isCalculating || !octalInput} className="w-full">
+                  {isCalculating ? "Converting..." : "Convert from Octal"}
                 </Button>
               </TabsContent>
             </Tabs>
@@ -315,7 +357,7 @@ const BinaryDecimalConverter = () => {
                 </div>
               </div>
               
-              <Button variant="outline" onClick={resetFields}>
+              <Button variant="outline" onClick={resetFields} disabled={isCalculating}>
                 Clear All Fields
               </Button>
             </div>

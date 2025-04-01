@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import CryptoJS from 'crypto-js';
 
 const MD5HashGenerator = () => {
   const [text, setText] = useState('');
   const [hash, setHash] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateHash = async () => {
+  const generateHash = () => {
     if (!text.trim()) {
       toast.error('Please enter text to generate MD5 hash.');
       return;
@@ -21,19 +22,9 @@ const MD5HashGenerator = () => {
     setIsGenerating(true);
 
     try {
-      // Convert the text to an array of UTF-8 code units
-      const utf8Encode = new TextEncoder();
-      const data = utf8Encode.encode(text);
-
-      // Generate the MD5 hash
-      const buffer = await crypto.subtle.digest('MD5', data);
+      // Use CryptoJS to generate the MD5 hash
+      const md5Hash = CryptoJS.MD5(text).toString();
       
-      // Convert the ArrayBuffer to a hex string
-      const hashArray = Array.from(new Uint8Array(buffer));
-      const md5Hash = hashArray
-        .map((bytes) => bytes.toString(16).padStart(2, '0'))
-        .join('');
-
       setHash(md5Hash);
       toast.success('MD5 hash generated successfully!');
     } catch (error) {

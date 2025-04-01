@@ -8,28 +8,23 @@ import { motion } from 'framer-motion';
 import { ArrowDown, Database } from 'lucide-react';
 import { ToolLayout } from '@/components/ToolLayout';
 
-type StorageUnit = 'bit' | 'byte' | 'kilobyte' | 'megabyte' | 'gigabyte' | 'terabyte' | 'petabyte' | 'kibibyte' | 'mebibyte' | 'gibibyte' | 'tebibyte' | 'pebibyte';
+type StorageUnit = 'bit' | 'byte' | 'kibibyte' | 'mebibyte' | 'gibibyte' | 'tebibyte' | 'pebibyte';
 
 const DataStorageConverter = () => {
   const [inputValue, setInputValue] = useState<string>('1');
-  const [fromUnit, setFromUnit] = useState<StorageUnit>('gigabyte');
-  const [toUnit, setToUnit] = useState<StorageUnit>('megabyte');
+  const [fromUnit, setFromUnit] = useState<StorageUnit>('gibibyte');
+  const [toUnit, setToUnit] = useState<StorageUnit>('mebibyte');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to bytes - corrected values for binary units
+  // Binary conversion factors (powers of 1024)
   const conversionFactors: Record<StorageUnit, number> = {
     'bit': 0.125,
     'byte': 1,
-    'kilobyte': 1000,
-    'megabyte': 1000000,
-    'gigabyte': 1000000000,
-    'terabyte': 1000000000000,
-    'petabyte': 1000000000000000,
-    'kibibyte': 1024,
-    'mebibyte': 1048576, // 1024²
-    'gibibyte': 1073741824, // 1024³
-    'tebibyte': 1099511627776, // 1024⁴
-    'pebibyte': 1125899906842624 // 1024⁵
+    'kibibyte': 1024, // 2^10
+    'mebibyte': 1048576, // 2^20 (1024^2)
+    'gibibyte': 1073741824, // 2^30 (1024^3)
+    'tebibyte': 1099511627776, // 2^40 (1024^4)
+    'pebibyte': 1125899906842624 // 2^50 (1024^5)
   };
 
   useEffect(() => {
@@ -64,11 +59,6 @@ const DataStorageConverter = () => {
   const unitOptions: { value: StorageUnit; label: string }[] = [
     { value: 'bit', label: 'Bit (b)' },
     { value: 'byte', label: 'Byte (B)' },
-    { value: 'kilobyte', label: 'Kilobyte (KB)' },
-    { value: 'megabyte', label: 'Megabyte (MB)' },
-    { value: 'gigabyte', label: 'Gigabyte (GB)' },
-    { value: 'terabyte', label: 'Terabyte (TB)' },
-    { value: 'petabyte', label: 'Petabyte (PB)' },
     { value: 'kibibyte', label: 'Kibibyte (KiB)' },
     { value: 'mebibyte', label: 'Mebibyte (MiB)' },
     { value: 'gibibyte', label: 'Gibibyte (GiB)' },
@@ -79,11 +69,6 @@ const DataStorageConverter = () => {
   const unitAbbreviations: Record<StorageUnit, string> = {
     'bit': 'b',
     'byte': 'B',
-    'kilobyte': 'KB',
-    'megabyte': 'MB',
-    'gigabyte': 'GB',
-    'terabyte': 'TB',
-    'petabyte': 'PB',
     'kibibyte': 'KiB',
     'mebibyte': 'MiB',
     'gibibyte': 'GiB',
@@ -165,23 +150,13 @@ const DataStorageConverter = () => {
       </Card>
 
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Data Storage Conversion Guide</h2>
+        <h2 className="text-xl font-semibold mb-4">Binary Storage Units Guide</h2>
         <Card className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium mb-2">Decimal (SI) Units</h3>
+              <h3 className="font-medium mb-2">Binary Units (Used by Operating Systems)</h3>
               <ul className="space-y-2">
                 <li>8 Bits = 1 Byte</li>
-                <li>1 Kilobyte (KB) = 1,000 Bytes</li>
-                <li>1 Megabyte (MB) = 1,000 KB</li>
-                <li>1 Gigabyte (GB) = 1,000 MB</li>
-                <li>1 Terabyte (TB) = 1,000 GB</li>
-                <li>1 Petabyte (PB) = 1,000 TB</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-2">Binary Units</h3>
-              <ul className="space-y-2">
                 <li>1 Kibibyte (KiB) = 1,024 Bytes</li>
                 <li>1 Mebibyte (MiB) = 1,024 KiB</li>
                 <li>1 Gibibyte (GiB) = 1,024 MiB</li>
@@ -189,14 +164,24 @@ const DataStorageConverter = () => {
                 <li>1 Pebibyte (PiB) = 1,024 TiB</li>
               </ul>
             </div>
+            <div>
+              <h3 className="font-medium mb-2">Common Conversions</h3>
+              <ul className="space-y-2">
+                <li>1 KiB = 1,024 Bytes</li>
+                <li>1 MiB = 1,048,576 Bytes</li>
+                <li>1 GiB = 1,073,741,824 Bytes</li>
+                <li>1 TiB = 1,099,511,627,776 Bytes</li>
+                <li>1 PiB = 1,125,899,906,842,624 Bytes</li>
+              </ul>
+            </div>
           </div>
           
           <div className="mt-6">
             <h3 className="font-medium mb-2">Important Notes</h3>
             <ul className="space-y-2">
-              <li>Storage manufacturers typically use decimal units (1 KB = 1,000 bytes)</li>
-              <li>Operating systems often use binary units (1 KiB = 1,024 bytes)</li>
-              <li>This difference explains why a "500 GB" hard drive shows as ~465 GiB in your OS</li>
+              <li>Operating systems like Windows, macOS, and Linux use binary units (1 KiB = 1,024 bytes)</li>
+              <li>This is why a "1 TB" hard drive shows as ~931 GiB in your OS</li>
+              <li>This converter uses binary units (powers of 1024) as used by operating systems</li>
             </ul>
           </div>
         </Card>
