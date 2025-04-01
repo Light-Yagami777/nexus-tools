@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -52,7 +51,7 @@ import {
   Italic,
   Bold,
   BookOpen,
-  Palette2,
+  Palette,
   MousePointer,
   PenTool,
   Wand2,
@@ -126,7 +125,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
       case "italic": return <Italic {...iconProps} />;
       case "bold": return <Bold {...iconProps} />;
       case "book-open": return <BookOpen {...iconProps} />;
-      case "swatch": return <Palette2 {...iconProps} />; // Changed from Swatch to Palette2
+      case "swatch": return <Palette {...iconProps} />;
       case "mouse-pointer": return <MousePointer {...iconProps} />;
       case "pen-tool": return <PenTool {...iconProps} />;
       case "wand-2": return <Wand2 {...iconProps} />;
