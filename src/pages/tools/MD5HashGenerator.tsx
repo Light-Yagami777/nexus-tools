@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Key, Copy } from 'lucide-react';
+import { Key, Copy, RefreshCw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,24 +22,14 @@ const MD5HashGenerator = () => {
     setIsGenerating(true);
 
     try {
-      // Use setTimeout to ensure UI updates before heavy computation
-      setTimeout(() => {
-        try {
-          // Use CryptoJS to generate the MD5 hash
-          const md5Hash = CryptoJS.MD5(text).toString();
-          
-          setHash(md5Hash);
-          toast.success('MD5 hash generated successfully!');
-        } catch (error) {
-          console.error('Error generating MD5 hash:', error);
-          toast.error('Error generating MD5 hash. Please try again.');
-        } finally {
-          setIsGenerating(false);
-        }
-      }, 50);
+      // Calculate MD5 hash directly without setTimeout
+      const md5Hash = CryptoJS.MD5(text).toString();
+      setHash(md5Hash);
+      toast.success('MD5 hash generated successfully!');
     } catch (error) {
-      console.error('Error in hash generation process:', error);
-      toast.error('Unexpected error occurred. Please try again.');
+      console.error('Error generating MD5 hash:', error);
+      toast.error('Error generating MD5 hash. Please try again.');
+    } finally {
       setIsGenerating(false);
     }
   };
@@ -71,7 +61,7 @@ const MD5HashGenerator = () => {
         <CardHeader>
           <CardTitle>MD5 Hash Generator</CardTitle>
           <CardDescription>
-            Enter text to generate its MD5 hash.
+            Enter text below to generate its MD5 hash value.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -79,23 +69,33 @@ const MD5HashGenerator = () => {
             placeholder="Enter text here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="resize-none font-mono min-h-[120px]"
+            className="font-mono min-h-[120px] resize-none w-full"
           />
           <div className="flex space-x-2">
             <Button 
               onClick={generateHash} 
               disabled={isGenerating || !text.trim()}
-              className="relative"
+              className="flex items-center gap-2"
             >
-              {isGenerating ? 'Generating...' : 'Generate'}
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>Generate</>
+              )}
             </Button>
-            <Button variant="outline" onClick={clearText} disabled={isGenerating}>Clear</Button>
+            <Button variant="outline" onClick={clearText} disabled={isGenerating}>
+              Clear
+            </Button>
           </div>
+          
           {hash && (
             <div className="border p-4 rounded-md bg-secondary">
-              <div className="flex justify-between items-center">
-                <p className="text-sm font-mono break-words">{hash}</p>
-                <Button variant="ghost" size="sm" onClick={copyToClipboard}>
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                <p className="text-sm font-mono break-all">{hash}</p>
+                <Button variant="ghost" size="sm" onClick={copyToClipboard} className="shrink-0">
                   <Copy className="h-4 w-4 mr-2" />
                   Copy
                 </Button>

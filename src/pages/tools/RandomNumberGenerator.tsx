@@ -1,197 +1,177 @@
 
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Dice1 } from 'lucide-react';
+import { Dices, Copy, RefreshCw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { motion } from 'framer-motion';
+import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
 
 const RandomNumberGenerator = () => {
-  const [min, setMin] = useState<number>(1);
-  const [max, setMax] = useState<number>(100);
-  const [count, setCount] = useState<number>(1);
-  const [allowDuplicates, setAllowDuplicates] = useState<boolean>(true);
-  const [includeDecimal, setIncludeDecimal] = useState<boolean>(false);
-  const [decimalPlaces, setDecimalPlaces] = useState<number>(2);
-  const [result, setResult] = useState<string[]>([]);
-  const [error, setError] = useState<string>('');
+  const [min, setMin] = useState(1);
+  const [max, setMax] = useState(100);
+  const [quantity, setQuantity] = useState(1);
+  const [allowDuplicates, setAllowDuplicates] = useState(true);
+  const [results, setResults] = useState<number[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateNumbers = () => {
-    setError('');
-
-    // Validate inputs
-    if (min > max) {
-      setError('Minimum value must be less than or equal to maximum value');
+  const handleGenerate = () => {
+    if (min >= max) {
+      toast.error('Minimum value must be less than maximum value');
       return;
     }
 
-    if (count < 1) {
-      setError('Count must be at least 1');
+    if (quantity < 1) {
+      toast.error('Quantity must be at least 1');
       return;
     }
 
-    if (!allowDuplicates && (max - min + 1) < count) {
-      setError('Not enough numbers in range to generate unique values. Increase range or decrease count.');
+    if (!allowDuplicates && (max - min + 1) < quantity) {
+      toast.error(`Cannot generate ${quantity} unique numbers in the range ${min} to ${max}`);
       return;
     }
 
-    const numbers: string[] = [];
-    const usedNumbers = new Set<number>();
-    
-    for (let i = 0; i < count; i++) {
-      let num: number;
-      
-      if (includeDecimal) {
-        // Generate decimal number
-        num = min + Math.random() * (max - min);
-        // Round to specified decimal places
-        num = Number(num.toFixed(decimalPlaces));
-      } else {
-        // Generate integer
-        num = Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-      
-      if (!allowDuplicates) {
-        // If we've already used this number and duplicates aren't allowed, try again
-        if (usedNumbers.has(num)) {
-          i--; // Retry this iteration
-          continue;
+    setIsGenerating(true);
+
+    try {
+      let generatedNumbers: number[] = [];
+
+      if (allowDuplicates) {
+        // With duplicates, just generate random numbers
+        for (let i = 0; i < quantity; i++) {
+          const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+          generatedNumbers.push(randomNum);
         }
-        usedNumbers.add(num);
+      } else {
+        // Without duplicates, use a pool of available numbers
+        const availableNumbers = Array.from(
+          { length: max - min + 1 },
+          (_, i) => min + i
+        );
+        
+        // Fisher-Yates shuffle
+        for (let i = availableNumbers.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [availableNumbers[i], availableNumbers[j]] = [availableNumbers[j], availableNumbers[i]];
+        }
+        
+        generatedNumbers = availableNumbers.slice(0, quantity);
       }
-      
-      numbers.push(num.toString());
+
+      setResults(generatedNumbers);
+      toast.success(`Generated ${quantity} random number${quantity > 1 ? 's' : ''}`);
+    } catch (error) {
+      console.error('Error generating random numbers:', error);
+      toast.error('Failed to generate random numbers');
+    } finally {
+      setIsGenerating(false);
     }
-    
-    setResult(numbers);
   };
 
-  const copyResults = () => {
-    if (result.length === 0) return;
-    
-    navigator.clipboard.writeText(result.join(', '))
-      .then(() => {
-        // Show success message
-        console.log('Copied to clipboard');
-      })
-      .catch(err => {
-        // Show error message
-        console.error('Failed to copy: ', err);
-      });
+  const copyToClipboard = () => {
+    if (results.length === 0) {
+      toast.error('No numbers to copy');
+      return;
+    }
+
+    navigator.clipboard.writeText(results.join(', '))
+      .then(() => toast.success('Numbers copied to clipboard'))
+      .catch(() => toast.error('Failed to copy to clipboard'));
   };
 
   return (
-    <ToolLayout
-      title="Random Number Generator"
-      description="Generate random numbers with custom ranges and options"
-      icon={<Dice1 className="h-6 w-6" />}
-      extraPadding={true}
+    <ToolLayout 
+      title="Random Number Generator" 
+      description="Generate random numbers within a specified range"
+      icon={<Dices className="h-6 w-6" />}
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Random Number Generator</CardTitle>
-            <CardDescription>
-              Generate random numbers with custom parameters
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="min">Minimum Value</Label>
-                <Input 
-                  id="min" 
-                  type="number" 
-                  value={min}
-                  onChange={(e) => setMin(Number(e.target.value))}
-                />
-              </div>
-              <div>
-                <Label htmlFor="max">Maximum Value</Label>
-                <Input 
-                  id="max" 
-                  type="number" 
-                  value={max}
-                  onChange={(e) => setMax(Number(e.target.value))}
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label htmlFor="count">Number of Results</Label>
-              <Input 
-                id="count" 
-                type="number" 
-                value={count}
-                min="1"
-                onChange={(e) => setCount(Number(e.target.value))}
+      <Card>
+        <CardHeader>
+          <CardTitle>Random Number Generator</CardTitle>
+          <CardDescription>
+            Generate random numbers within a custom range
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="min">Minimum Value</Label>
+              <Input
+                id="min"
+                type="number"
+                value={min}
+                onChange={(e) => setMin(parseInt(e.target.value) || 0)}
               />
             </div>
-            
-            <div className="flex items-center justify-between">
-              <Label htmlFor="allow-duplicates" className="cursor-pointer">Allow Duplicates</Label>
-              <Switch 
-                id="allow-duplicates" 
-                checked={allowDuplicates}
-                onCheckedChange={setAllowDuplicates}
+            <div className="space-y-2">
+              <Label htmlFor="max">Maximum Value</Label>
+              <Input
+                id="max"
+                type="number"
+                value={max}
+                onChange={(e) => setMax(parseInt(e.target.value) || 0)}
               />
             </div>
-            
-            <div className="flex items-center justify-between">
-              <Label htmlFor="include-decimal" className="cursor-pointer">Include Decimals</Label>
-              <Switch 
-                id="include-decimal" 
-                checked={includeDecimal}
-                onCheckedChange={setIncludeDecimal}
-              />
-            </div>
-            
-            {includeDecimal && (
-              <div>
-                <Label htmlFor="decimal-places">Decimal Places</Label>
-                <Input 
-                  id="decimal-places" 
-                  type="number" 
-                  value={decimalPlaces}
-                  min="0"
-                  max="10"
-                  onChange={(e) => setDecimalPlaces(Number(e.target.value))}
-                />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Quantity: {quantity}</Label>
+            <Slider
+              value={[quantity]}
+              min={1}
+              max={100}
+              step={1}
+              onValueChange={(value) => setQuantity(value[0])}
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="allowDuplicates"
+              checked={allowDuplicates}
+              onCheckedChange={setAllowDuplicates}
+            />
+            <Label htmlFor="allowDuplicates">Allow Duplicates</Label>
+          </div>
+
+          <div className="flex space-x-2">
+            <Button 
+              onClick={handleGenerate} 
+              disabled={isGenerating || min >= max}
+              className="flex items-center gap-2"
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>Generate</>
+              )}
+            </Button>
+          </div>
+
+          {results.length > 0 && (
+            <div className="mt-6 p-4 border rounded-md bg-secondary">
+              <div className="flex flex-col">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium">Results</h3>
+                  <Button variant="ghost" size="sm" onClick={copyToClipboard}>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy
+                  </Button>
+                </div>
+                <div className="font-mono text-sm break-all leading-relaxed max-h-[200px] overflow-y-auto">
+                  {results.join(', ')}
+                </div>
               </div>
-            )}
-            
-            {error && (
-              <div className="text-red-500 text-sm">{error}</div>
-            )}
-            
-            <div className="flex gap-2">
-              <Button onClick={generateNumbers}>Generate Numbers</Button>
-              <Button variant="outline" onClick={() => setResult([])}>Clear Results</Button>
             </div>
-          </CardContent>
-        </Card>
-        
-        {result.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Results</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-muted p-4 rounded-md mb-4">
-                <p className="font-mono break-all">{result.join(', ')}</p>
-              </div>
-              <Button onClick={copyResults} variant="secondary">Copy Results</Button>
-            </CardContent>
-          </Card>
-        )}
-      </motion.div>
+          )}
+        </CardContent>
+      </Card>
     </ToolLayout>
   );
 };

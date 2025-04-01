@@ -41,7 +41,33 @@ import {
   Mic,
   Volume2,
   Calendar,
-  UserRound
+  UserRound,
+  Beaker,
+  VideoIcon,
+  MonitorSmartphone,
+  Crop,
+  LayoutGrid,
+  Tag,
+  Type,
+  Italic,
+  Bold,
+  BookOpen,
+  Swatch,
+  MousePointer,
+  PenTool,
+  Wand2,
+  Timer,
+  StickyNote,
+  Laugh,
+  ScreenShare,
+  Check,
+  NotebookText,
+  PauseCircle,
+  PlayCircle,
+  RefreshCcw,
+  Copy,
+  AlignLeft,
+  Verified
 } from "lucide-react";
 
 interface ToolCardProps {
@@ -57,7 +83,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
     
     switch (tool.icon) {
       case "image": return <Image {...iconProps} />;
-      case "text": return <FileText {...iconProps} />;
+      case "text": return <Text {...iconProps} />;
       case "code": return <Code {...iconProps} />;
       case "braces": return <Braces {...iconProps} />;
       case "key": return <Key {...iconProps} />;
@@ -90,7 +116,32 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
       case "youtube": return <Youtube {...iconProps} />;
       case "user": return <UserRound {...iconProps} />;
       case "calendar": return <Calendar {...iconProps} />;
-      case "video": return <MessageSquare {...iconProps} />;
+      case "video": return <VideoIcon {...iconProps} />;
+      case "beaker": return <Beaker {...iconProps} />;
+      case "monitor-smartphone": return <MonitorSmartphone {...iconProps} />;
+      case "crop": return <Crop {...iconProps} />;
+      case "layout-grid": return <LayoutGrid {...iconProps} />;
+      case "tag": return <Tag {...iconProps} />;
+      case "type": return <Type {...iconProps} />;
+      case "italic": return <Italic {...iconProps} />;
+      case "bold": return <Bold {...iconProps} />;
+      case "book-open": return <BookOpen {...iconProps} />;
+      case "swatch": return <Swatch {...iconProps} />;
+      case "mouse-pointer": return <MousePointer {...iconProps} />;
+      case "pen-tool": return <PenTool {...iconProps} />;
+      case "wand-2": return <Wand2 {...iconProps} />;
+      case "timer": return <Timer {...iconProps} />;
+      case "sticky-note": return <StickyNote {...iconProps} />;
+      case "laugh": return <Laugh {...iconProps} />;
+      case "screen-share": return <ScreenShare {...iconProps} />;
+      case "check": return <Check {...iconProps} />;
+      case "notebook-text": return <NotebookText {...iconProps} />;
+      case "pause-circle": return <PauseCircle {...iconProps} />;
+      case "play-circle": return <PlayCircle {...iconProps} />;
+      case "refresh-ccw": return <RefreshCcw {...iconProps} />;
+      case "copy": return <Copy {...iconProps} />;
+      case "align-left": return <AlignLeft {...iconProps} />;
+      case "verified": return <Verified {...iconProps} />;
       default: return <Activity {...iconProps} />;
     }
   };
