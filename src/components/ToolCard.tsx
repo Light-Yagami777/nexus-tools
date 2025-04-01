@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -51,7 +52,6 @@ import {
   Italic,
   Bold,
   BookOpen,
-  Palette,
   MousePointer,
   PenTool,
   Wand2,
