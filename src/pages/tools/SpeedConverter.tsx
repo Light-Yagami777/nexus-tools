@@ -1,6 +1,12 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Gauge } from 'lucide-react';
+import { Gauge, ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type SpeedUnit = 'mps' | 'kph' | 'mph' | 'knot' | 'ftps';
 
