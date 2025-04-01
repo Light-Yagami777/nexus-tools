@@ -220,11 +220,23 @@ const SeoAnalyzer = () => {
                 <span className="text-3xl font-bold">{score}</span>
               </div>
             </div>
-            <Progress 
-              value={score} 
-              className="h-4 w-full absolute rounded-full" 
-              indicatorClassName={color}
-            />
+            <svg className="w-full h-full" viewBox="0 0 36 36">
+              <path
+                className="stroke-muted-foreground/20"
+                fill="none"
+                strokeWidth="3"
+                strokeLinecap="round"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className={color}
+                fill="none"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeDasharray={`${score}, 100`}
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
           </div>
         </div>
         <div className="text-center mt-2">

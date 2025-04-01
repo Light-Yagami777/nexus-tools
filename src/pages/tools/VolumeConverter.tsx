@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Flask, ArrowDown } from 'lucide-react';
+import { Beaker, ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -85,7 +86,7 @@ const VolumeConverter = () => {
     <ToolLayout 
       title="Volume Converter" 
       description="Convert between different units of volume"
-      icon={<Flask className="h-6 w-6" />}
+      icon={<Beaker className="h-6 w-6" />}
       extraPadding={true}
     >
       <div className="flex-grow container mx-auto px-4 py-8">

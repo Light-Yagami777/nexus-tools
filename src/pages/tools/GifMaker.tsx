@@ -1,11 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Film } from 'lucide-react';
+import { Film, Info } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Upload, ImageIcon } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 
 const GifMaker = () => {
@@ -14,6 +16,7 @@ const GifMaker = () => {
   const [loading, setLoading] = useState(false);
   const [gifUrl, setGifUrl] = useState<string | null>(null);
   const [fps, setFps] = useState(10);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -28,11 +31,23 @@ const GifMaker = () => {
         toast.warning("Some files were ignored. Only PNG and JPEG images are supported.");
       }
       
+      if (validFiles.length === 0) {
+        toast.error("Please upload valid image files (PNG or JPEG).");
+        return;
+      }
+      
       setImages(prevImages => [...prevImages, ...validFiles]);
       
       // Create preview URLs
       const newUrls = validFiles.map(file => URL.createObjectURL(file));
       setPreviewUrls(prevUrls => [...prevUrls, ...newUrls]);
+      
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      
+      toast.success(`Added ${validFiles.length} image${validFiles.length !== 1 ? 's' : ''}`);
     }
   };
 
@@ -42,6 +57,7 @@ const GifMaker = () => {
     setImages([]);
     setPreviewUrls([]);
     setGifUrl(null);
+    toast.info("All images cleared");
   };
 
   const handleCreateGif = () => {
@@ -54,7 +70,7 @@ const GifMaker = () => {
     
     // Simulate GIF creation (in a real app, you would use a GIF library)
     setTimeout(() => {
-      toast.success("GIF created successfully!");
+      toast.success("GIF created successfully! (This is a simulation - in a real app, the images would be converted to an actual GIF)");
       setLoading(false);
       // In a real implementation, you would generate and set the actual GIF URL here
       setGifUrl(previewUrls[0]); // Placeholder: just showing the first image
@@ -63,61 +79,112 @@ const GifMaker = () => {
 
   const removeImage = (index: number) => {
     URL.revokeObjectURL(previewUrls[index]);
-    setImages(images.filter((_, i) => i !== index));
-    setPreviewUrls(previewUrls.filter((_, i) => i !== index));
+    
+    setImages(prevImages => {
+      const newImages = [...prevImages];
+      newImages.splice(index, 1);
+      return newImages;
+    });
+    
+    setPreviewUrls(prevUrls => {
+      const newUrls = [...prevUrls];
+      newUrls.splice(index, 1);
+      return newUrls;
+    });
+    
+    toast.info("Image removed");
+  };
+  
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+  
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      const validFiles = droppedFiles.filter(file => 
+        file.type === 'image/png' || 
+        file.type === 'image/jpeg' || 
+        file.type === 'image/jpg'
+      );
+      
+      if (validFiles.length !== droppedFiles.length) {
+        toast.warning("Some files were ignored. Only PNG and JPEG images are supported.");
+      }
+      
+      if (validFiles.length === 0) {
+        toast.error("Please drop valid image files (PNG or JPEG).");
+        return;
+      }
+      
+      setImages(prevImages => [...prevImages, ...validFiles]);
+      
+      // Create preview URLs
+      const newUrls = validFiles.map(file => URL.createObjectURL(file));
+      setPreviewUrls(prevUrls => [...prevUrls, ...newUrls]);
+      
+      toast.success(`Added ${validFiles.length} image${validFiles.length !== 1 ? 's' : ''}`);
+    }
   };
 
   return (
     <ToolLayout 
       title="GIF Maker" 
-      description="Create animated GIFs from images or videos"
+      description="Create animated GIFs from images"
       icon={<Film className="h-6 w-6" />}
       extraPadding={true}
     >
       <Card className="p-6">
         <div className="space-y-6">
           <div>
+            <div className="flex items-center mb-2">
+              <h2 className="text-xl font-semibold">GIF Maker</h2>
+              <div className="ml-2 text-muted-foreground">
+                <Info className="h-4 w-4" />
+              </div>
+            </div>
             <p className="text-muted-foreground mb-4">
               Upload multiple images to create an animated GIF. You can adjust the animation speed and preview the result.
             </p>
             
-            <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex-1 min-w-[200px]">
-                <Label htmlFor="image-upload" className="block mb-2">
-                  Upload Images (PNG or JPEG)
-                </Label>
-                <div className="relative">
-                  <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/png,image/jpeg,image/jpg"
-                    onChange={handleFileChange}
-                    multiple
-                    className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-                  />
-                  <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
-                    <Upload className="h-6 w-6" />
-                    <span>Click or drop files</span>
-                  </Button>
-                </div>
-                
-                <div className="mt-4">
-                  <Label htmlFor="fps" className="block mb-2">
-                    Animation Speed (frames per second)
-                  </Label>
-                  <input
-                    id="fps"
-                    type="range"
-                    min="1"
-                    max="30"
-                    value={fps}
-                    onChange={(e) => setFps(parseInt(e.target.value))}
-                    className="w-full"
-                  />
-                  <div className="text-center text-sm text-muted-foreground">
-                    {fps} FPS
-                  </div>
-                </div>
+            <div 
+              className="border-2 border-dashed rounded-md p-8 text-center hover:bg-muted/50 transition-colors cursor-pointer"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/jpg"
+                onChange={handleFileChange}
+                multiple
+                className="hidden"
+              />
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Upload className="h-10 w-10 text-muted-foreground" />
+                <h3 className="font-medium">Click or drop images here</h3>
+                <p className="text-sm text-muted-foreground">
+                  Supports PNG and JPEG images
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-6">
+              <Label className="mb-2 block">Animation Speed: {fps} FPS</Label>
+              <div className="flex items-center gap-4">
+                <span className="text-sm">Slow</span>
+                <Slider
+                  value={[fps]}
+                  min={1}
+                  max={30}
+                  step={1}
+                  onValueChange={(value) => setFps(value[0])}
+                  className="flex-1"
+                />
+                <span className="text-sm">Fast</span>
               </div>
             </div>
           </div>
@@ -131,7 +198,7 @@ const GifMaker = () => {
                 </Button>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {previewUrls.map((url, index) => (
                   <div key={index} className="relative group">
                     <img
@@ -140,7 +207,10 @@ const GifMaker = () => {
                       className="h-24 w-full object-cover rounded-md border"
                     />
                     <button
-                      onClick={() => removeImage(index)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeImage(index);
+                      }}
                       className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       ✕
@@ -164,17 +234,23 @@ const GifMaker = () => {
           
           {gifUrl && (
             <div className="space-y-4 mt-6">
-              <h3 className="font-medium">Generated GIF</h3>
+              <h3 className="font-medium">Generated GIF Preview</h3>
               <div className="flex justify-center">
                 <div className="relative border rounded-md p-2">
                   <img src={gifUrl} alt="Generated GIF" className="max-h-60 object-contain" />
+                  <div className="absolute top-0 right-0 bg-background/70 px-2 py-1 text-xs">
+                    Preview only (not a real GIF)
+                  </div>
                 </div>
               </div>
               <div className="flex justify-center">
                 <Button variant="outline" className="w-full sm:w-auto">
-                  Download GIF
+                  Download GIF (Simulated)
                 </Button>
               </div>
+              <p className="text-sm text-muted-foreground text-center">
+                Note: This is a simulation. In a complete implementation, this would create and download a real GIF.
+              </p>
             </div>
           )}
         </div>

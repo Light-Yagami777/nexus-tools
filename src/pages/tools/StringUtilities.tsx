@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -6,10 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Copy, Text, Search, RefreshCw, ArrowRightLeft, Scissors } from "lucide-react";
-import { showRewardedAd } from "@/utils/adUtils";
 
 const StringUtilities = () => {
   const [input, setInput] = useState("");
@@ -18,37 +16,45 @@ const StringUtilities = () => {
   const [replaceText, setReplaceText] = useState("");
   const [extractPattern, setExtractPattern] = useState("");
   const [trimOption, setTrimOption] = useState<"both" | "start" | "end" | "all">("both");
-  const { toast } = useToast();
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(output);
-    toast({
-      title: "Copied to clipboard",
-      description: "Output has been copied to your clipboard.",
-    });
+    if (!output) {
+      toast("No output to copy", {
+        description: "Process some text first."
+      });
+      return;
+    }
+    
+    navigator.clipboard.writeText(output)
+      .then(() => {
+        toast("Copied to clipboard", {
+          description: "Output has been copied to your clipboard."
+        });
+      })
+      .catch(err => {
+        toast("Failed to copy", {
+          description: "Could not copy text to clipboard.",
+          variant: "destructive"
+        });
+      });
   };
 
-  const handleReplace = async () => {
+  const handleReplace = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
 
     if (!findText) {
-      toast({
-        variant: "destructive",
-        title: "Find text is empty",
+      toast("Find text is empty", {
         description: "Please enter text to find.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     try {
       // Create a regex with global flag for multiple replacements
@@ -58,31 +64,25 @@ const StringUtilities = () => {
       setOutput(result);
       
       const count = (input.match(regex) || []).length;
-      toast({
-        title: "Replacement complete",
-        description: `Replaced ${count} occurrence${count !== 1 ? 's' : ''}.`,
+      toast("Replacement complete", {
+        description: `Replaced ${count} occurrence${count !== 1 ? 's' : ''}.`
       });
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Replacement failed",
-        description: "An error occurred during text replacement.",
+      toast("Replacement failed", {
+        description: "An error occurred. Check if your find text is valid.",
+        variant: "destructive"
       });
     }
   };
 
-  const handleTrim = async () => {
+  const handleTrim = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     let result = input;
     
@@ -103,33 +103,27 @@ const StringUtilities = () => {
     
     setOutput(result);
     
-    toast({
-      title: "Trim complete",
-      description: "Text has been trimmed according to your selection.",
+    toast("Trim complete", {
+      description: "Text has been trimmed according to your selection."
     });
   };
 
-  const handleExtract = async () => {
+  const handleExtract = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
 
     if (!extractPattern) {
-      toast({
-        variant: "destructive",
-        title: "Pattern is empty",
+      toast("Pattern is empty", {
         description: "Please enter a pattern to extract.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     try {
       // Try to create and use the regex pattern
@@ -138,62 +132,50 @@ const StringUtilities = () => {
       
       if (matches && matches.length > 0) {
         setOutput(matches.join('\n'));
-        toast({
-          title: "Extraction complete",
-          description: `Extracted ${matches.length} match${matches.length !== 1 ? 'es' : ''}.`,
+        toast("Extraction complete", {
+          description: `Extracted ${matches.length} match${matches.length !== 1 ? 'es' : ''}.`
         });
       } else {
         setOutput('');
-        toast({
-          variant: "destructive",
-          title: "No matches found",
+        toast("No matches found", {
           description: "The pattern did not match any text.",
+          variant: "destructive"
         });
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Extraction failed",
+      toast("Extraction failed", {
         description: "Invalid regular expression or an error occurred.",
+        variant: "destructive"
       });
     }
   };
 
-  const handleReverse = async () => {
+  const handleReverse = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     // Reverse the string
     const result = input.split('').reverse().join('');
     setOutput(result);
     
-    toast({
-      title: "Reverse complete",
-      description: "Text has been reversed.",
+    toast("Reverse complete", {
+      description: "Text has been reversed."
     });
   };
 
-  const handleRandomCase = async () => {
+  const handleRandomCase = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     // Convert text to random case
     const result = input.split('').map(char => {
@@ -202,24 +184,19 @@ const StringUtilities = () => {
     
     setOutput(result);
     
-    toast({
-      title: "Random case applied",
-      description: "Text has been converted to random case.",
+    toast("Random case applied", {
+      description: "Text has been converted to random case."
     });
   };
 
-  const handleWordCount = async () => {
+  const handleWordCount = () => {
     if (!input) {
-      toast({
-        variant: "destructive",
-        title: "Empty input",
+      toast("Empty input", {
         description: "Please enter some text to process.",
+        variant: "destructive"
       });
       return;
     }
-    
-    // Show rewarded ad before processing
-    await showRewardedAd();
     
     // Count words, characters, lines
     const words = input.split(/\s+/).filter(word => word.length > 0).length;
@@ -228,16 +205,15 @@ const StringUtilities = () => {
     
     setOutput(`Words: ${words}\nCharacters: ${chars}\nLines: ${lines}`);
     
-    toast({
-      title: "Count complete",
-      description: `Found ${words} words in your text.`,
+    toast("Count complete", {
+      description: `Found ${words} words in your text.`
     });
   };
 
   return (
     <ToolLayout
       title="String Utilities"
-      description="Various string manipulation utilities including trim, replace, extract, and more."
+      description="Various string manipulation utilities"
       icon={<Text size={24} />}
       extraPadding
     >
@@ -247,7 +223,7 @@ const StringUtilities = () => {
             <h2 className="text-xl font-semibold mb-4">Input Text</h2>
             <Textarea
               placeholder="Enter or paste your text here..."
-              className="min-h-[200px] text-base"
+              className="min-h-[200px] text-base font-mono"
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
@@ -267,7 +243,7 @@ const StringUtilities = () => {
                 <span>Copy</span>
               </Button>
             </div>
-            <div className="min-h-[200px] p-4 bg-muted/30 rounded-md overflow-auto whitespace-pre-wrap">
+            <div className="min-h-[200px] p-4 bg-muted/30 rounded-md overflow-auto whitespace-pre-wrap font-mono border">
               {output || <span className="text-muted-foreground">Processed text will appear here...</span>}
             </div>
           </Card>

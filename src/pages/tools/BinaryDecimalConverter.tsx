@@ -65,6 +65,11 @@ const BinaryDecimalConverter = () => {
 
     try {
       const decimal = parseInt(binaryInput, 2);
+      if (isNaN(decimal)) {
+        toast.error("Invalid binary number");
+        return;
+      }
+      
       setDecimalInput(decimal.toString());
       setHexInput(decimal.toString(16).toUpperCase());
       setOctalInput(decimal.toString(8));
@@ -77,6 +82,7 @@ const BinaryDecimalConverter = () => {
       
       explanation += `\n\nSum = ${decimal}`;
       setConversionExplanation(explanation);
+      toast.success("Conversion successful");
     } catch (error) {
       toast.error("Invalid binary number");
     }
@@ -170,10 +176,11 @@ const BinaryDecimalConverter = () => {
     setHexInput("");
     setOctalInput("");
     setConversionExplanation("");
+    toast.success("All fields cleared");
   };
 
   return (
-    <ToolLayout title="Binary-Decimal Converter">
+    <ToolLayout title="Binary-Decimal Converter" icon={<Calculator className="h-6 w-6" />}>
       <Card className="p-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-6">

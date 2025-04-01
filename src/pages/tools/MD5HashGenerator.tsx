@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Key, Copy } from 'lucide-react';
@@ -9,12 +10,15 @@ import { toast } from "sonner";
 const MD5HashGenerator = () => {
   const [text, setText] = useState('');
   const [hash, setHash] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const generateHash = async () => {
     if (!text.trim()) {
       toast.error('Please enter text to generate MD5 hash.');
       return;
     }
+
+    setIsGenerating(true);
 
     try {
       // Convert the text to an array of UTF-8 code units
@@ -23,6 +27,8 @@ const MD5HashGenerator = () => {
 
       // Generate the MD5 hash
       const buffer = await crypto.subtle.digest('MD5', data);
+      
+      // Convert the ArrayBuffer to a hex string
       const hashArray = Array.from(new Uint8Array(buffer));
       const md5Hash = hashArray
         .map((bytes) => bytes.toString(16).padStart(2, '0'))
@@ -31,8 +37,10 @@ const MD5HashGenerator = () => {
       setHash(md5Hash);
       toast.success('MD5 hash generated successfully!');
     } catch (error) {
-      toast.error('Error generating MD5 hash.');
-      console.error(error);
+      console.error('Error generating MD5 hash:', error);
+      toast.error('Error generating MD5 hash. Please try again.');
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -74,8 +82,10 @@ const MD5HashGenerator = () => {
             className="resize-none font-mono"
           />
           <div className="flex space-x-2">
-            <Button onClick={generateHash}>Generate</Button>
-            <Button variant="outline" onClick={clearText}>Clear</Button>
+            <Button onClick={generateHash} disabled={isGenerating || !text.trim()}>
+              {isGenerating ? 'Generating...' : 'Generate'}
+            </Button>
+            <Button variant="outline" onClick={clearText} disabled={isGenerating}>Clear</Button>
           </div>
           {hash && (
             <div className="border p-4 rounded-md bg-secondary">
@@ -88,6 +98,15 @@ const MD5HashGenerator = () => {
               </div>
             </div>
           )}
+          
+          <div className="border-t pt-4 mt-4">
+            <h3 className="font-medium mb-2 text-sm">About MD5 Hash</h3>
+            <p className="text-sm text-muted-foreground">
+              MD5 is a widely used cryptographic hash function that produces a 128-bit (16-byte) hash value, 
+              typically expressed as a 32-character hexadecimal number. While MD5 is no longer considered secure 
+              for cryptographic purposes, it remains useful for checksums and non-security applications.
+            </p>
+          </div>
         </CardContent>
       </Card>
     </ToolLayout>

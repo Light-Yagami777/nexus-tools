@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,11 +9,32 @@ import { toast } from 'sonner';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
+interface Window {
+  SpeechRecognition: any;
+  webkitSpeechRecognition: any;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
 const SpeechToText = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcription, setTranscription] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [browserSupport, setBrowserSupport] = useState(true);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    // Check if browser supports speech recognition
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      setBrowserSupport(false);
+      toast.error('Speech recognition is not supported in your browser. Try Chrome, Edge, or Safari.');
+    }
+  }, []);
 
   const languages = [
     { code: 'en-US', name: 'English (US)' },
@@ -49,7 +70,7 @@ const SpeechToText = () => {
         toast.success('Started listening...');
       };
 
-      recognition.onresult = (event) => {
+      recognition.onresult = (event: any) => {
         let interimTranscript = '';
         let finalTranscript = '';
 
@@ -61,10 +82,12 @@ const SpeechToText = () => {
           }
         }
 
-        setTranscription((prev) => prev + finalTranscript);
+        if (finalTranscript) {
+          setTranscription((prev) => prev + finalTranscript + ' ');
+        }
       };
 
-      recognition.onerror = (event) => {
+      recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         toast.error(`Error: ${event.error}`);
         setIsRecording(false);
@@ -142,6 +165,7 @@ const SpeechToText = () => {
                 <Button
                   onClick={isRecording ? stopRecording : startRecording}
                   variant={isRecording ? "destructive" : "default"}
+                  disabled={!browserSupport}
                 >
                   {isRecording ? (
                     <>
@@ -156,6 +180,12 @@ const SpeechToText = () => {
                   )}
                 </Button>
               </div>
+
+              {!browserSupport && (
+                <div className="p-3 border border-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800 rounded text-sm">
+                  Your browser doesn't support speech recognition. Please try Chrome, Edge, or Safari.
+                </div>
+              )}
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -203,6 +233,7 @@ const SpeechToText = () => {
               <li>Use a good quality microphone if possible</li>
               <li>Keep a consistent distance from the microphone</li>
               <li>Select the appropriate language for better accuracy</li>
+              <li>Give your browser permission to access the microphone when prompted</li>
             </ul>
           </CardContent>
         </Card>

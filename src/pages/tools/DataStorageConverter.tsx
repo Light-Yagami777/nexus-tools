@@ -16,7 +16,7 @@ const DataStorageConverter = () => {
   const [toUnit, setToUnit] = useState<StorageUnit>('megabyte');
   const [result, setResult] = useState<string>('');
 
-  // Conversion factors to bytes
+  // Conversion factors to bytes - corrected values for binary units
   const conversionFactors: Record<StorageUnit, number> = {
     'bit': 0.125,
     'byte': 1,
@@ -26,10 +26,10 @@ const DataStorageConverter = () => {
     'terabyte': 1000000000000,
     'petabyte': 1000000000000000,
     'kibibyte': 1024,
-    'mebibyte': 1048576,
-    'gibibyte': 1073741824,
-    'tebibyte': 1099511627776,
-    'pebibyte': 1125899906842624
+    'mebibyte': 1048576, // 1024²
+    'gibibyte': 1073741824, // 1024³
+    'tebibyte': 1099511627776, // 1024⁴
+    'pebibyte': 1125899906842624 // 1024⁵
   };
 
   useEffect(() => {
