@@ -95,6 +95,15 @@ import PomodoroTimer from "./pages/tools/PomodoroTimer";
 import QuickNotes from "./pages/tools/QuickNotes";
 import MemeGenerator from "./pages/tools/MemeGenerator";
 
+// New Tool Imports
+import TwitterCardGenerator from "./pages/tools/TwitterCardGenerator";
+import InstagramFontGenerator from "./pages/tools/InstagramFontGenerator";
+import OgImageGenerator from "./pages/tools/OgImageGenerator";
+import SocialMediaColorPicker from "./pages/tools/SocialMediaColorPicker";
+import TwitterCharacterCounter from "./pages/tools/TwitterCharacterCounter";
+import SocialProfileAnalyzer from "./pages/tools/SocialProfileAnalyzer";
+import PostScheduler from "./pages/tools/PostScheduler";
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   
@@ -213,15 +222,18 @@ const App = () => {
               
               <Route path="/tools/social-media-image-resizer" element={<SocialMediaImageResizer />} />
               <Route path="/tools/hashtag-generator" element={<HashtagGenerator />} />
-              <Route path="/tools/twitter-card-generator" element={<ToolPlaceholder toolName="Twitter Card Generator" toolDescription="Create Twitter card previews for your website or blog posts to enhance social sharing." />} />
-              <Route path="/tools/instagram-font-generator" element={<ToolPlaceholder toolName="Instagram Font Generator" toolDescription="Create fancy text for Instagram bios and captions that stand out from the crowd." />} />
-              <Route path="/tools/og-image-generator" element={<ToolPlaceholder toolName="OG Image Generator" toolDescription="Create Open Graph images for social sharing with customizable templates and designs." />} />
-              <Route path="/tools/social-media-color-picker" element={<ToolPlaceholder toolName="Social Media Color Picker" toolDescription="Get brand colors for social media platforms to ensure consistent branding across channels." />} />
-              <Route path="/tools/twitter-character-counter" element={<ToolPlaceholder toolName="Twitter Character Counter" toolDescription="Count characters for Twitter posts with visual feedback on length limitations." />} />
-              <Route path="/tools/social-profile-analyzer" element={<ToolPlaceholder toolName="Social Profile Analyzer" toolDescription="Analyze social media profiles for engagement metrics and optimization opportunities." />} />
-              <Route path="/tools/post-scheduler" element={<ToolPlaceholder toolName="Post Scheduler" toolDescription="Find the optimal times to post on social media based on audience activity patterns." />} />
+              
+              {/* New social media tool routes */}
+              <Route path="/tools/twitter-card-generator" element={<TwitterCardGenerator />} />
+              <Route path="/tools/instagram-font-generator" element={<InstagramFontGenerator />} />
+              <Route path="/tools/og-image-generator" element={<OgImageGenerator />} />
+              <Route path="/tools/social-media-color-picker" element={<SocialMediaColorPicker />} />
+              <Route path="/tools/twitter-character-counter" element={<TwitterCharacterCounter />} />
+              <Route path="/tools/social-profile-analyzer" element={<SocialProfileAnalyzer />} />
+              <Route path="/tools/post-scheduler" element={<PostScheduler />} />
               <Route path="/tools/name-generator" element={<ToolPlaceholder toolName="Name Generator" toolDescription="Generate random names for people, businesses, characters, and more." />} />
               
+              {/* Legacy routes for old components */}
               <Route path="/tools/social-media-image-resizer-old" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
               <Route path="/tools/hashtag-generator-old" element={<ToolPlaceholder toolName="Hashtag Generator" toolDescription="Generate relevant hashtags for your content based on keywords and trending topics." />} />
               <Route path="/tools/twitter-card-generator-old" element={<ToolPlaceholder toolName="Twitter Card Generator" toolDescription="Create Twitter card previews for your website or blog posts to enhance social sharing." />} />
