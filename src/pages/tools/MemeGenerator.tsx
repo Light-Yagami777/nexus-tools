@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Image as ImageIcon, Upload, Download, Laugh, RefreshCw, Type, AlignCenter, AlignLeft, AlignRight, Bold, Italic } from 'lucide-react';
+import { Image as ImageIcon, Upload, Download, RefreshCw, Type, AlignCenter, AlignLeft, AlignRight, Bold, Italic } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -261,7 +261,7 @@ const MemeGenerator = () => {
     <ToolLayout 
       title="Meme Generator" 
       description="Create custom memes with popular templates or upload your own images"
-      icon={<Laugh className="h-6 w-6" />}
+      icon={<ImageIcon className="h-6 w-6" />}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-1 space-y-6">
@@ -462,7 +462,7 @@ const MemeGenerator = () => {
                           <ToggleGroupItem 
                             value="bold"
                             aria-label="Toggle bold"
-                            pressed={selectedLayer.isBold}
+                            data-state={selectedLayer.isBold ? "on" : "off"}
                             onClick={() => updateTextLayer(selectedLayer.id, { isBold: !selectedLayer.isBold })}
                           >
                             <Bold className="h-4 w-4" />
@@ -470,7 +470,7 @@ const MemeGenerator = () => {
                           <ToggleGroupItem 
                             value="italic"
                             aria-label="Toggle italic"
-                            pressed={selectedLayer.isItalic}
+                            data-state={selectedLayer.isItalic ? "on" : "off"}
                             onClick={() => updateTextLayer(selectedLayer.id, { isItalic: !selectedLayer.isItalic })}
                           >
                             <Italic className="h-4 w-4" />
@@ -478,7 +478,7 @@ const MemeGenerator = () => {
                           <ToggleGroupItem 
                             value="left"
                             aria-label="Align left"
-                            pressed={selectedLayer.alignment === 'left'}
+                            data-state={selectedLayer.alignment === 'left' ? "on" : "off"}
                             onClick={() => updateTextLayer(selectedLayer.id, { alignment: 'left' })}
                           >
                             <AlignLeft className="h-4 w-4" />
@@ -486,7 +486,7 @@ const MemeGenerator = () => {
                           <ToggleGroupItem 
                             value="center"
                             aria-label="Align center"
-                            pressed={selectedLayer.alignment === 'center'}
+                            data-state={selectedLayer.alignment === 'center' ? "on" : "off"}
                             onClick={() => updateTextLayer(selectedLayer.id, { alignment: 'center' })}
                           >
                             <AlignCenter className="h-4 w-4" />
@@ -494,7 +494,7 @@ const MemeGenerator = () => {
                           <ToggleGroupItem 
                             value="right"
                             aria-label="Align right"
-                            pressed={selectedLayer.alignment === 'right'}
+                            data-state={selectedLayer.alignment === 'right' ? "on" : "off"}
                             onClick={() => updateTextLayer(selectedLayer.id, { alignment: 'right' })}
                           >
                             <AlignRight className="h-4 w-4" />
