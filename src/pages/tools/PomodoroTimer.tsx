@@ -180,7 +180,7 @@ const PomodoroTimer = () => {
                 
                 <Progress value={progress} className="h-2 mb-8" />
                 
-                <div className="flex justify-center gap-2 mb-6">
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
                   <Button
                     variant="outline"
                     size="sm"
@@ -207,7 +207,7 @@ const PomodoroTimer = () => {
                   </Button>
                 </div>
                 
-                <div className="flex justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-2">
                   {!isRunning ? (
                     <Button onClick={startTimer}>
                       <Play className="h-4 w-4 mr-1" /> Start
@@ -286,9 +286,9 @@ const PomodoroTimer = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Auto Start</h3>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroup defaultValue={autoStartBreaks ? "yes" : "no"} onValueChange={(val) => setAutoStartBreaks(val === "yes")}>
+                <div className="space-y-4 md:space-y-2">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <RadioGroup defaultValue={autoStartBreaks ? "yes" : "no"} onValueChange={(val) => setAutoStartBreaks(val === "yes")} className="flex flex-col md:flex-row gap-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="auto-breaks-yes" />
                         <Label htmlFor="auto-breaks-yes">Auto-start breaks</Label>
@@ -301,9 +301,9 @@ const PomodoroTimer = () => {
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroup defaultValue={autoStartPomodoros ? "yes" : "no"} onValueChange={(val) => setAutoStartPomodoros(val === "yes")}>
+                <div className="space-y-4 md:space-y-2">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <RadioGroup defaultValue={autoStartPomodoros ? "yes" : "no"} onValueChange={(val) => setAutoStartPomodoros(val === "yes")} className="flex flex-col md:flex-row gap-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="auto-pomodoros-yes" />
                         <Label htmlFor="auto-pomodoros-yes">Auto-start pomodoros</Label>
@@ -320,9 +320,9 @@ const PomodoroTimer = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Notifications</h3>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroup defaultValue={showNotifications ? "yes" : "no"} onValueChange={(val) => setShowNotifications(val === "yes")}>
+                <div className="space-y-4 md:space-y-2">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <RadioGroup defaultValue={showNotifications ? "yes" : "no"} onValueChange={(val) => setShowNotifications(val === "yes")} className="flex flex-col md:flex-row gap-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="notifications-yes" />
                         <Label htmlFor="notifications-yes">Show notifications</Label>

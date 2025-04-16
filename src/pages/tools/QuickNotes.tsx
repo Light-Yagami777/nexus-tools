@@ -199,14 +199,14 @@ const QuickNotes = () => {
                     }}
                   >
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="max-w-[80%]">
                         <h3 className="font-medium truncate">{note.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-sm text-muted-foreground line-clamp-2 break-words">
                           {note.content}
                         </p>
                       </div>
                       <div
-                        className={`w-4 h-4 rounded-full ml-2 mt-1 ${note.color}`}
+                        className={`w-4 h-4 rounded-full ml-2 mt-1 flex-shrink-0 ${note.color}`}
                       />
                     </div>
                     <div className="mt-1 text-xs text-muted-foreground">
@@ -255,11 +255,11 @@ const QuickNotes = () => {
                 <Textarea
                   value={activeNote.content}
                   onChange={(e) => setActiveNote({ ...activeNote, content: e.target.value })}
-                  className="min-h-[300px] border-none focus-visible:ring-0 p-0"
+                  className="min-h-[300px] border-none focus-visible:ring-0 p-0 resize-none"
                   placeholder="Start typing..."
                 />
               </CardContent>
-              <CardFooter className="border-t pt-4 flex justify-between">
+              <CardFooter className="border-t pt-4 flex flex-wrap justify-between gap-2">
                 <div>
                   <Select
                     value={activeNote.color}
@@ -281,7 +281,7 @@ const QuickNotes = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap space-x-2">
                   <Button variant="outline" onClick={() => setIsEditing(false)}>
                     <X className="h-4 w-4 mr-1" />
                     Cancel
@@ -297,24 +297,24 @@ const QuickNotes = () => {
             <>
               <CardHeader className={`${activeNote.color}`}>
                 <div className="flex justify-between items-start">
-                  <CardTitle className="text-xl">{activeNote.title}</CardTitle>
+                  <CardTitle className="text-xl break-words mr-2">{activeNote.title}</CardTitle>
                 </div>
                 <CardDescription>
-                  <div className="flex items-center text-muted-foreground">
+                  <div className="flex items-center flex-wrap text-muted-foreground">
                     <CalendarDays className="h-3.5 w-3.5 mr-1" />
-                    Created: {format(new Date(activeNote.createdAt), 'PP')}
-                    {" · "}
-                    Updated: {format(new Date(activeNote.updatedAt), 'PP')}
+                    <span className="whitespace-nowrap">Created: {format(new Date(activeNote.createdAt), 'PP')}</span>
+                    <span className="mx-1 whitespace-nowrap">·</span>
+                    <span className="whitespace-nowrap">Updated: {format(new Date(activeNote.updatedAt), 'PP')}</span>
                   </div>
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <div className="whitespace-pre-wrap min-h-[300px]">
+                <div className="whitespace-pre-wrap min-h-[300px] break-words overflow-auto">
                   {activeNote.content || <span className="text-muted-foreground italic">No content</span>}
                 </div>
               </CardContent>
-              <CardFooter className="border-t pt-4 flex justify-between">
-                <div className="flex space-x-2">
+              <CardFooter className="border-t pt-4 flex flex-wrap justify-between gap-y-2">
+                <div className="flex flex-wrap space-x-2 gap-y-2">
                   <Button variant="outline" size="sm" onClick={handleDownloadNote}>
                     <Download className="h-4 w-4 mr-1" />
                     Download
@@ -324,7 +324,7 @@ const QuickNotes = () => {
                     Copy
                   </Button>
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap space-x-2 gap-y-2">
                   <Button variant="destructive" size="sm" onClick={() => deleteNote(activeNote.id)}>
                     <Trash2 className="h-4 w-4 mr-1" />
                     Delete

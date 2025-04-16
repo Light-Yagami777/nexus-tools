@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 const SocialMediaColorPicker = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPlatforms, setFilteredPlatforms] = useState<any[]>([]);
 
   // Social media platform colors
   const platforms = [
@@ -42,10 +43,13 @@ const SocialMediaColorPicker = () => {
     { name: "Soundcloud", primary: "#FF3300", secondary: "#ff5500", accent: "#ff7700" },
   ];
 
-  // Filter platforms based on search term
-  const filteredPlatforms = platforms.filter(platform => 
-    platform.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter platforms based on search term whenever it changes
+  useEffect(() => {
+    const filtered = platforms.filter(platform => 
+      platform.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredPlatforms(filtered);
+  }, [searchTerm]);
 
   const handleCopyColor = (color: string) => {
     navigator.clipboard.writeText(color);
@@ -58,13 +62,13 @@ const SocialMediaColorPicker = () => {
   const ColorCard = ({ color, label }: { color: string; label: string }) => (
     <div className="flex flex-col items-center space-y-1">
       <div 
-        className="w-16 h-16 rounded-md border cursor-pointer transition-transform hover:scale-105"
+        className="w-12 h-12 rounded-md border cursor-pointer transition-transform hover:scale-105"
         style={{ backgroundColor: color }}
         onClick={() => handleCopyColor(color)}
       ></div>
       <div className="text-xs text-center">
-        <div className="font-medium">{label}</div>
-        <div className="text-muted-foreground">{color}</div>
+        <div className="font-medium truncate max-w-full">{label}</div>
+        <div className="text-muted-foreground truncate max-w-full">{color}</div>
       </div>
     </div>
   );
@@ -100,23 +104,29 @@ const SocialMediaColorPicker = () => {
 
           <TabsContent value="grid" className="mt-4">
             <ScrollArea className="h-[500px]">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                {filteredPlatforms.map((platform) => (
-                  <Card key={platform.name} className="overflow-hidden">
-                    <div 
-                      className="h-10" 
-                      style={{ backgroundColor: platform.primary }}
-                    ></div>
-                    <CardContent className="pt-4">
-                      <h3 className="text-sm font-semibold mb-3">{platform.name}</h3>
-                      <div className="grid grid-cols-3 gap-2">
-                        <ColorCard color={platform.primary} label="Primary" />
-                        <ColorCard color={platform.secondary} label="Secondary" />
-                        <ColorCard color={platform.accent} label="Accent" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {filteredPlatforms.length > 0 ? (
+                  filteredPlatforms.map((platform) => (
+                    <Card key={platform.name} className="overflow-hidden">
+                      <div 
+                        className="h-10" 
+                        style={{ backgroundColor: platform.primary }}
+                      ></div>
+                      <CardContent className="pt-4">
+                        <h3 className="text-sm font-semibold mb-3 truncate">{platform.name}</h3>
+                        <div className="grid grid-cols-3 gap-2">
+                          <ColorCard color={platform.primary} label="Primary" />
+                          <ColorCard color={platform.secondary} label="Secondary" />
+                          <ColorCard color={platform.accent} label="Accent" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-10">
+                    No platforms match your search.
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </TabsContent>
@@ -134,56 +144,67 @@ const SocialMediaColorPicker = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredPlatforms.map((platform) => (
-                      <tr key={platform.name} className="border-b">
-                        <td className="p-3 font-medium">{platform.name}</td>
-                        <td className="p-3">
-                          <div className="flex items-center space-x-2">
-                            <div 
-                              className="w-6 h-6 rounded-md border"
-                              style={{ backgroundColor: platform.primary }}
-                            ></div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => handleCopyColor(platform.primary)}
-                            >
-                              {platform.primary}
-                            </Button>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex items-center space-x-2">
-                            <div 
-                              className="w-6 h-6 rounded-md border"
-                              style={{ backgroundColor: platform.secondary }}
-                            ></div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => handleCopyColor(platform.secondary)}
-                            >
-                              {platform.secondary}
-                            </Button>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex items-center space-x-2">
-                            <div 
-                              className="w-6 h-6 rounded-md border"
-                              style={{ backgroundColor: platform.accent }}
-                            ></div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => handleCopyColor(platform.accent)}
-                            >
-                              {platform.accent}
-                            </Button>
-                          </div>
+                    {filteredPlatforms.length > 0 ? (
+                      filteredPlatforms.map((platform) => (
+                        <tr key={platform.name} className="border-b">
+                          <td className="p-3 font-medium">{platform.name}</td>
+                          <td className="p-3">
+                            <div className="flex items-center space-x-2">
+                              <div 
+                                className="w-6 h-6 rounded-md border"
+                                style={{ backgroundColor: platform.primary }}
+                              ></div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleCopyColor(platform.primary)}
+                                className="truncate max-w-[100px]"
+                              >
+                                {platform.primary}
+                              </Button>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <div className="flex items-center space-x-2">
+                              <div 
+                                className="w-6 h-6 rounded-md border"
+                                style={{ backgroundColor: platform.secondary }}
+                              ></div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleCopyColor(platform.secondary)}
+                                className="truncate max-w-[100px]"
+                              >
+                                {platform.secondary}
+                              </Button>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <div className="flex items-center space-x-2">
+                              <div 
+                                className="w-6 h-6 rounded-md border"
+                                style={{ backgroundColor: platform.accent }}
+                              ></div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleCopyColor(platform.accent)}
+                                className="truncate max-w-[100px]"
+                              >
+                                {platform.accent}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="text-center py-10">
+                          No platforms match your search.
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </ScrollArea>

@@ -136,34 +136,38 @@ const TwitterCharacterCounter = () => {
           <Card>
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold mb-3">Hashtags</h3>
-              {hashtags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {hashtags.map((hashtag, index) => (
-                    <div key={index} className="bg-muted text-muted-foreground px-2 py-1 rounded-md text-sm">
-                      {hashtag}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No hashtags found</p>
-              )}
+              <div className="max-h-[120px] overflow-y-auto">
+                {hashtags.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {hashtags.map((hashtag, index) => (
+                      <div key={index} className="bg-muted text-muted-foreground px-2 py-1 rounded-md text-sm">
+                        {hashtag}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No hashtags found</p>
+                )}
+              </div>
             </CardContent>
           </Card>
           
           <Card>
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold mb-3">Mentions</h3>
-              {mentions.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {mentions.map((mention, index) => (
-                    <div key={index} className="bg-muted text-muted-foreground px-2 py-1 rounded-md text-sm">
-                      {mention}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No mentions found</p>
-              )}
+              <div className="max-h-[120px] overflow-y-auto">
+                {mentions.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {mentions.map((mention, index) => (
+                      <div key={index} className="bg-muted text-muted-foreground px-2 py-1 rounded-md text-sm">
+                        {mention}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No mentions found</p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>

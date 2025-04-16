@@ -162,7 +162,7 @@ const UuidGenerator = () => {
               <div className="space-y-2 max-h-[300px] overflow-y-auto">
                 {uuids.map((uuid, index) => (
                   <div key={index} className="flex justify-between items-center p-2 bg-background rounded border">
-                    <code className="font-mono text-sm break-all">{uuid}</code>
+                    <code className="font-mono text-xs sm:text-sm break-all overflow-hidden max-w-[calc(100%-40px)]">{uuid}</code>
                     <Button variant="ghost" size="icon" onClick={() => copyToClipboard(index)}>
                       <Copy className="h-4 w-4" />
                     </Button>
