@@ -40,12 +40,12 @@ export const ColorPicker = ({
           variant="outline"
           className="w-full h-10 p-1 flex items-center justify-between"
         >
-          <div className="flex items-center">
+          <div className="flex items-center w-full overflow-hidden">
             <div
-              className="h-6 w-6 rounded-sm mr-2"
+              className="h-6 w-6 min-w-6 rounded-sm mr-2 flex-shrink-0"
               style={{ backgroundColor: color }}
             />
-            <span>{color}</span>
+            <span className="truncate text-sm">{color}</span>
           </div>
         </Button>
       </PopoverTrigger>
@@ -111,7 +111,7 @@ const ColorPickerContent = ({
             type="text"
             value={inputValue}
             onChange={handleHexInputChange}
-            className="flex-1 px-3 py-2 border rounded-r-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className="flex-1 px-3 py-2 border rounded-r-md focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="#000000"
           />
         </div>

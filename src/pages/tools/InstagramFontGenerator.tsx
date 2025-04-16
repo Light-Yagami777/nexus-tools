@@ -110,7 +110,7 @@ const InstagramFontGenerator = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type your text here..."
                 rows={3}
-                className="resize-none"
+                className="resize-none w-full"
               />
             </div>
           </CardContent>
@@ -122,13 +122,13 @@ const InstagramFontGenerator = () => {
             <div className="space-y-4">
               {fontStyles.map((style, index) => (
                 <div key={index} className="p-3 border rounded-md bg-card">
-                  <div className="flex justify-between items-center">
-                    <div className="break-all">{style.transform(inputText)}</div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                    <div className="break-all pr-2 max-w-full">{style.transform(inputText)}</div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => handleCopy(style.transform(inputText))}
-                      className="ml-2 shrink-0"
+                      className="ml-auto shrink-0"
                     >
                       Copy
                     </Button>

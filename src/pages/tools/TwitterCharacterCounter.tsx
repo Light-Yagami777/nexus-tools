@@ -82,7 +82,7 @@ const TwitterCharacterCounter = () => {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's happening?"
                 rows={6}
-                className="resize-none"
+                className="resize-none w-full"
               />
               
               <Progress 
@@ -90,7 +90,7 @@ const TwitterCharacterCounter = () => {
                 className={`h-2 ${getProgressColor()}`}
               />
               
-              <div className="flex justify-between gap-2">
+              <div className="flex flex-col sm:flex-row justify-between gap-2">
                 <Button variant="outline" onClick={handleClear} className="flex-1">
                   Clear
                 </Button>

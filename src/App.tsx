@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -103,6 +102,7 @@ import SocialMediaColorPicker from "./pages/tools/SocialMediaColorPicker";
 import TwitterCharacterCounter from "./pages/tools/TwitterCharacterCounter";
 import SocialProfileAnalyzer from "./pages/tools/SocialProfileAnalyzer";
 import PostScheduler from "./pages/tools/PostScheduler";
+import NameGenerator from "./pages/tools/NameGenerator";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -231,7 +231,8 @@ const App = () => {
               <Route path="/tools/twitter-character-counter" element={<TwitterCharacterCounter />} />
               <Route path="/tools/social-profile-analyzer" element={<SocialProfileAnalyzer />} />
               <Route path="/tools/post-scheduler" element={<PostScheduler />} />
-              <Route path="/tools/name-generator" element={<ToolPlaceholder toolName="Name Generator" toolDescription="Generate random names for people, businesses, characters, and more." />} />
+              <Route path="/tools/name-generator" element={<NameGenerator />} />
+              <Route path="/tools/lorem-ipsum" element={<LoremIpsumGenerator />} />
               
               {/* Legacy routes for old components */}
               <Route path="/tools/social-media-image-resizer-old" element={<ToolPlaceholder toolName="Social Media Image Resizer" toolDescription="Resize images for different social platforms with optimal dimensions for each network." />} />
