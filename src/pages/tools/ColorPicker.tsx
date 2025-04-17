@@ -99,7 +99,7 @@ const ColorPicker = () => {
     h /= 360;
     s /= 100;
     l /= 100;
-    let r, g, b;
+    let r: number, g: number, b: number;
 
     if (s === 0) {
       r = g = b = l;
@@ -173,7 +173,10 @@ const ColorPicker = () => {
             if (distance <= radius) {
               const hue = ((angle + Math.PI) / (2 * Math.PI)) * 360;
               const saturation = Math.min(100, (distance / radius) * 100);
-              const [r, g, b] = hslToRgb(hue, saturation, 50);
+              const rgbObj = hslToRgb(hue, saturation, 50);
+              const r = rgbObj.r;
+              const g = rgbObj.g;
+              const b = rgbObj.b;
 
               const i = (y * 200 + x) * 4;
               imageData.data[i] = r;
@@ -284,7 +287,7 @@ const ColorPicker = () => {
                         className="ml-2"
                         onClick={() => copyToClipboard(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <Copy className="h-4 w-4" />
                       </Button>
                     </div>
                   </TabsContent>
@@ -336,7 +339,7 @@ const ColorPicker = () => {
                         className="ml-2"
                         onClick={() => copyToClipboard(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`)}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <Copy className="h-4 w-4" />
                       </Button>
                     </div>
                   </TabsContent>
