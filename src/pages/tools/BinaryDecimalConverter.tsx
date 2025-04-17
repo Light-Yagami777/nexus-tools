@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calculator } from "lucide-react";
 import { toast } from "sonner";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const BinaryDecimalConverter = () => {
   const [binaryInput, setBinaryInput] = useState<string>("");
@@ -223,134 +223,137 @@ const BinaryDecimalConverter = () => {
 
   return (
     <ToolLayout title="Binary-Decimal Converter" icon={<Calculator className="h-6 w-6" />}>
-      <Card className="p-6">
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-6">
+      <Card className="p-4 md:p-6">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-4 md:space-y-6">
             <div>
-              <h2 className="text-xl font-semibold mb-4">Number System Converter</h2>
-              <p className="text-muted-foreground mb-4">
+              <h2 className="text-lg md:text-xl font-semibold mb-2 md:mb-4">Number System Converter</h2>
+              <p className="text-sm md:text-base text-muted-foreground mb-4">
                 Convert between binary, decimal, hexadecimal, and octal number systems.
               </p>
             </div>
             
-            <Tabs 
-              defaultValue="binary-to-decimal" 
-              onValueChange={setActiveTab} 
-              className="w-full"
-            >
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="binary-to-decimal">Binary</TabsTrigger>
-                <TabsTrigger value="decimal-to-binary">Decimal</TabsTrigger>
-                <TabsTrigger value="hex-to-decimal">Hex</TabsTrigger>
-                <TabsTrigger value="octal-to-decimal">Octal</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="binary-to-decimal" className="mt-4 space-y-4">
-                <div>
-                  <Label htmlFor="binary-input">Binary Input (Base-2)</Label>
-                  <Input
-                    id="binary-input"
-                    type="text"
-                    placeholder="Enter binary (e.g. 10101)"
-                    value={binaryInput}
-                    onChange={(e) => handleBinaryInput(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Binary numbers only use 0 and 1
-                  </p>
-                </div>
+            <ScrollArea className="w-full">
+              <Tabs 
+                defaultValue="binary-to-decimal" 
+                onValueChange={setActiveTab} 
+                className="w-full"
+              >
+                <TabsList className="inline-flex h-auto p-1">
+                  <TabsTrigger value="binary-to-decimal">Binary</TabsTrigger>
+                  <TabsTrigger value="decimal-to-binary">Decimal</TabsTrigger>
+                  <TabsTrigger value="hex-to-decimal">Hex</TabsTrigger>
+                  <TabsTrigger value="octal-to-decimal">Octal</TabsTrigger>
+                </TabsList>
+                <ScrollBar orientation="horizontal" />
+
+                <TabsContent value="binary-to-decimal" className="mt-4 space-y-4">
+                  <div>
+                    <Label htmlFor="binary-input">Binary Input (Base-2)</Label>
+                    <Input
+                      id="binary-input"
+                      type="text"
+                      placeholder="Enter binary (e.g. 10101)"
+                      value={binaryInput}
+                      onChange={(e) => handleBinaryInput(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Binary numbers only use 0 and 1
+                    </p>
+                  </div>
+                  
+                  <Button onClick={convertBinaryToDecimal} disabled={isCalculating || !binaryInput} className="w-full">
+                    {isCalculating ? "Converting..." : "Convert from Binary"}
+                  </Button>
+                </TabsContent>
                 
-                <Button onClick={convertBinaryToDecimal} disabled={isCalculating || !binaryInput} className="w-full">
-                  {isCalculating ? "Converting..." : "Convert from Binary"}
-                </Button>
-              </TabsContent>
-              
-              <TabsContent value="decimal-to-binary" className="mt-4 space-y-4">
-                <div>
-                  <Label htmlFor="decimal-input">Decimal Input (Base-10)</Label>
-                  <Input
-                    id="decimal-input"
-                    type="text"
-                    placeholder="Enter decimal (e.g. 42)"
-                    value={decimalInput}
-                    onChange={(e) => handleDecimalInput(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Decimal numbers use digits 0-9
-                  </p>
-                </div>
+                <TabsContent value="decimal-to-binary" className="mt-4 space-y-4">
+                  <div>
+                    <Label htmlFor="decimal-input">Decimal Input (Base-10)</Label>
+                    <Input
+                      id="decimal-input"
+                      type="text"
+                      placeholder="Enter decimal (e.g. 42)"
+                      value={decimalInput}
+                      onChange={(e) => handleDecimalInput(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Decimal numbers use digits 0-9
+                    </p>
+                  </div>
+                  
+                  <Button onClick={convertDecimalToBinary} disabled={isCalculating || !decimalInput} className="w-full">
+                    {isCalculating ? "Converting..." : "Convert from Decimal"}
+                  </Button>
+                </TabsContent>
                 
-                <Button onClick={convertDecimalToBinary} disabled={isCalculating || !decimalInput} className="w-full">
-                  {isCalculating ? "Converting..." : "Convert from Decimal"}
-                </Button>
-              </TabsContent>
-              
-              <TabsContent value="hex-to-decimal" className="mt-4 space-y-4">
-                <div>
-                  <Label htmlFor="hex-input">Hexadecimal Input (Base-16)</Label>
-                  <Input
-                    id="hex-input"
-                    type="text"
-                    placeholder="Enter hexadecimal (e.g. 1A3F)"
-                    value={hexInput}
-                    onChange={(e) => handleHexInput(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Hexadecimal numbers use digits 0-9 and letters A-F
-                  </p>
-                </div>
+                <TabsContent value="hex-to-decimal" className="mt-4 space-y-4">
+                  <div>
+                    <Label htmlFor="hex-input">Hexadecimal Input (Base-16)</Label>
+                    <Input
+                      id="hex-input"
+                      type="text"
+                      placeholder="Enter hexadecimal (e.g. 1A3F)"
+                      value={hexInput}
+                      onChange={(e) => handleHexInput(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Hexadecimal numbers use digits 0-9 and letters A-F
+                    </p>
+                  </div>
+                  
+                  <Button onClick={convertHexToDecimal} disabled={isCalculating || !hexInput} className="w-full">
+                    {isCalculating ? "Converting..." : "Convert from Hexadecimal"}
+                  </Button>
+                </TabsContent>
                 
-                <Button onClick={convertHexToDecimal} disabled={isCalculating || !hexInput} className="w-full">
-                  {isCalculating ? "Converting..." : "Convert from Hexadecimal"}
-                </Button>
-              </TabsContent>
-              
-              <TabsContent value="octal-to-decimal" className="mt-4 space-y-4">
-                <div>
-                  <Label htmlFor="octal-input">Octal Input (Base-8)</Label>
-                  <Input
-                    id="octal-input"
-                    type="text"
-                    placeholder="Enter octal (e.g. 52)"
-                    value={octalInput}
-                    onChange={(e) => handleOctalInput(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Octal numbers use digits 0-7
-                  </p>
-                </div>
-                
-                <Button onClick={convertOctalToDecimal} disabled={isCalculating || !octalInput} className="w-full">
-                  {isCalculating ? "Converting..." : "Convert from Octal"}
-                </Button>
-              </TabsContent>
-            </Tabs>
+                <TabsContent value="octal-to-decimal" className="mt-4 space-y-4">
+                  <div>
+                    <Label htmlFor="octal-input">Octal Input (Base-8)</Label>
+                    <Input
+                      id="octal-input"
+                      type="text"
+                      placeholder="Enter octal (e.g. 52)"
+                      value={octalInput}
+                      onChange={(e) => handleOctalInput(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Octal numbers use digits 0-7
+                    </p>
+                  </div>
+                  
+                  <Button onClick={convertOctalToDecimal} disabled={isCalculating || !octalInput} className="w-full">
+                    {isCalculating ? "Converting..." : "Convert from Octal"}
+                  </Button>
+                </TabsContent>
+              </Tabs>
+            </ScrollArea>
             
             <div className="pt-4 grid grid-cols-1 gap-4">
               <div className="rounded-lg p-4 border">
                 <h3 className="text-sm font-medium mb-2">Conversion Results</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="result-binary">Binary</Label>
-                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono overflow-x-auto whitespace-nowrap">
+                    <Label>Binary</Label>
+                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono break-all">
                       {binaryInput || "0"}
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="result-decimal">Decimal</Label>
-                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono overflow-x-auto whitespace-nowrap">
+                    <Label>Decimal</Label>
+                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono break-all">
                       {decimalInput || "0"}
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="result-hex">Hexadecimal</Label>
-                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono overflow-x-auto whitespace-nowrap">
+                    <Label>Hexadecimal</Label>
+                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono break-all">
                       {hexInput || "0"}
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="result-octal">Octal</Label>
-                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono overflow-x-auto whitespace-nowrap">
+                    <Label>Octal</Label>
+                    <div className="p-2 bg-muted/30 rounded border text-sm font-mono break-all">
                       {octalInput || "0"}
                     </div>
                   </div>
