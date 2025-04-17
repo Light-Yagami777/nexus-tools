@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,21 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Copy, RefreshCw, CornerDownLeft } from 'lucide-react';
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const StringUtilities = () => {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [activeTab, setActiveTab] = useState('replace');
   
-  // Search and replace state
   const [searchText, setSearchText] = useState('');
   const [replaceText, setReplaceText] = useState('');
   
-  // Case conversion type
   const [caseType, setCaseType] = useState('uppercase');
   
-  // Processing state
   const [isProcessing, setIsProcessing] = useState(false);
   
   const handleProcess = () => {
@@ -103,7 +99,6 @@ const StringUtilities = () => {
   };
   
   const handleExtract = () => {
-    // Extract numbers
     const numbers = inputText.match(/\d+/g);
     if (numbers) {
       setOutputText(numbers.join(', '));
@@ -166,7 +161,7 @@ const StringUtilities = () => {
         <div className="w-full">
           <Tabs defaultValue="replace" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="overflow-x-auto pb-2">
-              <ScrollArea className="w-full" orientation="horizontal">
+              <ScrollArea className="w-full">
                 <div className="inline-flex min-w-max">
                   <TabsList>
                     <TabsTrigger value="replace">Replace</TabsTrigger>
@@ -178,6 +173,7 @@ const StringUtilities = () => {
                     <TabsTrigger value="case">Case Change</TabsTrigger>
                   </TabsList>
                 </div>
+                <ScrollBar orientation="horizontal" />
               </ScrollArea>
             </div>
             
