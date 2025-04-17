@@ -209,20 +209,20 @@ const PomodoroTimer = () => {
                 
                 <div className="flex flex-wrap justify-center gap-2">
                   {!isRunning ? (
-                    <Button onClick={startTimer}>
+                    <Button onClick={startTimer} className="w-24">
                       <Play className="h-4 w-4 mr-1" /> Start
                     </Button>
                   ) : (
-                    <Button variant="outline" onClick={pauseTimer}>
+                    <Button variant="outline" onClick={pauseTimer} className="w-24">
                       <Pause className="h-4 w-4 mr-1" /> Pause
                     </Button>
                   )}
                   
-                  <Button variant="outline" onClick={resetTimer}>
+                  <Button variant="outline" onClick={resetTimer} className="w-24">
                     <RefreshCw className="h-4 w-4 mr-1" /> Reset
                   </Button>
                   
-                  <Button variant="secondary" onClick={skipToNext}>
+                  <Button variant="secondary" onClick={skipToNext} className="w-24">
                     Skip
                   </Button>
                 </div>
@@ -286,31 +286,33 @@ const PomodoroTimer = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Auto Start</h3>
                 
-                <div className="space-y-4 md:space-y-2">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <RadioGroup defaultValue={autoStartBreaks ? "yes" : "no"} onValueChange={(val) => setAutoStartBreaks(val === "yes")} className="flex flex-col md:flex-row gap-2">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label>Auto-start breaks</Label>
+                    <RadioGroup defaultValue={autoStartBreaks ? "yes" : "no"} onValueChange={(val) => setAutoStartBreaks(val === "yes")} className="flex flex-col space-y-1">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="auto-breaks-yes" />
-                        <Label htmlFor="auto-breaks-yes">Auto-start breaks</Label>
+                        <Label htmlFor="auto-breaks-yes">Yes</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="no" id="auto-breaks-no" />
-                        <Label htmlFor="auto-breaks-no">Don't auto-start breaks</Label>
+                        <Label htmlFor="auto-breaks-no">No</Label>
                       </div>
                     </RadioGroup>
                   </div>
                 </div>
                 
-                <div className="space-y-4 md:space-y-2">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <RadioGroup defaultValue={autoStartPomodoros ? "yes" : "no"} onValueChange={(val) => setAutoStartPomodoros(val === "yes")} className="flex flex-col md:flex-row gap-2">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label>Auto-start pomodoros</Label>
+                    <RadioGroup defaultValue={autoStartPomodoros ? "yes" : "no"} onValueChange={(val) => setAutoStartPomodoros(val === "yes")} className="flex flex-col space-y-1">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="auto-pomodoros-yes" />
-                        <Label htmlFor="auto-pomodoros-yes">Auto-start pomodoros</Label>
+                        <Label htmlFor="auto-pomodoros-yes">Yes</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="no" id="auto-pomodoros-no" />
-                        <Label htmlFor="auto-pomodoros-no">Don't auto-start pomodoros</Label>
+                        <Label htmlFor="auto-pomodoros-no">No</Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -320,16 +322,17 @@ const PomodoroTimer = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Notifications</h3>
                 
-                <div className="space-y-4 md:space-y-2">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <RadioGroup defaultValue={showNotifications ? "yes" : "no"} onValueChange={(val) => setShowNotifications(val === "yes")} className="flex flex-col md:flex-row gap-2">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label>Show notifications</Label>
+                    <RadioGroup defaultValue={showNotifications ? "yes" : "no"} onValueChange={(val) => setShowNotifications(val === "yes")} className="flex flex-col space-y-1">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="yes" id="notifications-yes" />
-                        <Label htmlFor="notifications-yes">Show notifications</Label>
+                        <Label htmlFor="notifications-yes">Yes</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="no" id="notifications-no" />
-                        <Label htmlFor="notifications-no">Don't show notifications</Label>
+                        <Label htmlFor="notifications-no">No</Label>
                       </div>
                     </RadioGroup>
                   </div>

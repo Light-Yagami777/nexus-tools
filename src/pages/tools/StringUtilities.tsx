@@ -162,178 +162,182 @@ const StringUtilities = () => {
           </CardContent>
         </Card>
         
-        <Tabs defaultValue="replace" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
-            <TabsTrigger value="replace">Replace</TabsTrigger>
-            <TabsTrigger value="trim">Trim</TabsTrigger>
-            <TabsTrigger value="extract">Extract</TabsTrigger>
-            <TabsTrigger value="reverse">Reverse</TabsTrigger>
-            <TabsTrigger value="random">Random Case</TabsTrigger>
-            <TabsTrigger value="count">Word Count</TabsTrigger>
-            <TabsTrigger value="case">Case Change</TabsTrigger>
-          </TabsList>
-          
-          <Card className="mt-4">
-            <CardContent className="p-6">
-              <TabsContent value="replace" className="space-y-4 mt-0">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Find</label>
-                  <Input
-                    value={searchText}
-                    onChange={e => setSearchText(e.target.value)}
-                    placeholder="Text to find"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2">Replace with</label>
-                  <Input
-                    value={replaceText}
-                    onChange={e => setReplaceText(e.target.value)}
-                    placeholder="Replacement text"
-                  />
-                </div>
-                
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Replace Text'}
-                </Button>
-                
-                <p className="text-sm text-muted-foreground">
-                  Finds all occurrences of the specified text and replaces them with the replacement text.
-                </p>
-              </TabsContent>
-              
-              <TabsContent value="case" className="space-y-4 mt-0">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-                  <Button 
-                    variant={caseType === 'uppercase' ? 'default' : 'outline'}
-                    onClick={() => setCaseType('uppercase')}
-                    className="w-full"
-                  >
-                    UPPERCASE
+        <div className="overflow-x-auto">
+          <Tabs defaultValue="replace" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="overflow-x-auto pb-2">
+              <TabsList className="inline-flex min-w-max">
+                <TabsTrigger value="replace">Replace</TabsTrigger>
+                <TabsTrigger value="trim">Trim</TabsTrigger>
+                <TabsTrigger value="extract">Extract</TabsTrigger>
+                <TabsTrigger value="reverse">Reverse</TabsTrigger>
+                <TabsTrigger value="random">Random Case</TabsTrigger>
+                <TabsTrigger value="count">Word Count</TabsTrigger>
+                <TabsTrigger value="case">Case Change</TabsTrigger>
+              </TabsList>
+            </div>
+            
+            <Card className="mt-4">
+              <CardContent className="p-6">
+                <TabsContent value="replace" className="space-y-4 mt-0">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Find</label>
+                    <Input
+                      value={searchText}
+                      onChange={e => setSearchText(e.target.value)}
+                      placeholder="Text to find"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Replace with</label>
+                    <Input
+                      value={replaceText}
+                      onChange={e => setReplaceText(e.target.value)}
+                      placeholder="Replacement text"
+                    />
+                  </div>
+                  
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Replace Text'}
                   </Button>
-                  <Button 
-                    variant={caseType === 'lowercase' ? 'default' : 'outline'}
-                    onClick={() => setCaseType('lowercase')}
-                    className="w-full"
-                  >
-                    lowercase
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Finds all occurrences of the specified text and replaces them with the replacement text.
+                  </p>
+                </TabsContent>
+                
+                <TabsContent value="case" className="space-y-4 mt-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <Button 
+                      variant={caseType === 'uppercase' ? 'default' : 'outline'}
+                      onClick={() => setCaseType('uppercase')}
+                      className="w-full"
+                    >
+                      UPPERCASE
+                    </Button>
+                    <Button 
+                      variant={caseType === 'lowercase' ? 'default' : 'outline'}
+                      onClick={() => setCaseType('lowercase')}
+                      className="w-full"
+                    >
+                      lowercase
+                    </Button>
+                    <Button 
+                      variant={caseType === 'capitalize' ? 'default' : 'outline'}
+                      onClick={() => setCaseType('capitalize')}
+                      className="w-full"
+                    >
+                      Title Case
+                    </Button>
+                    <Button 
+                      variant={caseType === 'sentence' ? 'default' : 'outline'}
+                      onClick={() => setCaseType('sentence')}
+                      className="w-full"
+                    >
+                      Sentence case
+                    </Button>
+                    <Button 
+                      variant={caseType === 'alternating' ? 'default' : 'outline'}
+                      onClick={() => setCaseType('alternating')}
+                      className="w-full sm:col-span-2"
+                    >
+                      aLtErNaTiNg
+                    </Button>
+                  </div>
+                  
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Change Case'}
                   </Button>
-                  <Button 
-                    variant={caseType === 'capitalize' ? 'default' : 'outline'}
-                    onClick={() => setCaseType('capitalize')}
-                    className="w-full"
-                  >
-                    Title Case
+                </TabsContent>
+                
+                <TabsContent value="trim" className="space-y-4 mt-0">
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Trim Whitespace'}
                   </Button>
-                  <Button 
-                    variant={caseType === 'sentence' ? 'default' : 'outline'}
-                    onClick={() => setCaseType('sentence')}
-                    className="w-full"
-                  >
-                    Sentence case
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Removes whitespace from the beginning and end of the text.
+                  </p>
+                </TabsContent>
+                
+                <TabsContent value="extract" className="space-y-4 mt-0">
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Extract Numbers'}
                   </Button>
-                  <Button 
-                    variant={caseType === 'alternating' ? 'default' : 'outline'}
-                    onClick={() => setCaseType('alternating')}
-                    className="w-full"
-                  >
-                    aLtErNaTiNg
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Extracts all numbers from the text.
+                  </p>
+                </TabsContent>
+                
+                <TabsContent value="reverse" className="space-y-4 mt-0">
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Reverse Text'}
                   </Button>
-                </div>
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Reverses all characters in the text.
+                  </p>
+                </TabsContent>
                 
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Change Case'}
-                </Button>
-              </TabsContent>
-              
-              <TabsContent value="trim" className="space-y-4 mt-0">
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Trim Whitespace'}
-                </Button>
+                <TabsContent value="count" className="space-y-4 mt-0">
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Count Words & Characters'}
+                  </Button>
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Counts words, characters, and lines in the text.
+                  </p>
+                </TabsContent>
                 
-                <p className="text-sm text-muted-foreground">
-                  Removes whitespace from the beginning and end of the text.
-                </p>
-              </TabsContent>
-              
-              <TabsContent value="extract" className="space-y-4 mt-0">
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Extract Numbers'}
-                </Button>
-                
-                <p className="text-sm text-muted-foreground">
-                  Extracts all numbers from the text.
-                </p>
-              </TabsContent>
-              
-              <TabsContent value="reverse" className="space-y-4 mt-0">
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Reverse Text'}
-                </Button>
-                
-                <p className="text-sm text-muted-foreground">
-                  Reverses all characters in the text.
-                </p>
-              </TabsContent>
-              
-              <TabsContent value="count" className="space-y-4 mt-0">
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Count Words & Characters'}
-                </Button>
-                
-                <p className="text-sm text-muted-foreground">
-                  Counts words, characters, and lines in the text.
-                </p>
-              </TabsContent>
-              
-              <TabsContent value="random" className="space-y-4 mt-0">
-                <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
-                  {isProcessing ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : 'Randomize Case'}
-                </Button>
-                
-                <p className="text-sm text-muted-foreground">
-                  Creates text with randomly mixed uppercase and lowercase letters.
-                </p>
-              </TabsContent>
-            </CardContent>
-          </Card>
-        </Tabs>
+                <TabsContent value="random" className="space-y-4 mt-0">
+                  <Button onClick={handleProcess} disabled={isProcessing} className="w-full">
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Randomize Case'}
+                  </Button>
+                  
+                  <p className="text-sm text-muted-foreground">
+                    Creates text with randomly mixed uppercase and lowercase letters.
+                  </p>
+                </TabsContent>
+              </CardContent>
+            </Card>
+          </Tabs>
+        </div>
         
         <Card>
           <CardContent className="p-6">

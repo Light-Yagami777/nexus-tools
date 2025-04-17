@@ -1,5 +1,4 @@
 
-// This is a mock implementation of a PostScheduler tool
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Instagram, Facebook, Twitter, Linkedin, Send } from "lucide-react";
+import { CalendarIcon, Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -140,17 +139,19 @@ const PostScheduler = () => {
                 </Select>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Date</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-start text-left font-normal"
+                        className="w-full justify-start text-left font-normal overflow-hidden"
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                        <span className="truncate">
+                          {date ? format(date, "PP") : "Pick a date"}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">

@@ -45,11 +45,21 @@ const SocialMediaColorPicker = () => {
 
   // Filter platforms based on search term whenever it changes
   useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredPlatforms(platforms);
+      return;
+    }
+    
     const filtered = platforms.filter(platform => 
       platform.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredPlatforms(filtered);
   }, [searchTerm]);
+
+  // Initialize with all platforms on first load
+  useEffect(() => {
+    setFilteredPlatforms(platforms);
+  }, []);
 
   const handleCopyColor = (color: string) => {
     navigator.clipboard.writeText(color);
@@ -66,9 +76,9 @@ const SocialMediaColorPicker = () => {
         style={{ backgroundColor: color }}
         onClick={() => handleCopyColor(color)}
       ></div>
-      <div className="text-xs text-center">
-        <div className="font-medium truncate max-w-full">{label}</div>
-        <div className="text-muted-foreground truncate max-w-full">{color}</div>
+      <div className="text-xs text-center w-full">
+        <div className="font-medium truncate">{label}</div>
+        <div className="text-muted-foreground truncate">{color}</div>
       </div>
     </div>
   );
@@ -134,79 +144,81 @@ const SocialMediaColorPicker = () => {
           <TabsContent value="list" className="mt-4">
             <Card>
               <ScrollArea className="h-[500px]">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left p-3">Platform</th>
-                      <th className="text-left p-3">Primary</th>
-                      <th className="text-left p-3">Secondary</th>
-                      <th className="text-left p-3">Accent</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredPlatforms.length > 0 ? (
-                      filteredPlatforms.map((platform) => (
-                        <tr key={platform.name} className="border-b">
-                          <td className="p-3 font-medium">{platform.name}</td>
-                          <td className="p-3">
-                            <div className="flex items-center space-x-2">
-                              <div 
-                                className="w-6 h-6 rounded-md border"
-                                style={{ backgroundColor: platform.primary }}
-                              ></div>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => handleCopyColor(platform.primary)}
-                                className="truncate max-w-[100px]"
-                              >
-                                {platform.primary}
-                              </Button>
-                            </div>
-                          </td>
-                          <td className="p-3">
-                            <div className="flex items-center space-x-2">
-                              <div 
-                                className="w-6 h-6 rounded-md border"
-                                style={{ backgroundColor: platform.secondary }}
-                              ></div>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => handleCopyColor(platform.secondary)}
-                                className="truncate max-w-[100px]"
-                              >
-                                {platform.secondary}
-                              </Button>
-                            </div>
-                          </td>
-                          <td className="p-3">
-                            <div className="flex items-center space-x-2">
-                              <div 
-                                className="w-6 h-6 rounded-md border"
-                                style={{ backgroundColor: platform.accent }}
-                              ></div>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => handleCopyColor(platform.accent)}
-                                className="truncate max-w-[100px]"
-                              >
-                                {platform.accent}
-                              </Button>
-                            </div>
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-3">Platform</th>
+                        <th className="text-left p-3">Primary</th>
+                        <th className="text-left p-3">Secondary</th>
+                        <th className="text-left p-3">Accent</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredPlatforms.length > 0 ? (
+                        filteredPlatforms.map((platform) => (
+                          <tr key={platform.name} className="border-b">
+                            <td className="p-3 font-medium">{platform.name}</td>
+                            <td className="p-3">
+                              <div className="flex items-center space-x-2">
+                                <div 
+                                  className="w-6 h-6 rounded-md border"
+                                  style={{ backgroundColor: platform.primary }}
+                                ></div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => handleCopyColor(platform.primary)}
+                                  className="truncate max-w-[100px]"
+                                >
+                                  {platform.primary}
+                                </Button>
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-center space-x-2">
+                                <div 
+                                  className="w-6 h-6 rounded-md border"
+                                  style={{ backgroundColor: platform.secondary }}
+                                ></div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => handleCopyColor(platform.secondary)}
+                                  className="truncate max-w-[100px]"
+                                >
+                                  {platform.secondary}
+                                </Button>
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-center space-x-2">
+                                <div 
+                                  className="w-6 h-6 rounded-md border"
+                                  style={{ backgroundColor: platform.accent }}
+                                ></div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => handleCopyColor(platform.accent)}
+                                  className="truncate max-w-[100px]"
+                                >
+                                  {platform.accent}
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4} className="text-center py-10">
+                            No platforms match your search.
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="text-center py-10">
-                          No platforms match your search.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </ScrollArea>
             </Card>
           </TabsContent>
