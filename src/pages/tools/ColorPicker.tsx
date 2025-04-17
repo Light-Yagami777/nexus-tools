@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Palette, Copy, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
+import { ColorWheel } from '@/components/ui/color-wheel';
 
 const ColorPicker = () => {
   const [color, setColor] = useState<string>("#3b82f6");
@@ -202,30 +203,22 @@ const ColorPicker = () => {
           <CardHeader>
             <CardTitle>Color Picker</CardTitle>
             <CardDescription>
-              Pick colors using the wheel or input values directly
+              Pick colors using the wheel or input values directly. Hover over the center circle to see RGB/HSL values.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <div className="relative">
-                  <canvas
-                    ref={canvasRef}
-                    width={200}
-                    height={200}
-                    onClick={handleCanvasClick}
-                    className="border rounded-full cursor-pointer mx-auto"
-                  />
-                  <div
-                    ref={pickerRef}
-                    className="absolute w-6 h-6 border-2 border-white rounded-full shadow-lg cursor-move"
-                    style={{
-                      backgroundColor: color,
-                      transform: 'translate(-50%, -50%)',
-                      pointerEvents: 'none'
-                    }}
-                  />
-                </div>
+                <ColorWheel
+                  color={color}
+                  onChange={(newColor) => {
+                    setColor(newColor);
+                    updateRgbFromHex(newColor);
+                    updateHslFromHex(newColor);
+                  }}
+                  rgb={rgb}
+                  hsl={hsl}
+                />
 
                 <div 
                   className="h-32 rounded-lg w-full mb-4 border" 

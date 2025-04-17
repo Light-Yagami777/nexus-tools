@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { 
   Github, 
@@ -73,6 +72,7 @@ export const Footer = () => {
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-transparent to-secondary/20">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      
       <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-primary/20 blur-3xl" />
       <div className="absolute bottom-40 right-20 w-60 h-60 rounded-full bg-pink-500/10 blur-3xl" />
@@ -88,7 +88,7 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
         <div className="glass rounded-2xl p-8 md:p-10 lg:p-12 mb-16 border border-primary/20 shadow-lg overflow-hidden">
           <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full blur-xl"></div>
