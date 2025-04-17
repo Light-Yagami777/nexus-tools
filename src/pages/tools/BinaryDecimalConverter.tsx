@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -457,19 +458,19 @@ const BinaryDecimalConverter = () => {
         <div className="mt-8 pt-6 border-t">
           <h3 className="text-lg font-medium mb-4">Applications of Number Systems</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-lg border">
+            <div className="p-4 rounded-lg border h-full">
               <h4 className="font-medium mb-2">Binary in Computing</h4>
               <p className="text-sm text-muted-foreground">
                 Computers use binary internally as it maps perfectly to electronic states (on/off). All data in computers is ultimately stored and processed as binary.
               </p>
             </div>
-            <div className="p-4 rounded-lg border">
+            <div className="p-4 rounded-lg border h-full">
               <h4 className="font-medium mb-2">Hexadecimal in Programming</h4>
               <p className="text-sm text-muted-foreground">
                 Used in programming for memory addresses, color codes (e.g., #FF0000 for red), and representing binary data in a more compact form.
               </p>
             </div>
-            <div className="p-4 rounded-lg border">
+            <div className="p-4 rounded-lg border h-full">
               <h4 className="font-medium mb-2">Octal in File Permissions</h4>
               <p className="text-sm text-muted-foreground">
                 Unix/Linux systems use octal numbers to represent file permissions. For example, 755 means read/write/execute for owner, read/execute for group and others.
