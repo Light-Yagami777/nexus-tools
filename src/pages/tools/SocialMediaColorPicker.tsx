@@ -45,15 +45,21 @@ const SocialMediaColorPicker = () => {
 
   // Filter platforms based on search term whenever it changes
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      setFilteredPlatforms(platforms);
-      return;
-    }
-    
-    const filtered = platforms.filter(platform => 
-      platform.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPlatforms(filtered);
+    const performSearch = () => {
+      const searchLower = searchTerm.toLowerCase().trim();
+      
+      if (!searchLower) {
+        setFilteredPlatforms(platforms);
+        return;
+      }
+      
+      const filtered = platforms.filter(platform => 
+        platform.name.toLowerCase().includes(searchLower)
+      );
+      setFilteredPlatforms(filtered);
+    };
+
+    performSearch();
   }, [searchTerm]);
 
   // Initialize with all platforms on first load

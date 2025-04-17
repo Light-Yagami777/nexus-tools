@@ -146,7 +146,7 @@ const PostScheduler = () => {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-start text-left font-normal overflow-hidden"
+                        className="w-full justify-start text-left font-normal"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                         <span className="truncate">
@@ -160,6 +160,7 @@ const PostScheduler = () => {
                         selected={date}
                         onSelect={setDate}
                         initialFocus
+                        className="rounded-md border"
                       />
                     </PopoverContent>
                   </Popover>

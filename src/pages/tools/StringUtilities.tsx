@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Copy, RefreshCw, CornerDownLeft } from 'lucide-react';
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const StringUtilities = () => {
   const [inputText, setInputText] = useState('');
@@ -162,18 +163,22 @@ const StringUtilities = () => {
           </CardContent>
         </Card>
         
-        <div className="overflow-x-auto">
+        <div className="w-full">
           <Tabs defaultValue="replace" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="overflow-x-auto pb-2">
-              <TabsList className="inline-flex min-w-max">
-                <TabsTrigger value="replace">Replace</TabsTrigger>
-                <TabsTrigger value="trim">Trim</TabsTrigger>
-                <TabsTrigger value="extract">Extract</TabsTrigger>
-                <TabsTrigger value="reverse">Reverse</TabsTrigger>
-                <TabsTrigger value="random">Random Case</TabsTrigger>
-                <TabsTrigger value="count">Word Count</TabsTrigger>
-                <TabsTrigger value="case">Case Change</TabsTrigger>
-              </TabsList>
+              <ScrollArea className="w-full" orientation="horizontal">
+                <div className="inline-flex min-w-max">
+                  <TabsList>
+                    <TabsTrigger value="replace">Replace</TabsTrigger>
+                    <TabsTrigger value="trim">Trim</TabsTrigger>
+                    <TabsTrigger value="extract">Extract</TabsTrigger>
+                    <TabsTrigger value="reverse">Reverse</TabsTrigger>
+                    <TabsTrigger value="random">Random Case</TabsTrigger>
+                    <TabsTrigger value="count">Word Count</TabsTrigger>
+                    <TabsTrigger value="case">Case Change</TabsTrigger>
+                  </TabsList>
+                </div>
+              </ScrollArea>
             </div>
             
             <Card className="mt-4">

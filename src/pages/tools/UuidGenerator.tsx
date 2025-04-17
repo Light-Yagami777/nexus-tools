@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider"; 
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const UuidGenerator = () => {
   const [uuids, setUuids] = useState<string[]>([]);
@@ -159,16 +160,18 @@ const UuidGenerator = () => {
                   Copy All
                 </Button>
               </div>
-              <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                {uuids.map((uuid, index) => (
-                  <div key={index} className="flex justify-between items-center p-2 bg-background rounded border">
-                    <code className="font-mono text-xs sm:text-sm whitespace-pre-wrap break-all overflow-hidden max-w-[calc(100%-40px)]">{uuid}</code>
-                    <Button variant="ghost" size="icon" onClick={() => copyToClipboard(index)}>
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
+              <ScrollArea className="max-h-[300px]">
+                <div className="space-y-2">
+                  {uuids.map((uuid, index) => (
+                    <div key={index} className="flex justify-between items-center p-2 bg-background rounded border">
+                      <code className="font-mono text-xs sm:text-sm break-all pr-2">{uuid}</code>
+                      <Button variant="ghost" size="icon" onClick={() => copyToClipboard(index)} className="flex-shrink-0">
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           )}
         </CardContent>

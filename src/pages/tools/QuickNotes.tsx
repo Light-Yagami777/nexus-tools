@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -186,35 +187,37 @@ const QuickNotes = () => {
                   "No notes match your search."}
               </div>
             ) : (
-              <div className="space-y-2 max-h-[500px] overflow-y-auto">
-                {filteredNotes.map(note => (
-                  <div
-                    key={note.id}
-                    className={`p-3 rounded-md cursor-pointer border ${
-                      note.id === activeNote?.id ? 'border-primary' : ''
-                    }`}
-                    onClick={() => {
-                      setActiveNote(note);
-                      setIsEditing(false);
-                    }}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="max-w-[80%]">
-                        <h3 className="font-medium truncate">{note.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2 break-words">
-                          {note.content}
-                        </p>
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-2">
+                  {filteredNotes.map(note => (
+                    <div
+                      key={note.id}
+                      className={`p-3 rounded-md cursor-pointer border ${
+                        note.id === activeNote?.id ? 'border-primary' : ''
+                      }`}
+                      onClick={() => {
+                        setActiveNote(note);
+                        setIsEditing(false);
+                      }}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="max-w-[80%]">
+                          <h3 className="font-medium truncate">{note.title}</h3>
+                          <p className="text-sm text-muted-foreground line-clamp-2 break-words">
+                            {note.content}
+                          </p>
+                        </div>
+                        <div
+                          className={`w-4 h-4 rounded-full ml-2 mt-1 flex-shrink-0 ${note.color}`}
+                        />
                       </div>
-                      <div
-                        className={`w-4 h-4 rounded-full ml-2 mt-1 flex-shrink-0 ${note.color}`}
-                      />
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        Updated {format(new Date(note.updatedAt), 'MMM d, yyyy')}
+                      </div>
                     </div>
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      Updated {format(new Date(note.updatedAt), 'MMM d, yyyy')}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </ScrollArea>
             )}
           </CardContent>
         </Card>
@@ -252,12 +255,14 @@ const QuickNotes = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Textarea
-                  value={activeNote.content}
-                  onChange={(e) => setActiveNote({ ...activeNote, content: e.target.value })}
-                  className="min-h-[300px] border-none focus-visible:ring-0 p-0 resize-none"
-                  placeholder="Start typing..."
-                />
+                <ScrollArea className="h-[300px]">
+                  <Textarea
+                    value={activeNote.content}
+                    onChange={(e) => setActiveNote({ ...activeNote, content: e.target.value })}
+                    className="min-h-[300px] border-none focus-visible:ring-0 p-0 resize-none"
+                    placeholder="Start typing..."
+                  />
+                </ScrollArea>
               </CardContent>
               <CardFooter className="border-t pt-4 flex flex-wrap justify-between gap-2">
                 <div>
@@ -309,9 +314,11 @@ const QuickNotes = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <div className="whitespace-pre-wrap break-words min-h-[300px] overflow-auto">
-                  {activeNote.content || <span className="text-muted-foreground italic">No content</span>}
-                </div>
+                <ScrollArea className="h-[300px]">
+                  <div className="whitespace-pre-wrap break-words">
+                    {activeNote.content || <span className="text-muted-foreground italic">No content</span>}
+                  </div>
+                </ScrollArea>
               </CardContent>
               <CardFooter className="border-t pt-4 flex flex-wrap justify-between gap-2">
                 <div className="flex flex-wrap gap-2">
