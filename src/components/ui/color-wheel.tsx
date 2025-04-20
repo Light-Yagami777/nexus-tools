@@ -6,19 +6,23 @@ interface ColorWheelProps {
   onChange: (color: string) => void;
   rgb: { r: number; g: number; b: number };
   hsl: { h: number; s: number; l: number };
+  magnification?: number;
 }
 
 export const ColorWheel: React.FC<ColorWheelProps> = ({
   color,
   onChange,
   rgb,
-  hsl
+  hsl,
+  magnification = 5 // Default magnification level
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
+  const magnifierRef = useRef<HTMLCanvasElement>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [showMagnifier, setShowMagnifier] = useState(false);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -54,18 +58,66 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
     }
   }, []);
 
+  const updateMagnifier = (x: number, y: number) => {
+    if (magnifierRef.current && canvasRef.current) {
+      const magnifierCtx = magnifierRef.current.getContext('2d');
+      const sourceCtx = canvasRef.current.getContext('2d');
+      
+      if (magnifierCtx && sourceCtx) {
+        // Clear the magnifier canvas
+        magnifierCtx.clearRect(0, 0, 100, 100);
+        
+        // Draw the magnified section
+        const size = 20; // Size of area to magnify
+        magnifierCtx.imageSmoothingEnabled = false;
+        
+        // Draw the source image onto the magnifier canvas with scaling
+        magnifierCtx.drawImage(
+          canvasRef.current,
+          Math.max(0, Math.min(x - size / 2, 200 - size)),
+          Math.max(0, Math.min(y - size / 2, 200 - size)),
+          size,
+          size,
+          0,
+          0,
+          100,
+          100
+        );
+        
+        // Draw crosshair
+        magnifierCtx.strokeStyle = 'rgba(255,255,255,0.8)';
+        magnifierCtx.lineWidth = 1;
+        
+        // Horizontal line
+        magnifierCtx.beginPath();
+        magnifierCtx.moveTo(0, 50);
+        magnifierCtx.lineTo(100, 50);
+        magnifierCtx.stroke();
+        
+        // Vertical line
+        magnifierCtx.beginPath();
+        magnifierCtx.moveTo(50, 0);
+        magnifierCtx.lineTo(50, 100);
+        magnifierCtx.stroke();
+      }
+    }
+  };
+
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDragging(true);
     handleMouseMove(e);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDragging && !e.buttons) return;
-
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      
+      // Update magnifier
+      updateMagnifier(x, y);
+      
+      if (!isDragging && !e.buttons) return;
 
       const centerX = 100;
       const centerY = 100;
@@ -92,10 +144,12 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
 
   const handleMouseEnter = () => {
     setIsZoomed(true);
+    setShowMagnifier(true);
   };
 
   const handleMouseLeave = () => {
     setIsZoomed(false);
+    setShowMagnifier(false);
     setIsDragging(false);
   };
 
@@ -137,38 +191,56 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
   };
 
   return (
-    <div className="relative">
-      <canvas
-        ref={canvasRef}
-        width={200}
-        height={200}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        className="border rounded-full cursor-crosshair mx-auto"
-      />
-      <div
-        className={`absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-lg overflow-hidden transition-all duration-200 ${isZoomed ? 'scale-150' : 'scale-100'}`}
-        style={{
-          backgroundColor: color,
-          left: position.x,
-          top: position.y,
-        }}
-      >
-        <div 
-          ref={infoRef}
-          className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white text-[8px] font-mono opacity-0 group-hover:opacity-100 hover:opacity-100"
+    <div className="relative flex flex-col items-center">
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          width={200}
+          height={200}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="border rounded-full cursor-crosshair mx-auto"
+        />
+        {/* Color selector circle */}
+        <div
+          className={`absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-lg overflow-hidden transition-all duration-200 ${isZoomed ? 'scale-150' : 'scale-100'}`}
+          style={{
+            backgroundColor: color,
+            left: position.x,
+            top: position.y,
+          }}
         >
-          <div className="font-bold">{color}</div>
-          <div className="text-[7px]">
-            <div>RGB: {rgb.r}, {rgb.g}, {rgb.b}</div>
-            <div>HSL: {hsl.h}°, {hsl.s}%, {hsl.l}%</div>
-            <div>RGBA: {rgb.r},{rgb.g},{rgb.b},1</div>
+          <div 
+            ref={infoRef}
+            className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white text-[8px] font-mono opacity-0 group-hover:opacity-100 hover:opacity-100"
+          >
+            <div className="font-bold">{color}</div>
+            <div className="text-[7px]">
+              <div>RGB: {rgb.r}, {rgb.g}, {rgb.b}</div>
+              <div>HSL: {hsl.h}°, {hsl.s}%, {hsl.l}%</div>
+              <div>RGBA: {rgb.r},{rgb.g},{rgb.b},1</div>
+            </div>
           </div>
         </div>
       </div>
+      
+      {/* Magnifier */}
+      {showMagnifier && (
+        <div className="absolute -top-28 right-0 transform translate-x-full p-2 bg-background border rounded-lg shadow-lg">
+          <div className="text-xs font-medium mb-1 text-center">Magnifier (5x)</div>
+          <div className="relative">
+            <canvas
+              ref={magnifierRef}
+              width={100}
+              height={100}
+              className="border rounded-lg"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,10 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Palette, Copy, RefreshCw } from 'lucide-react';
+import { Palette, Copy, Eye, Upload, Save, Trash, Circle } from 'lucide-react';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
 import { ColorWheel } from '@/components/ui/color-wheel';
+
+interface SavedColor {
+  color: string;
+  name: string;
+  timestamp: number;
+}
 
 const ColorPicker = () => {
   const [color, setColor] = useState<string>("#3b82f6");
@@ -16,7 +23,31 @@ const ColorPicker = () => {
   const [hsl, setHsl] = useState<{h: number; s: number; l: number}>({h: 217, s: 91, l: 60});
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [savedColors, setSavedColors] = useState<SavedColor[]>([]);
+  const [colorName, setColorName] = useState<string>("");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const imageCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [colorSource, setColorSource] = useState<'wheel' | 'image'>('wheel');
+  const [magnification, setMagnification] = useState<number>(5);
+
+  // Load saved colors from localStorage on component mount
+  useEffect(() => {
+    const savedPalette = localStorage.getItem('savedColorPalette');
+    if (savedPalette) {
+      try {
+        setSavedColors(JSON.parse(savedPalette));
+      } catch (e) {
+        console.error("Error loading saved colors:", e);
+      }
+    }
+  }, []);
+
+  // Save colors to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('savedColorPalette', JSON.stringify(savedColors));
+  }, [savedColors]);
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value;
@@ -129,21 +160,70 @@ const ColorPicker = () => {
     };
   };
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, label?: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      toast.success("Copied to clipboard");
+      toast.success(`${label || 'Color'} copied to clipboard`);
     }).catch(() => {
       toast.error("Failed to copy");
     });
   };
 
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
+  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          const imageUrl = event.target.result as string;
+          setUploadedImage(imageUrl);
+          setColorSource('image');
+          
+          // Load the image onto the canvas
+          setTimeout(() => {
+            if (imageCanvasRef.current) {
+              const canvas = imageCanvasRef.current;
+              const ctx = canvas.getContext('2d');
+              
+              if (ctx) {
+                const img = new Image();
+                img.onload = () => {
+                  // Calculate scaling to fit within the canvas
+                  const scale = Math.min(
+                    canvas.width / img.width,
+                    canvas.height / img.height
+                  );
+                  
+                  const scaledWidth = img.width * scale;
+                  const scaledHeight = img.height * scale;
+                  
+                  // Center the image on the canvas
+                  const x = (canvas.width - scaledWidth) / 2;
+                  const y = (canvas.height - scaledHeight) / 2;
+                  
+                  // Clear and draw
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+                };
+                img.src = imageUrl;
+              }
+            }
+          }, 50);
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (imageCanvasRef.current) {
+      const rect = imageCanvasRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      const ctx = canvasRef.current.getContext('2d');
+      const ctx = imageCanvasRef.current.getContext('2d');
       if (ctx) {
         const imageData = ctx.getImageData(x, y, 1, 1).data;
         const newColor = rgbToHex(imageData[0], imageData[1], imageData[2]);
@@ -155,42 +235,27 @@ const ColorPicker = () => {
     }
   };
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const imageData = ctx.createImageData(200, 200);
-        const center = { x: 100, y: 100 };
-        const radius = 90;
-
-        for (let x = 0; x < 200; x++) {
-          for (let y = 0; y < 200; y++) {
-            const dx = x - center.x;
-            const dy = y - center.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const angle = Math.atan2(dy, dx);
-
-            if (distance <= radius) {
-              const hue = ((angle + Math.PI) / (2 * Math.PI)) * 360;
-              const saturation = Math.min(100, (distance / radius) * 100);
-              const rgbObj = hslToRgb(hue, saturation, 50);
-              const r = rgbObj.r;
-              const g = rgbObj.g;
-              const b = rgbObj.b;
-
-              const i = (y * 200 + x) * 4;
-              imageData.data[i] = r;
-              imageData.data[i + 1] = g;
-              imageData.data[i + 2] = b;
-              imageData.data[i + 3] = 255;
-            }
-          }
-        }
-        ctx.putImageData(imageData, 0, 0);
-      }
+  const saveCurrentColor = () => {
+    if (!colorName.trim()) {
+      toast.error("Please enter a name for this color");
+      return;
     }
-  }, []);
+    
+    const newSavedColor: SavedColor = {
+      color,
+      name: colorName.trim(),
+      timestamp: Date.now()
+    };
+    
+    setSavedColors(prev => [...prev, newSavedColor]);
+    setColorName("");
+    toast.success(`Color "${colorName}" saved to palette`);
+  };
+
+  const deleteSavedColor = (timestamp: number) => {
+    setSavedColors(prev => prev.filter(c => c.timestamp !== timestamp));
+    toast.success("Color removed from palette");
+  };
 
   return (
     <ToolLayout 
@@ -203,164 +268,343 @@ const ColorPicker = () => {
           <CardHeader>
             <CardTitle>Color Picker</CardTitle>
             <CardDescription>
-              Pick colors using the wheel or input values directly. Hover over the center circle to see RGB/HSL values.
+              Pick colors using the wheel, from an image, or input values directly
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <ColorWheel
-                  color={color}
-                  onChange={(newColor) => {
-                    setColor(newColor);
-                    updateRgbFromHex(newColor);
-                    updateHslFromHex(newColor);
-                  }}
-                  rgb={rgb}
-                  hsl={hsl}
-                />
-
-                <div 
-                  className="h-32 rounded-lg w-full mb-4 border" 
-                  style={{ backgroundColor: color }}
-                />
-              </div>
-
-              <div className="flex-1">
-                <Tabs defaultValue="rgb" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="rgb">RGB</TabsTrigger>
-                    <TabsTrigger value="hsl">HSL</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="rgb" className="space-y-4 mt-4">
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>
-                        <Label htmlFor="r-value">R</Label>
-                        <Input 
-                          id="r-value" 
-                          type="number" 
-                          min="0" 
-                          max="255" 
-                          value={rgb.r}
-                          onChange={(e) => handleRgbChange('r', e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="g-value">G</Label>
-                        <Input 
-                          id="g-value" 
-                          type="number" 
-                          min="0" 
-                          max="255" 
-                          value={rgb.g}
-                          onChange={(e) => handleRgbChange('g', e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="b-value">B</Label>
-                        <Input 
-                          id="b-value" 
-                          type="number" 
-                          min="0" 
-                          max="255" 
-                          value={rgb.b}
-                          onChange={(e) => handleRgbChange('b', e.target.value)}
-                        />
-                      </div>
+            <Tabs defaultValue="wheel" onValueChange={(value) => setColorSource(value as 'wheel' | 'image')}>
+              <TabsList className="mb-6 gap-2">
+                <TabsTrigger value="wheel">Color Wheel</TabsTrigger>
+                <TabsTrigger value="image">From Image</TabsTrigger>
+              </TabsList>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <TabsContent value="wheel" className="mt-0">
+                  <div className="space-y-4">
+                    <ColorWheel
+                      color={color}
+                      onChange={(newColor) => {
+                        setColor(newColor);
+                        updateRgbFromHex(newColor);
+                        updateHslFromHex(newColor);
+                      }}
+                      rgb={rgb}
+                      hsl={hsl}
+                      magnification={magnification}
+                    />
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="image" className="mt-0">
+                  <div className="space-y-4">
+                    <div className="flex flex-col items-center">
+                      {uploadedImage ? (
+                        <div className="relative w-full">
+                          <canvas 
+                            ref={imageCanvasRef}
+                            width={300}
+                            height={300}
+                            onClick={handleImageCanvasClick}
+                            onMouseMove={(e) => {
+                              if (e.buttons) {
+                                handleImageCanvasClick(e);
+                              }
+                            }}
+                            className="border rounded-lg cursor-crosshair mx-auto"
+                          />
+                          <div className="flex justify-center mt-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="mr-2"
+                            >
+                              <Upload className="h-4 w-4 mr-1" />
+                              Change Image
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => setUploadedImage(null)}
+                            >
+                              <Trash className="h-4 w-4 mr-1" />
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground/25 rounded-lg p-10 w-full h-[300px]">
+                          <Upload className="h-10 w-10 text-muted-foreground/50 mb-4" />
+                          <p className="text-muted-foreground mb-4">Upload an image to pick colors from</p>
+                          <Button onClick={() => fileInputRef.current?.click()}>
+                            Select Image
+                          </Button>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleUploadImage}
+                        accept="image/*"
+                        className="hidden"
+                      />
                     </div>
-                    <div className="flex">
-                      <Input 
-                        type="text" 
-                        value={`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`} 
-                        readOnly 
+                  </div>
+                </TabsContent>
+                
+                <div className="flex-1 space-y-4">
+                  <div 
+                    className="h-32 rounded-lg w-full mb-6 border relative overflow-hidden group"
+                    style={{ backgroundColor: color }}
+                  >
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-black/30 transition-opacity">
+                      <Button variant="outline" className="bg-white" onClick={() => copyToClipboard(color, "HEX color")}>
+                        <Copy className="h-4 w-4 mr-1" />
+                        Copy
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <Tabs defaultValue="rgb" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="rgb">RGB</TabsTrigger>
+                      <TabsTrigger value="hsl">HSL</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="rgb" className="space-y-4 mt-4">
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <Label htmlFor="r-value">R</Label>
+                          <Input 
+                            id="r-value" 
+                            type="number" 
+                            min="0" 
+                            max="255" 
+                            value={rgb.r}
+                            onChange={(e) => handleRgbChange('r', e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="g-value">G</Label>
+                          <Input 
+                            id="g-value" 
+                            type="number" 
+                            min="0" 
+                            max="255" 
+                            value={rgb.g}
+                            onChange={(e) => handleRgbChange('g', e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="b-value">B</Label>
+                          <Input 
+                            id="b-value" 
+                            type="number" 
+                            min="0" 
+                            max="255" 
+                            value={rgb.b}
+                            onChange={(e) => handleRgbChange('b', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex">
+                        <Input 
+                          type="text" 
+                          value={`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`} 
+                          readOnly 
+                        />
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="ml-2"
+                          onClick={() => copyToClipboard(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`, "RGB value")}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex">
+                        <Input 
+                          type="text" 
+                          value={`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`} 
+                          readOnly 
+                        />
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="ml-2"
+                          onClick={() => copyToClipboard(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`, "RGBA value")}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="hsl" className="space-y-4 mt-4">
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <Label htmlFor="h-value">H</Label>
+                          <Input 
+                            id="h-value" 
+                            type="number" 
+                            min="0" 
+                            max="360" 
+                            value={hsl.h}
+                            onChange={(e) => handleHslChange('h', e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="s-value">S (%)</Label>
+                          <Input 
+                            id="s-value" 
+                            type="number" 
+                            min="0" 
+                            max="100" 
+                            value={hsl.s}
+                            onChange={(e) => handleHslChange('s', e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="l-value">L (%)</Label>
+                          <Input 
+                            id="l-value" 
+                            type="number" 
+                            min="0" 
+                            max="100" 
+                            value={hsl.l}
+                            onChange={(e) => handleHslChange('l', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex">
+                        <Input 
+                          type="text" 
+                          value={`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`} 
+                          readOnly 
+                        />
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="ml-2"
+                          onClick={() => copyToClipboard(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`, "HSL value")}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                  
+                  <div>
+                    <Label htmlFor="hex-value">HEX</Label>
+                    <div className="flex mt-1">
+                      <Input
+                        id="hex-value" 
+                        type="text"
+                        value={color}
+                        onChange={handleColorChange}
                       />
                       <Button 
                         variant="outline" 
                         size="icon" 
                         className="ml-2"
-                        onClick={() => copyToClipboard(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)}
+                        onClick={() => copyToClipboard(color, "HEX color")}
                       >
                         <Copy className="h-4 w-4" />
                       </Button>
                     </div>
-                  </TabsContent>
-                  <TabsContent value="hsl" className="space-y-4 mt-4">
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>
-                        <Label htmlFor="h-value">H</Label>
-                        <Input 
-                          id="h-value" 
-                          type="number" 
-                          min="0" 
-                          max="360" 
-                          value={hsl.h}
-                          onChange={(e) => handleHslChange('h', e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="s-value">S (%)</Label>
-                        <Input 
-                          id="s-value" 
-                          type="number" 
-                          min="0" 
-                          max="100" 
-                          value={hsl.s}
-                          onChange={(e) => handleHslChange('s', e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="l-value">L (%)</Label>
-                        <Input 
-                          id="l-value" 
-                          type="number" 
-                          min="0" 
-                          max="100" 
-                          value={hsl.l}
-                          onChange={(e) => handleHslChange('l', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex">
-                      <Input 
-                        type="text" 
-                        value={`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`} 
-                        readOnly 
+                  </div>
+                  
+                  <div>
+                    <Label className="mb-2 block">Save to palette</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Color name"
+                        value={colorName}
+                        onChange={(e) => setColorName(e.target.value)}
                       />
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
-                        className="ml-2"
-                        onClick={() => copyToClipboard(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`)}
-                      >
-                        <Copy className="h-4 w-4" />
+                      <Button onClick={saveCurrentColor}>
+                        <Save className="h-4 w-4 mr-1" />
+                        Save
                       </Button>
                     </div>
-                  </TabsContent>
-                </Tabs>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <Label className="mb-2 block">Magnification Level</Label>
+                    <div className="flex items-center gap-4">
+                      <Circle className="h-3 w-3" />
+                      <Slider
+                        defaultValue={[5]}
+                        min={2}
+                        max={10}
+                        step={1}
+                        value={[magnification]}
+                        onValueChange={(values) => setMagnification(values[0])}
+                      />
+                      <Circle className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Tabs>
           </CardContent>
         </Card>
 
-        <div className="pt-4 border-t border-border">
-          <h3 className="text-lg font-medium mb-3">Color Palette</h3>
-          <div className="grid grid-cols-5 gap-2">
-            {['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', 
-              '#00FFFF', '#FFA500', '#800080', '#008000', '#000000'].map((clr) => (
-              <button
-                key={clr}
-                className="h-12 rounded border border-border transition-transform hover:scale-105"
-                style={{ backgroundColor: clr }}
-                onClick={() => {
-                  setColor(clr);
-                  updateRgbFromHex(clr);
-                  updateHslFromHex(clr);
-                }}
-                title={clr}
-              />
-            ))}
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Saved Colors</CardTitle>
+            <CardDescription>Your custom color palette</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {savedColors.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {savedColors.map((savedColor) => (
+                  <div 
+                    key={savedColor.timestamp} 
+                    className="flex flex-col overflow-hidden rounded-md border shadow-sm"
+                  >
+                    <div 
+                      className="h-12 w-full cursor-pointer"
+                      style={{ backgroundColor: savedColor.color }}
+                      onClick={() => {
+                        setColor(savedColor.color);
+                        updateRgbFromHex(savedColor.color);
+                        updateHslFromHex(savedColor.color);
+                      }}
+                    />
+                    <div className="p-2 bg-card">
+                      <div className="flex items-center justify-between">
+                        <div className="truncate text-xs font-medium">
+                          {savedColor.name}
+                        </div>
+                        <div className="flex">
+                          <button 
+                            className="p-1 text-muted-foreground hover:text-foreground"
+                            onClick={() => copyToClipboard(savedColor.color, savedColor.name)}
+                            title={`Copy ${savedColor.color}`}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                          <button 
+                            className="p-1 text-muted-foreground hover:text-destructive"
+                            onClick={() => deleteSavedColor(savedColor.timestamp)}
+                            title="Remove"
+                          >
+                            <Trash className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">{savedColor.color}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Eye className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                <p>Save colors to build your palette</p>
+                <p className="text-sm">Colors are stored in your browser</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </ToolLayout>
   );
