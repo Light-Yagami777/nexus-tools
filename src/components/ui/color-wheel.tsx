@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ColorWheelProps {
   color: string;
@@ -16,6 +16,9 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -51,19 +54,49 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
     }
   }, []);
 
-  const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsDragging(true);
+    handleMouseMove(e);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging && !e.buttons) return;
+
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) {
-        const imageData = ctx.getImageData(x, y, 1, 1).data;
-        const newColor = rgbToHex(imageData[0], imageData[1], imageData[2]);
-        onChange(newColor);
+
+      const centerX = 100;
+      const centerY = 100;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= 90) {
+        setPosition({ x, y });
+        
+        const ctx = canvasRef.current.getContext('2d');
+        if (ctx) {
+          const imageData = ctx.getImageData(x, y, 1, 1).data;
+          const newColor = rgbToHex(imageData[0], imageData[1], imageData[2]);
+          onChange(newColor);
+        }
       }
     }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseEnter = () => {
+    setIsZoomed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZoomed(false);
+    setIsDragging(false);
   };
 
   const rgbToHex = (r: number, g: number, b: number): string => {
@@ -109,23 +142,28 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
         ref={canvasRef}
         width={200}
         height={200}
-        onClick={handleClick}
-        className="border rounded-full cursor-pointer mx-auto"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="border rounded-full cursor-crosshair mx-auto"
       />
       <div
-        className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-lg overflow-hidden"
+        className={`absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full shadow-lg overflow-hidden transition-all duration-200 ${isZoomed ? 'scale-150' : 'scale-100'}`}
         style={{
           backgroundColor: color,
-          left: "50%",
-          top: "50%",
+          left: position.x,
+          top: position.y,
         }}
       >
         <div 
           ref={infoRef}
           className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white text-[8px] font-mono opacity-0 transition-opacity hover:opacity-100"
         >
+          <div>{color}</div>
           <div>R: {rgb.r} G: {rgb.g} B: {rgb.b}</div>
-          <div>H: {hsl.h}° S: {hsl.s}% L: {hsl.l}%</div>
+          <div>rgba({rgb.r},{rgb.g},{rgb.b},1)</div>
         </div>
       </div>
     </div>
