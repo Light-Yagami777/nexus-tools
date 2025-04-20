@@ -14,17 +14,15 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
   onChange,
   rgb,
   hsl,
-  magnification = 5 // Default magnification level
+  magnification = 5
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const infoRef = useRef<HTMLDivElement>(null);
   const magnifierRef = useRef<HTMLCanvasElement>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
   const [showMagnifier, setShowMagnifier] = useState(false);
-  const [magnifierPixelData, setMagnifierPixelData] = useState<ImageData | null>(null);
 
+  // Initial color wheel setup
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -65,23 +63,16 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
       const sourceCtx = canvasRef.current.getContext('2d');
       
       if (magnifierCtx && sourceCtx) {
-        // Clear the magnifier canvas
         magnifierCtx.clearRect(0, 0, 100, 100);
         
         try {
-          // Calculate the area to capture, ensuring we don't go out of bounds
-          const size = 20; // Size of area to magnify
+          const size = 20;
           const sourceX = Math.max(0, Math.min(x - size / 2, 200 - size));
           const sourceY = Math.max(0, Math.min(y - size / 2, 200 - size));
           
-          // Try to get the image data from the source
           const pixelData = sourceCtx.getImageData(sourceX, sourceY, size, size);
-          setMagnifierPixelData(pixelData);
           
-          // Draw with smooth rendering disabled for a clear pixel view
           magnifierCtx.imageSmoothingEnabled = false;
-          
-          // Draw the source image onto the magnifier canvas with scaling
           magnifierCtx.drawImage(
             canvasRef.current,
             sourceX,
@@ -94,61 +85,43 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
             100
           );
           
-          // Draw crosshair
+          // Draw grid
+          magnifierCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+          magnifierCtx.lineWidth = 0.5;
+          
+          for (let i = 0; i <= size; i++) {
+            const pos = (i / size) * 100;
+            
+            // Vertical lines
+            magnifierCtx.beginPath();
+            magnifierCtx.moveTo(pos, 0);
+            magnifierCtx.lineTo(pos, 100);
+            magnifierCtx.stroke();
+            
+            // Horizontal lines
+            magnifierCtx.beginPath();
+            magnifierCtx.moveTo(0, pos);
+            magnifierCtx.lineTo(100, pos);
+            magnifierCtx.stroke();
+          }
+          
+          // Draw center crosshair
           magnifierCtx.strokeStyle = 'rgba(255,255,255,0.8)';
           magnifierCtx.lineWidth = 1;
-          
-          // Horizontal line
           magnifierCtx.beginPath();
-          magnifierCtx.moveTo(0, 50);
-          magnifierCtx.lineTo(100, 50);
+          magnifierCtx.moveTo(48, 50);
+          magnifierCtx.lineTo(52, 50);
+          magnifierCtx.moveTo(50, 48);
+          magnifierCtx.lineTo(50, 52);
           magnifierCtx.stroke();
           
-          // Vertical line
-          magnifierCtx.beginPath();
-          magnifierCtx.moveTo(50, 0);
-          magnifierCtx.lineTo(50, 100);
-          magnifierCtx.stroke();
-          
-          // Draw a pixel grid for more precision
-          drawPixelGrid(magnifierCtx, 100, 100, size);
         } catch (error) {
           console.error("Error updating magnifier:", error);
-          
-          // Display fallback for error case
           magnifierCtx.fillStyle = '#f0f0f0';
           magnifierCtx.fillRect(0, 0, 100, 100);
-          magnifierCtx.fillStyle = '#ff0000';
-          magnifierCtx.font = '10px sans-serif';
-          magnifierCtx.textAlign = 'center';
-          magnifierCtx.fillText('Error loading', 50, 45);
-          magnifierCtx.fillText('magnifier', 50, 60);
+          magnifierCtx.fillText('Error loading', 50, 50);
         }
       }
-    }
-  };
-
-  // Draw a pixel grid on the magnifier to help with precision
-  const drawPixelGrid = (ctx: CanvasRenderingContext2D, width: number, height: number, gridSize: number) => {
-    const cellSize = width / gridSize;
-    
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-    ctx.lineWidth = 0.5;
-    
-    // Draw vertical lines
-    for (let x = 0; x <= width; x += cellSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-    }
-    
-    // Draw horizontal lines
-    for (let y = 0; y <= height; y += cellSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
     }
   };
 
@@ -163,7 +136,6 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      // Update magnifier regardless of dragging state
       updateMagnifier(x, y);
       
       if (!isDragging && !e.buttons) return;
@@ -185,7 +157,6 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
             onChange(newColor);
           } catch (error) {
             console.error("Error getting image data:", error);
-            // Don't update color in case of error
           }
         }
       }
@@ -197,16 +168,15 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
   };
 
   const handleMouseEnter = () => {
-    setIsZoomed(true);
     setShowMagnifier(true);
   };
 
   const handleMouseLeave = () => {
-    setIsZoomed(false);
     setShowMagnifier(false);
     setIsDragging(false);
   };
 
+  // Utility functions
   const rgbToHex = (r: number, g: number, b: number): string => {
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
   };
@@ -231,7 +201,6 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
 
       const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       const p = 2 * l - q;
-      
       r = hue2rgb(p, q, h + 1/3);
       g = hue2rgb(p, q, h);
       b = hue2rgb(p, q, h - 1/3);
@@ -258,60 +227,51 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
           onMouseLeave={handleMouseLeave}
           className="border rounded-full cursor-crosshair mx-auto"
         />
-        {/* Small color selector cursor circle - reduced from w-16 h-16 to w-4 h-4 */}
+        
+        {/* Smaller cursor circle with outline */}
         <div
-          className={`absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 border border-white rounded-full shadow-sm overflow-hidden transition-all duration-200 ${isZoomed ? 'scale-150' : 'scale-100'}`}
+          className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 border rounded-full"
           style={{
             backgroundColor: color,
             left: position.x,
             top: position.y,
-            // Add an outline to make it more visible
-            boxShadow: '0 0 0 1px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.5)'
+            borderColor: 'rgba(255,255,255,0.8)',
+            boxShadow: '0 0 0 1px rgba(0,0,0,0.3)'
           }}
-        >
-          {/* The inside of the cursor is now too small for text, so we remove it */}
-        </div>
+        />
         
-        {/* Color info tooltip that shows on hover near the cursor */}
+        {/* Simple HEX tooltip */}
         <div 
-          className="absolute px-2 py-1 bg-black/80 text-white text-xs rounded shadow-lg pointer-events-none z-10"
+          className="absolute px-2 py-1 text-xs bg-black/80 text-white rounded pointer-events-none"
           style={{
-            left: position.x + 10, // Offset from cursor
-            top: position.y - 40,
-            opacity: isZoomed ? 1 : 0,
+            left: position.x + 8,
+            top: position.y - 20,
+            opacity: showMagnifier ? 1 : 0,
             transition: 'opacity 0.2s ease'
           }}
         >
-          <div className="font-bold">{color}</div>
-          <div className="grid grid-cols-2 gap-x-2 text-[10px]">
-            <div>RGB: {rgb.r},{rgb.g},{rgb.b}</div>
-            <div>HSL: {hsl.h}°,{hsl.s}%,{hsl.l}%</div>
-          </div>
+          {color}
         </div>
       </div>
       
-      {/* Enhanced Magnifier with error handling and pixel grid */}
+      {/* Enhanced magnifier with fixed positioning */}
       {showMagnifier && (
-        <div className="absolute -top-28 right-0 transform translate-x-full p-2 bg-background border rounded-lg shadow-lg">
-          <div className="text-xs font-medium mb-1 text-center">Magnifier ({magnification}x)</div>
-          <div className="relative">
-            <canvas
-              ref={magnifierRef}
-              width={100}
-              height={100}
-              className="border rounded-lg"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-[8px] font-mono p-1 rounded-b-lg">
-              {magnifierPixelData ? (
-                <>
-                  <span className="font-semibold">Center: </span>
-                  {`RGB(${rgb.r},${rgb.g},${rgb.b})`}
-                </>
-              ) : (
-                "No data"
-              )}
-            </div>
-          </div>
+        <div 
+          className="fixed bg-background border rounded-lg shadow-lg"
+          style={{
+            left: 'calc(50% + 120px)',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 50
+          }}
+        >
+          <canvas
+            ref={magnifierRef}
+            width={100}
+            height={100}
+            className="rounded-lg"
+          />
+          <div className="absolute inset-0 pointer-events-none border border-white/10 rounded-lg" />
         </div>
       )}
     </div>
