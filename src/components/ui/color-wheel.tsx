@@ -159,11 +159,14 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
       >
         <div 
           ref={infoRef}
-          className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white text-[8px] font-mono opacity-0 transition-opacity hover:opacity-100"
+          className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white text-[8px] font-mono opacity-0 group-hover:opacity-100 hover:opacity-100"
         >
-          <div>{color}</div>
-          <div>R: {rgb.r} G: {rgb.g} B: {rgb.b}</div>
-          <div>rgba({rgb.r},{rgb.g},{rgb.b},1)</div>
+          <div className="font-bold">{color}</div>
+          <div className="text-[7px]">
+            <div>RGB: {rgb.r}, {rgb.g}, {rgb.b}</div>
+            <div>HSL: {hsl.h}°, {hsl.s}%, {hsl.l}%</div>
+            <div>RGBA: {rgb.r},{rgb.g},{rgb.b},1</div>
+          </div>
         </div>
       </div>
     </div>
