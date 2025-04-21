@@ -14,24 +14,36 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Tool[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  // Debounce search query to prevent excessive searches
   useEffect(() => {
-    if (query.trim().length >= 1) {
-      const searchResults = searchTools(query);
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Search when debounced query changes
+  useEffect(() => {
+    if (debouncedQuery.trim().length >= 2) {
+      const searchResults = searchTools(debouncedQuery);
       setResults(searchResults);
       if (onSearch) {
-        onSearch(query);
+        onSearch(debouncedQuery);
       }
-    } else {
+    } else if (debouncedQuery.trim() === "") {
       setResults([]);
       if (onSearch) {
         onSearch("");
       }
     }
-  }, [query, onSearch]);
+  }, [debouncedQuery, onSearch]);
 
+  // Handle outside clicks to close search results
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -57,6 +69,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
     setQuery("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent immediate search on space keypress
+    if (e.key === "Enter" && query.trim().length >= 2) {
+      // If Enter is pressed, pass the current query to onSearch
+      if (onSearch) {
+        onSearch(query);
+      }
+    }
+  };
+
   return (
     <div className={`relative ${className}`} ref={searchRef}>
       <div
@@ -72,7 +94,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsSearchFocused(true)}
-          placeholder="Search for tools..."
+          onKeyDown={handleKeyDown}
+          placeholder="Search for tools (min 2 characters)..."
           className="bg-transparent border-none outline-none w-full px-3 text-sm placeholder:text-muted-foreground focus:ring-0"
         />
         <AnimatePresence>

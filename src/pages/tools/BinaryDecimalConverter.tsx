@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
@@ -224,7 +223,7 @@ const BinaryDecimalConverter = () => {
 
   return (
     <ToolLayout title="Binary-Decimal Converter" icon={<Calculator className="h-6 w-6" />}>
-      <Card className="p-4 md:p-6">
+      <Card className="p-4 md:p-6 overflow-hidden">
         <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-4 md:space-y-6">
             <div>
@@ -247,7 +246,7 @@ const BinaryDecimalConverter = () => {
                   <TabsTrigger value="octal-to-decimal">Octal</TabsTrigger>
                 </TabsList>
                 <ScrollBar orientation="horizontal" />
-
+                
                 <TabsContent value="binary-to-decimal" className="mt-4 space-y-4">
                   <div>
                     <Label htmlFor="binary-input">Binary Input (Base-2)</Label>
@@ -367,48 +366,50 @@ const BinaryDecimalConverter = () => {
             </div>
           </div>
           
-          <div className="space-y-6">
+          <div className="space-y-6 overflow-auto max-h-[800px] pr-1">
             {conversionExplanation ? (
-              <div className="space-y-4">
-                <div className="rounded-lg border overflow-hidden">
-                  <div className="p-3 border-b bg-muted/50">
-                    <h3 className="font-medium">Conversion Explanation</h3>
+              <ScrollArea className="h-[600px]">
+                <div className="space-y-4">
+                  <div className="rounded-lg border overflow-hidden">
+                    <div className="p-3 border-b bg-muted/50">
+                      <h3 className="font-medium">Conversion Explanation</h3>
+                    </div>
+                    <div className="p-4">
+                      <pre className="text-sm whitespace-pre-wrap font-mono">
+                        {conversionExplanation}
+                      </pre>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <pre className="text-sm whitespace-pre-wrap font-mono">
-                      {conversionExplanation}
-                    </pre>
-                  </div>
-                </div>
-                
-                <div className="rounded-lg border overflow-hidden">
-                  <div className="p-3 border-b bg-muted/50">
-                    <h3 className="font-medium">Number System Comparison</h3>
-                  </div>
-                  <div className="p-4">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="pb-2 text-left">Decimal</th>
-                          <th className="pb-2 text-left">Binary</th>
-                          <th className="pb-2 text-left">Octal</th>
-                          <th className="pb-2 text-left">Hex</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15].map((num) => (
-                          <tr key={num} className="border-b">
-                            <td className="py-1">{num}</td>
-                            <td className="py-1">{num.toString(2)}</td>
-                            <td className="py-1">{num.toString(8)}</td>
-                            <td className="py-1">{num.toString(16).toUpperCase()}</td>
+                  
+                  <div className="rounded-lg border overflow-hidden">
+                    <div className="p-3 border-b bg-muted/50">
+                      <h3 className="font-medium">Number System Comparison</h3>
+                    </div>
+                    <div className="p-4">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="pb-2 text-left">Decimal</th>
+                            <th className="pb-2 text-left">Binary</th>
+                            <th className="pb-2 text-left">Octal</th>
+                            <th className="pb-2 text-left">Hex</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15].map((num) => (
+                            <tr key={num} className="border-b">
+                              <td className="py-1">{num}</td>
+                              <td className="py-1">{num.toString(2)}</td>
+                              <td className="py-1">{num.toString(8)}</td>
+                              <td className="py-1">{num.toString(16).toUpperCase()}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollArea>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center p-6">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
@@ -421,62 +422,67 @@ const BinaryDecimalConverter = () => {
               </div>
             )}
             
-            <div className="rounded-lg border overflow-hidden">
-              <div className="p-3 border-b bg-muted/50">
-                <h3 className="font-medium">About Number Systems</h3>
+            <ScrollArea className="h-[300px]">
+              <div className="rounded-lg border overflow-hidden">
+                <div className="p-3 border-b bg-muted/50">
+                  <h3 className="font-medium">About Number Systems</h3>
+                </div>
+                <div className="divide-y p-4 space-y-3">
+                  <div>
+                    <h4 className="font-medium" id="binary-info">Binary (Base-2)</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Uses only 0 and 1. Each digit position represents a power of 2.
+                    </p>
+                  </div>
+                  <div className="pt-3">
+                    <h4 className="font-medium" id="decimal-info">Decimal (Base-10)</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Uses digits 0-9. The standard number system we use in everyday life.
+                    </p>
+                  </div>
+                  <div className="pt-3">
+                    <h4 className="font-medium" id="hex-info">Hexadecimal (Base-16)</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Uses digits 0-9 and letters A-F. Often used in computing to represent binary data in a more human-readable form.
+                    </p>
+                  </div>
+                  <div className="pt-3">
+                    <h4 className="font-medium" id="octal-info">Octal (Base-8)</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Uses digits 0-7. Historically used in computing due to its simple relationship with binary.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="divide-y p-4 space-y-3">
-                <div>
-                  <h4 className="font-medium">Binary (Base-2)</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Uses only 0 and 1. Each digit position represents a power of 2.
-                  </p>
-                </div>
-                <div className="pt-3">
-                  <h4 className="font-medium">Decimal (Base-10)</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Uses digits 0-9. The standard number system we use in everyday life.
-                  </p>
-                </div>
-                <div className="pt-3">
-                  <h4 className="font-medium">Hexadecimal (Base-16)</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Uses digits 0-9 and letters A-F. Often used in computing to represent binary data in a more human-readable form.
-                  </p>
-                </div>
-                <div className="pt-3">
-                  <h4 className="font-medium">Octal (Base-8)</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Uses digits 0-7. Historically used in computing due to its simple relationship with binary.
-                  </p>
-                </div>
-              </div>
-            </div>
+            </ScrollArea>
           </div>
         </div>
         
         <div className="mt-8 pt-6 border-t">
-          <h3 className="text-lg font-medium mb-4">Applications of Number Systems</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-lg border h-full">
-              <h4 className="font-medium mb-2">Binary in Computing</h4>
-              <p className="text-sm text-muted-foreground">
-                Computers use binary internally as it maps perfectly to electronic states (on/off). All data in computers is ultimately stored and processed as binary.
-              </p>
+          <ScrollArea className="w-full">
+            <h3 className="text-lg font-medium mb-4">Applications of Number Systems</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-w-[600px]">
+              <div className="p-4 rounded-lg border h-full">
+                <h4 className="font-medium mb-2" id="binary-computing">Binary in Computing</h4>
+                <p className="text-sm text-muted-foreground">
+                  Computers use binary internally as it maps perfectly to electronic states (on/off). All data in computers is ultimately stored and processed as binary.
+                </p>
+              </div>
+              <div className="p-4 rounded-lg border h-full">
+                <h4 className="font-medium mb-2" id="hex-programming">Hexadecimal in Programming</h4>
+                <p className="text-sm text-muted-foreground">
+                  Used in programming for memory addresses, color codes (e.g., #FF0000 for red), and representing binary data in a more compact form.
+                </p>
+              </div>
+              <div className="p-4 rounded-lg border h-full">
+                <h4 className="font-medium mb-2" id="octal-permissions">Octal in File Permissions</h4>
+                <p className="text-sm text-muted-foreground">
+                  Unix/Linux systems use octal numbers to represent file permissions. For example, 755 means read/write/execute for owner, read/execute for group and others.
+                </p>
+              </div>
             </div>
-            <div className="p-4 rounded-lg border h-full">
-              <h4 className="font-medium mb-2">Hexadecimal in Programming</h4>
-              <p className="text-sm text-muted-foreground">
-                Used in programming for memory addresses, color codes (e.g., #FF0000 for red), and representing binary data in a more compact form.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg border h-full">
-              <h4 className="font-medium mb-2">Octal in File Permissions</h4>
-              <p className="text-sm text-muted-foreground">
-                Unix/Linux systems use octal numbers to represent file permissions. For example, 755 means read/write/execute for owner, read/execute for group and others.
-              </p>
-            </div>
-          </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
       </Card>
     </ToolLayout>
