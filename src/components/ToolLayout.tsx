@@ -1,5 +1,4 @@
 
-import React from "react";
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
 import { motion } from "framer-motion";
@@ -11,7 +10,6 @@ interface ToolLayoutProps {
   description?: string;
   icon?: React.ReactNode;
   extraPadding?: boolean; 
-  metaDescription?: string; // Add metadata for SEO
 }
 
 export const ToolLayout: React.FC<ToolLayoutProps> = ({ 
@@ -19,8 +17,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   title, 
   description,
   icon,
-  extraPadding = false,
-  metaDescription
+  extraPadding = false 
 }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -41,21 +38,6 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
 
   // Always add enough padding to clear the navbar
   const topPadding = extraPadding ? "pt-28" : "pt-24";
-  
-  // Set meta tags for SEO
-  React.useEffect(() => {
-    // Update page title
-    document.title = `${title} | Nexus Tools`;
-    
-    // Update meta description
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && metaDescription) {
-      metaDesc.setAttribute('content', metaDescription);
-    } else if (metaDesc && description) {
-      // Fallback to regular description if meta description isn't provided
-      metaDesc.setAttribute('content', `${title} - ${description} | Free online tool by Nexus Tools.`);
-    }
-  }, [title, description, metaDescription]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -77,13 +59,13 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
             ) : (
               <span className="mb-3 text-primary"><FileText size={24} /></span>
             )}
-            <motion.h1 className="text-3xl md:text-4xl font-bold text-center">
+            <motion.h1 className="text-3xl font-bold text-center">
               {title}
             </motion.h1>
             {description && (
               <motion.p 
                 variants={itemVariants}
-                className="mt-2 text-muted-foreground text-center max-w-2xl text-base md:text-lg"
+                className="mt-2 text-muted-foreground text-center max-w-2xl"
               >
                 {description}
               </motion.p>

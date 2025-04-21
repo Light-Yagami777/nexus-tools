@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ColorWheelProps {
   color: string;
@@ -21,7 +21,6 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [showMagnifier, setShowMagnifier] = useState(false);
-  const animationRef = useRef<number | null>(null);
 
   // Initial color wheel setup
   useEffect(() => {
@@ -58,8 +57,7 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
     }
   }, []);
 
-  // Updated magnifier function using requestAnimationFrame
-  const updateMagnifier = useCallback((x: number, y: number) => {
+  const updateMagnifier = (x: number, y: number) => {
     if (magnifierRef.current && canvasRef.current) {
       const magnifierCtx = magnifierRef.current.getContext('2d');
       const sourceCtx = canvasRef.current.getContext('2d');
@@ -72,118 +70,98 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
           const sourceX = Math.max(0, Math.min(x - size / 2, 200 - size));
           const sourceY = Math.max(0, Math.min(y - size / 2, 200 - size));
           
-          // Get pixel data before drawing to check if it's valid
           const pixelData = sourceCtx.getImageData(sourceX, sourceY, size, size);
           
-          if (pixelData && pixelData.data) {
-            magnifierCtx.imageSmoothingEnabled = false;
-            magnifierCtx.drawImage(
-              canvasRef.current,
-              sourceX,
-              sourceY,
-              size,
-              size,
-              0,
-              0,
-              100,
-              100
-            );
+          magnifierCtx.imageSmoothingEnabled = false;
+          magnifierCtx.drawImage(
+            canvasRef.current,
+            sourceX,
+            sourceY,
+            size,
+            size,
+            0,
+            0,
+            100,
+            100
+          );
+          
+          // Draw grid
+          magnifierCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+          magnifierCtx.lineWidth = 0.5;
+          
+          for (let i = 0; i <= size; i++) {
+            const pos = (i / size) * 100;
             
-            // Draw grid
-            magnifierCtx.strokeStyle = 'rgba(255,255,255,0.2)';
-            magnifierCtx.lineWidth = 0.5;
-            
-            for (let i = 0; i <= size; i++) {
-              const pos = (i / size) * 100;
-              
-              // Vertical lines
-              magnifierCtx.beginPath();
-              magnifierCtx.moveTo(pos, 0);
-              magnifierCtx.lineTo(pos, 100);
-              magnifierCtx.stroke();
-              
-              // Horizontal lines
-              magnifierCtx.beginPath();
-              magnifierCtx.moveTo(0, pos);
-              magnifierCtx.lineTo(100, pos);
-              magnifierCtx.stroke();
-            }
-            
-            // Draw center crosshair
-            magnifierCtx.strokeStyle = 'rgba(255,255,255,0.8)';
-            magnifierCtx.lineWidth = 1;
+            // Vertical lines
             magnifierCtx.beginPath();
-            magnifierCtx.moveTo(48, 50);
-            magnifierCtx.lineTo(52, 50);
-            magnifierCtx.moveTo(50, 48);
-            magnifierCtx.lineTo(50, 52);
+            magnifierCtx.moveTo(pos, 0);
+            magnifierCtx.lineTo(pos, 100);
             magnifierCtx.stroke();
-          } else {
-            // Fallback if pixel data is invalid
-            throw new Error("Invalid pixel data");
+            
+            // Horizontal lines
+            magnifierCtx.beginPath();
+            magnifierCtx.moveTo(0, pos);
+            magnifierCtx.lineTo(100, pos);
+            magnifierCtx.stroke();
           }
+          
+          // Draw center crosshair
+          magnifierCtx.strokeStyle = 'rgba(255,255,255,0.8)';
+          magnifierCtx.lineWidth = 1;
+          magnifierCtx.beginPath();
+          magnifierCtx.moveTo(48, 50);
+          magnifierCtx.lineTo(52, 50);
+          magnifierCtx.moveTo(50, 48);
+          magnifierCtx.lineTo(50, 52);
+          magnifierCtx.stroke();
+          
         } catch (error) {
           console.error("Error updating magnifier:", error);
-          // Fallback visual for error state
-          magnifierCtx.fillStyle = '#202020';
+          magnifierCtx.fillStyle = '#f0f0f0';
           magnifierCtx.fillRect(0, 0, 100, 100);
-          magnifierCtx.fillStyle = '#ff5555';
-          magnifierCtx.font = '10px sans-serif';
-          magnifierCtx.textAlign = 'center';
-          magnifierCtx.fillText('Error', 50, 50);
+          magnifierCtx.fillText('Error loading', 50, 50);
         }
       }
     }
-  }, []);
+  };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDragging(true);
-    handleDrag(e);
+    handleMouseMove(e);
   };
 
-  const handleDrag = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      // Use requestAnimationFrame for smooth updates
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      updateMagnifier(x, y);
       
-      animationRef.current = requestAnimationFrame(() => {
-        updateMagnifier(x, y);
+      if (!isDragging && !e.buttons) return;
+
+      const centerX = 100;
+      const centerY = 100;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= 90) {
+        setPosition({ x, y });
         
-        if (!isDragging && !e.buttons) return;
-
-        const centerX = 100;
-        const centerY = 100;
-        const dx = x - centerX;
-        const dy = y - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance <= 90) {
-          setPosition({ x, y });
-          
-          const ctx = canvasRef.current?.getContext('2d');
-          if (ctx) {
-            try {
-              const imageData = ctx.getImageData(x, y, 1, 1).data;
-              const newColor = rgbToHex(imageData[0], imageData[1], imageData[2]);
-              onChange(newColor);
-            } catch (error) {
-              console.error("Error getting image data:", error);
-            }
+        const ctx = canvasRef.current.getContext('2d');
+        if (ctx) {
+          try {
+            const imageData = ctx.getImageData(x, y, 1, 1).data;
+            const newColor = rgbToHex(imageData[0], imageData[1], imageData[2]);
+            onChange(newColor);
+          } catch (error) {
+            console.error("Error getting image data:", error);
           }
         }
-      });
+      }
     }
-  }, [isDragging, updateMagnifier, onChange]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    handleDrag(e);
-  }, [handleDrag]);
+  };
 
   const handleMouseUp = () => {
     setIsDragging(false);
@@ -197,15 +175,6 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
     setShowMagnifier(false);
     setIsDragging(false);
   };
-
-  // Clean up animation frame on unmount
-  useEffect(() => {
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, []);
 
   // Utility functions
   const rgbToHex = (r: number, g: number, b: number): string => {
@@ -256,15 +225,12 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
           onMouseUp={handleMouseUp}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="border rounded-full cursor-crosshair mx-auto touch-none"
-          aria-label="Color wheel"
-          role="slider"
-          aria-valuetext={`Current color: ${color}`}
+          className="border rounded-full cursor-crosshair mx-auto"
         />
         
-        {/* Smaller cursor circle (2-3px) with outline */}
+        {/* Smaller cursor circle with outline */}
         <div
-          className="absolute w-1.5 h-1.5 -translate-x-1/2 -translate-y-1/2 border rounded-full"
+          className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 border rounded-full"
           style={{
             backgroundColor: color,
             left: position.x,
@@ -274,7 +240,7 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
           }}
         />
         
-        {/* Simplified HEX tooltip */}
+        {/* Simple HEX tooltip */}
         <div 
           className="absolute px-2 py-1 text-xs bg-black/80 text-white rounded pointer-events-none"
           style={{
@@ -288,15 +254,15 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
         </div>
       </div>
       
-      {/* Fixed magnifier positioning with higher z-index */}
+      {/* Enhanced magnifier with fixed positioning */}
       {showMagnifier && (
         <div 
           className="fixed bg-background border rounded-lg shadow-lg"
           style={{
-            right: '20px', 
+            left: 'calc(50% + 120px)',
             top: '50%',
             transform: 'translateY(-50%)',
-            zIndex: 1000
+            zIndex: 50
           }}
         >
           <canvas
