@@ -14,15 +14,24 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
   initialCategory = "All" 
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory>(initialCategory);
-  const [filteredTools, setFilteredTools] = useState<Tool[]>(tools);
+  const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const toolsPerPage = 12;
 
   useEffect(() => {
+    setCurrentPage(1); // Reset to first page when category changes
+    
     if (selectedCategory === "All") {
       setFilteredTools(tools);
     } else {
       setFilteredTools(tools.filter(tool => tool.category === selectedCategory));
     }
   }, [selectedCategory, tools]);
+
+  const indexOfLastTool = currentPage * toolsPerPage;
+  const indexOfFirstTool = indexOfLastTool - toolsPerPage;
+  const currentTools = filteredTools.slice(indexOfFirstTool, indexOfLastTool);
+  const totalPages = Math.ceil(filteredTools.length / toolsPerPage);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -42,7 +51,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 min-h-[48px] min-w-[48px] ${
               selectedCategory === category
                 ? "bg-primary text-white shadow-md"
                 : "bg-secondary text-foreground/70 hover:bg-secondary/80"
@@ -56,15 +65,15 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
       {/* Tool Grid */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={selectedCategory}
+          key={selectedCategory + currentPage}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {filteredTools.length > 0 ? (
-            filteredTools.map((tool, index) => (
+          {currentTools.length > 0 ? (
+            currentTools.map((tool, index) => (
               <ToolCard key={tool.id} tool={tool} index={index} />
             ))
           ) : (
@@ -74,6 +83,33 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
           )}
         </motion.div>
       </AnimatePresence>
+
+      {/* Pagination Controls */}
+      {filteredTools.length > toolsPerPage && (
+        <div className="flex justify-center mt-8 items-center gap-2">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-2 rounded-md bg-secondary text-foreground/70 hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] min-w-[48px]"
+            aria-label="Previous page"
+          >
+            &larr;
+          </button>
+          
+          <span className="text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-2 rounded-md bg-secondary text-foreground/70 hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] min-w-[48px]"
+            aria-label="Next page"
+          >
+            &rarr;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

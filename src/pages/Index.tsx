@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
@@ -11,7 +12,6 @@ import {
   tools,
   searchTools
 } from "@/utils/toolsData";
-import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -23,13 +23,36 @@ const Index = () => {
 
   useEffect(() => {
     setIsVisible(true);
+    
+    // Set the page title and meta description for SEO
+    document.title = "Nexus Tools - 100+ Free Online Tools for Every Need";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Free online tools to boost your productivity. Access 100+ web tools for SEO analysis, image conversion, text formatting, and more - all in one place.');
+    }
   }, []);
 
-  useEffect(() => {
-    if (searchQuery.trim().length >= 1) {
-      setSearchResults(searchTools(searchQuery));
+  // Memoize search function to avoid unnecessary re-renders
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    
+    if (query.trim().length >= 1) {
+      setSearchResults(searchTools(query));
     } else {
       setSearchResults(tools);
+    }
+  }, []);
+
+  // Use requestAnimationFrame for animation
+  useEffect(() => {
+    if (searchQuery.trim().length >= 1) {
+      requestAnimationFrame(() => {
+        setSearchResults(searchTools(searchQuery));
+      });
+    } else {
+      requestAnimationFrame(() => {
+        setSearchResults(tools);
+      });
     }
   }, [searchQuery]);
 
@@ -66,15 +89,11 @@ const Index = () => {
     }
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
       
-      {/* Hero Section */}
+      {/* Hero Section with proper H1 heading */}
       <section className="pt-32 pb-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -105,14 +124,14 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 to="/all-tools"
-                className="px-8 py-3 rounded-lg bg-primary text-white font-medium transition-all hover:shadow-lg hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 focus:outline-none"
+                className="px-8 py-3 rounded-lg bg-primary text-white font-medium transition-all hover:shadow-lg hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 focus:outline-none min-h-[48px] min-w-[48px]"
               >
                 Browse All Tools
               </Link>
               
               <Link
                 to="/about"
-                className="px-8 py-3 rounded-lg border border-border bg-background font-medium transition-all hover:bg-secondary focus:outline-none"
+                className="px-8 py-3 rounded-lg border border-border bg-background font-medium transition-all hover:bg-secondary focus:outline-none min-h-[48px] min-w-[48px]"
               >
                 Learn More
               </Link>
@@ -121,7 +140,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Search Section - Centered */}
+      {/* Search Section - Centered with H2 heading */}
       <section className="py-12 px-6 md:px-10 bg-gradient-subtle dark:bg-[#1a1b25]">
         <div className="max-w-7xl mx-auto flex justify-center">
           <motion.div
@@ -142,7 +161,7 @@ const Index = () => {
               variants={itemVariants}
               className="w-full"
             >
-              <SearchBar className="w-full" />
+              <SearchBar onSearch={handleSearch} className="w-full" />
             </motion.div>
             
             <motion.div
@@ -153,8 +172,8 @@ const Index = () => {
               {["converter", "calculator", "generator", "formatter", "image"].map((term) => (
                 <button
                   key={term}
-                  onClick={() => setSearchQuery(term)}
-                  className="px-3 py-1 text-sm rounded-full bg-secondary hover:bg-secondary/80 transition-colors dark:bg-[#2a2b35] dark:hover:bg-[#3a3b45]"
+                  onClick={() => handleSearch(term)}
+                  className="px-3 py-1 text-sm rounded-full bg-secondary hover:bg-secondary/80 transition-colors dark:bg-[#2a2b35] dark:hover:bg-[#3a3b45] min-h-[48px] min-w-[48px]"
                 >
                   {term}
                 </button>
@@ -176,7 +195,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Featured Tools Section */}
+      {/* Featured Tools Section with proper H2 heading */}
       <section className="py-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -192,7 +211,7 @@ const Index = () => {
               <h2 className="text-2xl md:text-3xl font-semibold">Featured Tools</h2>
               <Link 
                 to="/all-tools" 
-                className="text-primary font-medium flex items-center hover:underline"
+                className="text-primary font-medium flex items-center hover:underline min-h-[48px] min-w-[48px] px-2"
               >
                 View All
                 <span className="ml-1">→</span>
@@ -220,7 +239,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* New Tools Section */}
+      {/* New Tools Section with proper H2 heading */}
       {newTools.length > 0 && (
         <section className="py-16 px-6 md:px-10 bg-gradient-subtle dark:bg-[#1a1b25]">
           <div className="max-w-7xl mx-auto">
@@ -245,7 +264,7 @@ const Index = () => {
         </section>
       )}
       
-      {/* Search Results & All Tools Section */}
+      {/* Search Results & All Tools Section with proper H2 heading */}
       <section className="py-16 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <motion.div

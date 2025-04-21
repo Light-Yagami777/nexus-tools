@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
@@ -12,21 +12,31 @@ const AllTools = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTools, setFilteredTools] = useState(tools);
   
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      setFilteredTools(searchTools(searchQuery));
+  // Memoize search function to avoid unnecessary re-renders
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    
+    if (query.trim()) {
+      requestAnimationFrame(() => {
+        setFilteredTools(searchTools(query));
+      });
     } else {
-      setFilteredTools(tools);
+      requestAnimationFrame(() => {
+        setFilteredTools(tools);
+      });
     }
-  }, [searchQuery]);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Set the page title and meta description for SEO
+    document.title = "All Tools - 100+ Free Online Utilities | Nexus Tools";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Access our complete collection of 100+ free online tools for SEO, image conversion, text formatting, calculations, and more. Find the perfect tool for your needs.');
+    }
   }, []);
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
