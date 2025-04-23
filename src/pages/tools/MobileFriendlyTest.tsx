@@ -66,7 +66,7 @@ const MobileFriendlyTest = () => {
       setTimeout(() => {
         // Mock results for demonstration purposes
         const mockResults = {
-          isMobileFriendly: Math.random() > 0.3, // Randomize results to make it seem more realistic
+          isMobileFriendly: Math.random() > 0.3, // Randomize results to make it more realistic
           screenshot: "https://placehold.co/600x800/e2e8f0/64748b?text=Mobile+Preview",
           usabilityIssues: [
             { 

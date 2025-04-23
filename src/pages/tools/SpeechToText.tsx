@@ -27,6 +27,7 @@ const SpeechToText = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
   const [browserSupport, setBrowserSupport] = useState(true);
   const recognitionRef = useRef<any>(null);
+  const lastTranscriptRef = useRef<string>('');
 
   useEffect(() => {
     // Check if browser supports speech recognition
@@ -60,10 +61,18 @@ const SpeechToText = () => {
         return;
       }
 
+      // Cancel any existing recognition session first
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+
       const recognition = new SpeechRecognitionAPI();
+      // Set to false to prevent repetition
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = selectedLanguage;
+      // Reset the last transcript reference
+      lastTranscriptRef.current = '';
 
       recognition.onstart = () => {
         setIsRecording(true);
@@ -82,7 +91,8 @@ const SpeechToText = () => {
           }
         }
 
-        if (finalTranscript) {
+        if (finalTranscript && finalTranscript !== lastTranscriptRef.current) {
+          lastTranscriptRef.current = finalTranscript;
           setTranscription((prev) => prev + finalTranscript + ' ');
         }
       };
