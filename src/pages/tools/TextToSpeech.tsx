@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Speaker } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,23 +20,35 @@ const TextToSpeech = () => {
   const [volume, setVolume] = useState(1);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const isSpeakingRef = useRef<boolean>(false);
 
   React.useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
-      setVoices(availableVoices);
       if (availableVoices.length > 0) {
-        setVoice(availableVoices[0].name);
+        setVoices(availableVoices);
+        if (!voice && availableVoices.length > 0) {
+          setVoice(availableVoices[0].name);
+        }
       }
     };
 
     loadVoices();
+    
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = loadVoices;
     }
 
     return () => {
       if (utteranceRef.current) {
+        speechSynthesis.cancel();
+      }
+    };
+  }, [voice]);
+
+  useEffect(() => {
+    return () => {
+      if (isSpeakingRef.current) {
         speechSynthesis.cancel();
       }
     };
@@ -48,8 +60,9 @@ const TextToSpeech = () => {
       return;
     }
 
-    if (utteranceRef.current) {
+    if (isSpeakingRef.current) {
       speechSynthesis.cancel();
+      isSpeakingRef.current = false;
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
@@ -58,19 +71,29 @@ const TextToSpeech = () => {
     utterance.rate = rate;
     utterance.volume = volume;
 
-    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      isSpeakingRef.current = true;
+    };
+    
     utterance.onend = () => {
       setIsSpeaking(false);
       setIsPaused(false);
+      isSpeakingRef.current = false;
     };
+    
     utterance.onerror = (event) => {
       console.error('Speech synthesis error:', event);
       toast.error('An error occurred while speaking');
       setIsSpeaking(false);
       setIsPaused(false);
+      isSpeakingRef.current = false;
     };
 
     utteranceRef.current = utterance;
+    
+    speechSynthesis.cancel();
+    
     speechSynthesis.speak(utterance);
   };
 
@@ -88,6 +111,7 @@ const TextToSpeech = () => {
     speechSynthesis.cancel();
     setIsSpeaking(false);
     setIsPaused(false);
+    isSpeakingRef.current = false;
   };
 
   return (

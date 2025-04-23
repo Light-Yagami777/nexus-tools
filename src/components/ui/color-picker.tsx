@@ -104,7 +104,8 @@ const ColorPickerContent = ({
             type="color"
             value={color}
             onChange={handleColorInputChange}
-            className="w-10 h-10 p-0 border rounded-l-md"
+            className="w-14 h-14 p-0 border rounded-l-md cursor-pointer"
+            style={{ cursor: 'pointer' }}
           />
           <input
             ref={inputRef}
@@ -124,7 +125,7 @@ const ColorPickerContent = ({
               key={presetColor}
               type="button"
               onClick={() => handlePresetClick(presetColor)}
-              className="w-8 h-8 rounded-sm border overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-10 h-10 rounded-sm border overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary"
               style={{ backgroundColor: presetColor }}
               aria-label={`Select color ${presetColor}`}
             />

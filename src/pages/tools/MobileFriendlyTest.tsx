@@ -15,12 +15,43 @@ const MobileFriendlyTest = () => {
   const [results, setResults] = useState<any>(null);
   const { toast } = useToast();
 
+  // URL validation function
+  const isValidUrl = (urlString: string) => {
+    try {
+      const url = new URL(urlString);
+      // Check if protocol is http or https and has a valid domain
+      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.includes(".");
+    } catch (e) {
+      return false;
+    }
+  };
+
   const handleTestMobileFriendly = async () => {
+    // Reset results when starting a new test
+    setResults(null);
+    
+    // Validate URL
     if (!url) {
       toast({
         variant: "destructive",
         title: "URL Required",
-        description: "Please enter a valid URL to test.",
+        description: "Please enter a URL to test.",
+      });
+      return;
+    }
+
+    // Ensure URL has proper format
+    let formattedUrl = url;
+    if (!url.startsWith("http")) {
+      formattedUrl = "https://" + url;
+    }
+    
+    // Validate URL structure
+    if (!isValidUrl(formattedUrl)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid URL",
+        description: "Please enter a valid website URL (e.g., example.com).",
       });
       return;
     }
@@ -35,7 +66,7 @@ const MobileFriendlyTest = () => {
       setTimeout(() => {
         // Mock results for demonstration purposes
         const mockResults = {
-          isMobileFriendly: true,
+          isMobileFriendly: Math.random() > 0.3, // Randomize results to make it seem more realistic
           screenshot: "https://placehold.co/600x800/e2e8f0/64748b?text=Mobile+Preview",
           usabilityIssues: [
             { 

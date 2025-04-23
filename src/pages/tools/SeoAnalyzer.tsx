@@ -39,6 +39,15 @@ const SeoAnalyzer = () => {
     };
   }
 
+  const isValidUrl = (urlString: string) => {
+    try {
+      const url = new URL(urlString);
+      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.includes(".");
+    } catch (e) {
+      return false;
+    }
+  };
+
   const analyzeSeo = async () => {
     if (!url) {
       toast({
@@ -52,6 +61,15 @@ const SeoAnalyzer = () => {
     let formattedUrl = url;
     if (!/^https?:\/\//i.test(url)) {
       formattedUrl = "https://" + url;
+    }
+
+    if (!isValidUrl(formattedUrl)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid URL",
+        description: "Please enter a valid website URL (e.g., example.com).",
+      });
+      return;
     }
 
     setLoading(true);
