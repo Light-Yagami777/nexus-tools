@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToolCard } from "./ToolCard";
 import { Tool, ToolCategory, categories } from "@/utils/toolsData";
-import { Button } from "@/components/ui/button";
 
 interface ToolGridProps {
   tools: Tool[];
@@ -16,7 +15,6 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory>(initialCategory);
   const [filteredTools, setFilteredTools] = useState<Tool[]>(tools);
-  const [visibleCount, setVisibleCount] = useState(12); // Initial load count
 
   useEffect(() => {
     if (selectedCategory === "All") {
@@ -24,57 +22,58 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
     } else {
       setFilteredTools(tools.filter(tool => tool.category === selectedCategory));
     }
-    setVisibleCount(12); // Reset visible count when category changes
   }, [selectedCategory, tools]);
 
-  const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 12, filteredTools.length));
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05
+      }
+    }
   };
-
-  const visibleTools = filteredTools.slice(0, visibleCount);
 
   return (
     <div className="w-full">
-      <div className="mb-8 overflow-x-auto pb-4 flex items-center space-x-4 no-scrollbar">
+      {/* Category Pills */}
+      <div className="mb-8 overflow-x-auto pb-2 flex items-center space-x-2 no-scrollbar">
         {categories.map((category) => (
-          <Button
+          <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            variant={selectedCategory === category ? "default" : "outline"}
-            className="min-w-[120px] h-12 px-6 whitespace-nowrap text-base"
-            aria-pressed={selectedCategory === category}
+            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+              selectedCategory === category
+                ? "bg-primary text-white shadow-md"
+                : "bg-secondary text-foreground/70 hover:bg-secondary/80"
+            }`}
           >
             {category}
-          </Button>
+          </button>
         ))}
       </div>
 
+      {/* Tool Grid */}
       <AnimatePresence mode="wait">
         <motion.div
           key={selectedCategory}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {visibleTools.map((tool, index) => (
-            <ToolCard key={tool.id} tool={tool} index={index} />
-          ))}
+          {filteredTools.length > 0 ? (
+            filteredTools.map((tool, index) => (
+              <ToolCard key={tool.id} tool={tool} index={index} />
+            ))
+          ) : (
+            <div className="col-span-full flex items-center justify-center h-40 text-muted-foreground">
+              No tools found in this category.
+            </div>
+          )}
         </motion.div>
       </AnimatePresence>
-
-      {visibleCount < filteredTools.length && (
-        <div className="mt-12 text-center">
-          <Button 
-            onClick={loadMore}
-            variant="outline"
-            size="lg"
-            className="h-14 px-8 text-lg"
-          >
-            Load More Tools
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
