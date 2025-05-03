@@ -5,22 +5,27 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Smartphone, Check, X, AlertTriangle, ThumbsUp, Info } from "lucide-react";
+import { Smartphone, Check, X, AlertTriangle, ThumbsUp, Info, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { showRewardedAd } from "@/utils/adUtils";
+import { useNavigate } from "react-router-dom";
 
 const MobileFriendlyTest = () => {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  // URL validation function
+  // URL validation function - improved
   const isValidUrl = (urlString: string) => {
     try {
       const url = new URL(urlString);
-      // Check if protocol is http or https and has a valid domain
-      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.includes(".");
+      // Check if protocol is http or https and has a valid domain with TLD
+      return (url.protocol === "http:" || url.protocol === "https:") && 
+        url.hostname.includes(".") && 
+        url.hostname.split(".").length >= 2 && 
+        url.hostname.split(".").every(part => part.length > 0);
     } catch (e) {
       return false;
     }
@@ -64,24 +69,35 @@ const MobileFriendlyTest = () => {
       
       // Simulate mobile-friendly test with a delay
       setTimeout(() => {
-        // Mock results for demonstration purposes
+        // Extract domain for identification
+        const domain = new URL(formattedUrl).hostname;
+        
+        // Real analysis would happen here with actual API calls
+        // For now we'll simulate with domain-based results
+        const domainHash = [...domain].reduce((a, b) => a + b.charCodeAt(0), 0);
+        const isMobileFriendly = domainHash % 10 > 3; // More deterministic than random
+        
         const mockResults = {
-          isMobileFriendly: Math.random() > 0.3, // Randomize results to make it more realistic
+          isMobileFriendly,
           screenshot: "https://placehold.co/600x800/e2e8f0/64748b?text=Mobile+Preview",
-          usabilityIssues: [
+          usabilityIssues: isMobileFriendly ? [] : [
             { 
               type: "touch-elements-too-close", 
-              severity: "minor",
+              severity: isMobileFriendly ? "minor" : "major",
               description: "Touch elements are too close to each other",
               recommendation: "Make sure touch elements have enough space between them to be easily tapped."
+            },
+            { 
+              type: "viewport-not-set", 
+              severity: "critical",
+              description: "Viewport not properly configured",
+              recommendation: "Add a proper viewport meta tag to ensure content scales correctly on mobile devices."
             }
           ],
           passedChecks: [
-            "Viewport is properly configured",
             "Content is sized to viewport",
             "Text is readable without zooming",
-            "Links have adequate spacing",
-            "Page avoids plugins"
+            ...(isMobileFriendly ? ["Viewport is properly configured", "Links have adequate spacing", "Page avoids plugins"] : [])
           ]
         };
         
@@ -103,6 +119,10 @@ const MobileFriendlyTest = () => {
     }
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <ToolLayout
       title="Mobile-Friendly Test"
@@ -111,6 +131,17 @@ const MobileFriendlyTest = () => {
       extraPadding
     >
       <div className="space-y-6">
+        {/* Back Button */}
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleGoBack}
+          className="mb-4"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+
         <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">Enter Website URL</h2>
           <div className="flex flex-col sm:flex-row gap-3">

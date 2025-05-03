@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,7 +17,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Debounce search query to prevent excessive searches
+  // Improved debounce search query to prevent excessive searches
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -27,10 +26,33 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Search when debounced query changes
+  // Enhanced search functionality
   useEffect(() => {
     if (debouncedQuery.trim().length >= 2) {
+      // More comprehensive search with better scoring and ranking
       const searchResults = searchTools(debouncedQuery);
+      
+      // Prioritize exact matches and matches at the beginning of the name
+      searchResults.sort((a, b) => {
+        const aNameLower = a.name.toLowerCase();
+        const bNameLower = b.name.toLowerCase();
+        const queryLower = debouncedQuery.toLowerCase();
+        
+        // Exact matches come first
+        if (aNameLower === queryLower && bNameLower !== queryLower) return -1;
+        if (bNameLower === queryLower && aNameLower !== queryLower) return 1;
+        
+        // Matches at the beginning come next
+        const aStartsWithQuery = aNameLower.startsWith(queryLower);
+        const bStartsWithQuery = bNameLower.startsWith(queryLower);
+        
+        if (aStartsWithQuery && !bStartsWithQuery) return -1;
+        if (bStartsWithQuery && !aStartsWithQuery) return 1;
+        
+        // Then sort by name length (shorter names first)
+        return a.name.length - b.name.length;
+      });
+      
       setResults(searchResults);
       if (onSearch) {
         onSearch(debouncedQuery);
@@ -70,13 +92,36 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Prevent immediate search on space keypress
+    // Enhanced keyboard navigation
     if (e.key === "Enter" && query.trim().length >= 2) {
-      // If Enter is pressed, pass the current query to onSearch
-      if (onSearch) {
+      // If Enter is pressed and we have results, navigate to the first result
+      if (results.length > 0) {
+        handleToolClick(results[0].path);
+      }
+      // Otherwise, pass the query to onSearch
+      else if (onSearch) {
         onSearch(query);
       }
+    } else if (e.key === "Escape") {
+      setIsSearchFocused(false);
     }
+  };
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    
+    return (
+      <>
+        {parts.map((part, i) => 
+          regex.test(part) ? 
+            <span key={i} className="bg-primary/20 font-semibold">{part}</span> : 
+            <span key={i}>{part}</span>
+        )}
+      </>
+    );
   };
 
   return (
@@ -135,7 +180,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className = "", onSearch }
                   className="px-4 py-2 hover:bg-primary/5 dark:hover:bg-[#2a2b35] cursor-pointer transition-colors"
                 >
                   <div className="flex items-center">
-                    <span className="font-medium">{tool.name}</span>
+                    <span className="font-medium">
+                      {highlightMatch(tool.name, query)}
+                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {tool.category}

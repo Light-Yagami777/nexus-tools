@@ -228,9 +228,9 @@ export const ColorWheel: React.FC<ColorWheelProps> = ({
           className="border rounded-full cursor-crosshair mx-auto"
         />
         
-        {/* Smaller cursor circle with outline */}
+        {/* Increased cursor circle with outline */}
         <div
-          className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 border rounded-full"
+          className="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 border-2 rounded-full"
           style={{
             backgroundColor: color,
             left: position.x,
