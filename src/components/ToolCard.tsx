@@ -3,71 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Tool } from "@/utils/toolsData";
-import { 
-  Image, 
-  FileText, 
-  Code, 
-  Calculator, 
-  Ruler, 
-  Key, 
-  Share2, 
-  Activity,
-  Palette,
-  Home,
-  Dices,
-  Braces,
-  QrCode,
-  Search,
-  Zap,
-  Link as LinkIcon,
-  Smartphone,
-  Text,
-  GitBranch,
-  Edit,
-  Clock,
-  DollarSign,
-  Hash,
-  Twitter,
-  Instagram,
-  Users,
-  MessageSquare,
-  BarChart,
-  Shuffle,
-  Shield,
-  Youtube,
-  HardDrive,
-  Thermometer,
-  Lock,
-  Mic,
-  Volume2,
-  Calendar,
-  UserRound,
-  Beaker,
-  VideoIcon,
-  MonitorSmartphone,
-  Crop,
-  LayoutGrid,
-  Tag,
-  Type,
-  Italic,
-  Bold,
-  BookOpen,
-  MousePointer,
-  PenTool,
-  Wand2,
-  Timer,
-  StickyNote,
-  Laugh,
-  ScreenShare,
-  Check,
-  NotebookText,
-  PauseCircle,
-  PlayCircle,
-  RefreshCcw,
-  Copy,
-  AlignLeft,
-  Verified
-} from "lucide-react";
+import { Activity, LucideIcon } from "lucide-react";
 
 interface ToolCardProps {
   tool: Tool;
@@ -79,70 +15,8 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
 
   const getIcon = () => {
     const iconProps = { className: "h-5 w-5" };
-    
-    switch (tool.icon) {
-      case "image": return <Image {...iconProps} />;
-      case "text": return <Text {...iconProps} />;
-      case "code": return <Code {...iconProps} />;
-      case "braces": return <Braces {...iconProps} />;
-      case "key": return <Key {...iconProps} />;
-      case "qr-code": return <QrCode {...iconProps} />;
-      case "calculator": return <Calculator {...iconProps} />;
-      case "ruler": return <Ruler {...iconProps} />;
-      case "palette": return <Palette {...iconProps} />;
-      case "home": return <Home {...iconProps} />;
-      case "dice": return <Dices {...iconProps} />;
-      case "search": return <Search {...iconProps} />;
-      case "zap": return <Zap {...iconProps} />;
-      case "link": return <LinkIcon {...iconProps} />;
-      case "smartphone": return <Smartphone {...iconProps} />;
-      case "git-branch": return <GitBranch {...iconProps} />;
-      case "edit": return <Edit {...iconProps} />;
-      case "clock": return <Clock {...iconProps} />;
-      case "dollar-sign": return <DollarSign {...iconProps} />;
-      case "hash": return <Hash {...iconProps} />;
-      case "twitter": return <Twitter {...iconProps} />;
-      case "instagram": return <Instagram {...iconProps} />;
-      case "users": return <Users {...iconProps} />;
-      case "file-text": return <FileText {...iconProps} />;
-      case "hard-drive": return <HardDrive {...iconProps} />;
-      case "thermometer": return <Thermometer {...iconProps} />;
-      case "lock": return <Lock {...iconProps} />;
-      case "mic": return <Mic {...iconProps} />;
-      case "volume-2": return <Volume2 {...iconProps} />;
-      case "shield": return <Shield {...iconProps} />;
-      case "shuffle": return <Shuffle {...iconProps} />;
-      case "youtube": return <Youtube {...iconProps} />;
-      case "user": return <UserRound {...iconProps} />;
-      case "calendar": return <Calendar {...iconProps} />;
-      case "video": return <VideoIcon {...iconProps} />;
-      case "beaker": return <Beaker {...iconProps} />;
-      case "monitor-smartphone": return <MonitorSmartphone {...iconProps} />;
-      case "crop": return <Crop {...iconProps} />;
-      case "layout-grid": return <LayoutGrid {...iconProps} />;
-      case "tag": return <Tag {...iconProps} />;
-      case "type": return <Type {...iconProps} />;
-      case "italic": return <Italic {...iconProps} />;
-      case "bold": return <Bold {...iconProps} />;
-      case "book-open": return <BookOpen {...iconProps} />;
-      case "swatch": return <Palette {...iconProps} />;
-      case "mouse-pointer": return <MousePointer {...iconProps} />;
-      case "pen-tool": return <PenTool {...iconProps} />;
-      case "wand-2": return <Wand2 {...iconProps} />;
-      case "timer": return <Timer {...iconProps} />;
-      case "sticky-note": return <StickyNote {...iconProps} />;
-      case "laugh": return <Laugh {...iconProps} />;
-      case "screen-share": return <ScreenShare {...iconProps} />;
-      case "check": return <Check {...iconProps} />;
-      case "notebook-text": return <NotebookText {...iconProps} />;
-      case "pause-circle": return <PauseCircle {...iconProps} />;
-      case "play-circle": return <PlayCircle {...iconProps} />;
-      case "refresh-ccw": return <RefreshCcw {...iconProps} />;
-      case "copy": return <Copy {...iconProps} />;
-      case "align-left": return <AlignLeft {...iconProps} />;
-      case "verified": return <Verified {...iconProps} />;
-      default: return <Activity {...iconProps} />;
-    }
+    const Icon = tool.icon || Activity;
+    return <Icon {...iconProps} />;
   };
 
   const cardVariants = {
@@ -164,15 +38,15 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, index }) => {
 
   const getCategoryColor = () => {
     switch (tool.category) {
-      case "Image Tools": return "bg-blue-100 text-blue-800";
-      case "Text Tools": return "bg-green-100 text-green-800";
-      case "Developer Tools": return "bg-purple-100 text-purple-800";
-      case "Security & Encryption": return "bg-red-100 text-red-800";
-      case "Math & Calculators": return "bg-yellow-100 text-yellow-800";
-      case "Unit Converters": return "bg-indigo-100 text-indigo-800";
-      case "Social Media Tools": return "bg-pink-100 text-pink-800";
+      case "Image": return "bg-blue-100 text-blue-800";
+      case "Text": return "bg-green-100 text-green-800";
+      case "Development": return "bg-purple-100 text-purple-800";
+      case "Security": return "bg-red-100 text-red-800";
+      case "Utilities": return "bg-yellow-100 text-yellow-800";
+      case "SEO": return "bg-teal-100 text-teal-800";
+      case "Design": return "bg-pink-100 text-pink-800";
+      case "Content": return "bg-indigo-100 text-indigo-800";
       case "Miscellaneous": return "bg-gray-100 text-gray-800";
-      case "SEO Tools": return "bg-teal-100 text-teal-800";
       default: return "bg-gray-100 text-gray-800";
     }
   };

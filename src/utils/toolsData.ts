@@ -1,4 +1,11 @@
-import { Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, ListChecks, FileText, Fingerprint, Key, Code, Palette, QrCode, Download, Compress, TextCursor, Link, Speedometer, BarChartBig, Mail, MessageSquare, Calendar, Clock, FileSearch2, FileDown, Users, FileCode2, CheckCircle2, LucideIcon } from "lucide-react";
+import { 
+  Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
+  ListChecks, FileText, Fingerprint, Key, Code, Palette, 
+  QrCode, Download, TextCursor, Link, BarChart, 
+  Mail, MessageSquare, Calendar, Clock, FileSearch2, 
+  FileDown, Users, FileCode2, CheckCircle2, LucideIcon,
+  Smartphone
+} from "lucide-react";
 
 export interface Tool {
   id: string;
@@ -15,9 +22,11 @@ export interface Tool {
     | "Design"
     | "Content"
     | "Miscellaneous";
-  icon?: LucideIcon;
+  icon: LucideIcon;
   featured: boolean;
   tags: string[];
+  isNew?: boolean;
+  isFeatured?: boolean;
 }
 
 // Enhanced search function for better matching
@@ -45,17 +54,6 @@ export const searchTools = (query: string): Tool[] => {
   
   // Return exact matches first, then partial matches
   return [...exactMatches, ...partialMatches];
-};
-
-// Define new tool for Lorem Ipsum Generator
-const loremIpsumTool: Tool = {
-  id: "lorem-ipsum-generator",
-  name: "Lorem Ipsum Generator",
-  description: "Generate placeholder text for designs and layouts",
-  path: "/tools/lorem-ipsum-generator",
-  category: "Content",
-  featured: false,
-  tags: ["placeholder", "text", "design", "content", "lorem ipsum", "dummy text", "filler text"],
 };
 
 export const TOOLS: Tool[] = [
@@ -95,7 +93,7 @@ export const TOOLS: Tool[] = [
     description: "Check your website's speed and performance",
     path: "/tools/page-speed-checker",
     category: "SEO",
-    icon: Speedometer,
+    icon: BarChart,
     featured: false,
     tags: ["page", "speed", "checker", "website", "performance"],
   },
@@ -135,7 +133,7 @@ export const TOOLS: Tool[] = [
     description: "Compress your images online",
     path: "/tools/image-compressor",
     category: "Image",
-    icon: Compress,
+    icon: Image,
     featured: false,
     tags: ["image", "compressor", "compress", "online", "photo"],
   },
@@ -289,4 +287,21 @@ export const TOOLS: Tool[] = [
     featured: true,
     tags: ["lorem", "ipsum", "generator", "online", "text", "utility"],
   },
+];
+
+// Define the allowed tool categories
+export type ToolCategory = "All" | Tool["category"];
+
+// Export categories array for use in components
+export const categories: ToolCategory[] = [
+  "All",
+  "Utilities",
+  "SEO",
+  "Image",
+  "Text",
+  "Security",
+  "Development",
+  "Design",
+  "Content",
+  "Miscellaneous",
 ];

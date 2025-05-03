@@ -24,16 +24,6 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
     }
   }, [selectedCategory, tools]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05
-      }
-    }
-  };
-
   return (
     <div className="w-full">
       {/* Category Pills */}
