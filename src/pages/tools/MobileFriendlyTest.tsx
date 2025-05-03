@@ -1,26 +1,30 @@
-
 import { useState } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Smartphone, Check, X, AlertTriangle, ThumbsUp, Info } from "lucide-react";
+import { ArrowLeft, Smartphone, Check, X, AlertTriangle, ThumbsUp, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import { showRewardedAd } from "@/utils/adUtils";
+import { useNavigate } from "react-router-dom";
 
 const MobileFriendlyTest = () => {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  // URL validation function
+  // URL validation function with improved validation
   const isValidUrl = (urlString: string) => {
     try {
       const url = new URL(urlString);
-      // Check if protocol is http or https and has a valid domain
-      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.includes(".");
+      // Check if protocol is http or https and has a valid domain (with at least one dot and no spaces)
+      return (url.protocol === "http:" || url.protocol === "https:") && 
+             url.hostname.includes(".") && 
+             !url.hostname.includes(" ") &&
+             url.hostname.split(".")[0].length > 0;
     } catch (e) {
       return false;
     }
@@ -30,7 +34,7 @@ const MobileFriendlyTest = () => {
     // Reset results when starting a new test
     setResults(null);
     
-    // Validate URL
+    // Validate URL presence
     if (!url) {
       toast({
         variant: "destructive",
@@ -64,25 +68,64 @@ const MobileFriendlyTest = () => {
       
       // Simulate mobile-friendly test with a delay
       setTimeout(() => {
-        // Mock results for demonstration purposes
+        // Generate realistic test results based on the domain
+        const domain = new URL(formattedUrl).hostname;
+        const domainHash = Array.from(domain).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        
+        const isMobileFriendly = domainHash % 100 > 30; // Make most sites pass, but some fail
+        
+        const commonIssues = [
+          { 
+            type: "touch-elements-too-close", 
+            severity: "minor",
+            description: "Touch elements are too close to each other",
+            recommendation: "Make sure touch elements have enough space between them to be easily tapped."
+          },
+          {
+            type: "content-wider-than-screen",
+            severity: "major",
+            description: "Content wider than screen",
+            recommendation: "Configure the viewport to scale properly on all devices."
+          },
+          {
+            type: "text-too-small",
+            severity: "critical",
+            description: "Text too small to read",
+            recommendation: "Use legible font sizes (at least 16px) for main text content."
+          },
+          {
+            type: "mobile-viewport-not-set",
+            severity: "critical",
+            description: "Viewport not set",
+            recommendation: "Add a proper viewport meta tag in your HTML head section."
+          }
+        ];
+        
+        // Select 0-2 issues based on whether site passes
+        const numIssues = isMobileFriendly ? 
+          Math.floor(domainHash % 2) : // 0-1 minor issues
+          1 + Math.floor(domainHash % 3); // 1-3 issues
+        
+        const shuffledIssues = [...commonIssues].sort(() => 0.5 - Math.random());
+        const selectedIssues = shuffledIssues.slice(0, numIssues);
+        
+        // If site is mobile friendly, only keep minor issues
+        const usabilityIssues = isMobileFriendly ? 
+          selectedIssues.filter(issue => issue.severity === "minor") :
+          selectedIssues;
+        
         const mockResults = {
-          isMobileFriendly: Math.random() > 0.3, // Randomize results to make it more realistic
-          screenshot: "https://placehold.co/600x800/e2e8f0/64748b?text=Mobile+Preview",
-          usabilityIssues: [
-            { 
-              type: "touch-elements-too-close", 
-              severity: "minor",
-              description: "Touch elements are too close to each other",
-              recommendation: "Make sure touch elements have enough space between them to be easily tapped."
-            }
-          ],
+          isMobileFriendly,
+          domain,
+          screenshot: "https://placehold.co/600x800/e2e8f0/64748b?text=Mobile+Preview+" + domain,
+          usabilityIssues,
           passedChecks: [
             "Viewport is properly configured",
             "Content is sized to viewport",
             "Text is readable without zooming",
             "Links have adequate spacing",
             "Page avoids plugins"
-          ]
+          ].slice(0, 3 + (domainHash % 3)) // Randomly include 3-5 passed checks
         };
         
         setResults(mockResults);
@@ -111,6 +154,18 @@ const MobileFriendlyTest = () => {
       extraPadding
     >
       <div className="space-y-6">
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="mr-2 flex items-center gap-1 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back</span>
+          </Button>
+        </div>
+
         <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">Enter Website URL</h2>
           <div className="flex flex-col sm:flex-row gap-3">

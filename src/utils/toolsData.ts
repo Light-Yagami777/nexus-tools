@@ -1,829 +1,292 @@
-export type ToolCategory = 
-  | 'All'
-  | 'Image Tools'
-  | 'SEO Tools'
-  | 'Text Tools'
-  | 'Developer Tools'
-  | 'Math & Calculators'
-  | 'Unit Converters'
-  | 'Security & Encryption'
-  | 'Social Media Tools'
-  | 'Miscellaneous';
+import { Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, ListChecks, FileText, Fingerprint, Key, Code, Palette, QrCode, Download, Compress, TextCursor, Link, Speedometer, BarChartBig, Mail, MessageSquare, Calendar, Clock, FileSearch2, FileDown, Users, FileCode2, CheckCircle2, LucideIcon } from "lucide-react";
 
 export interface Tool {
   id: string;
   name: string;
   description: string;
-  category: Exclude<ToolCategory, 'All'>;
-  icon: string;
   path: string;
-  isNew?: boolean;
-  isFeatured?: boolean;
+  category:
+    | "Utilities"
+    | "SEO"
+    | "Image"
+    | "Text"
+    | "Security"
+    | "Development"
+    | "Design"
+    | "Content"
+    | "Miscellaneous";
+  icon?: LucideIcon;
+  featured: boolean;
+  tags: string[];
 }
 
-export const tools: Tool[] = [
-  // Image Tools
-  {
-    id: 'image-to-png',
-    name: 'Image to PNG Converter',
-    description: 'Convert your images to PNG format easily',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-to-png',
-    isNew: true,
-  },
-  {
-    id: 'image-to-jpg',
-    name: 'Image to JPG Converter',
-    description: 'Convert images to JPG format with custom quality',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-to-jpg',
-  },
-  {
-    id: 'image-resizer',
-    name: 'Image Resizer',
-    description: 'Resize your images to specific dimensions',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-resizer',
-  },
-  {
-    id: 'image-compressor',
-    name: 'Image Compressor',
-    description: 'Compress images without losing quality',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-compressor',
-  },
-  {
-    id: 'qr-code-generator',
-    name: 'QR Code Generator',
-    description: 'Create QR codes for URLs, text or contact information',
-    category: 'Image Tools',
-    icon: 'qr-code',
-    path: '/tools/qr-code-generator',
-    isFeatured: true,
-  },
-  {
-    id: 'image-to-base64',
-    name: 'Image to Base64',
-    description: 'Convert images to Base64 encoded strings',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/image-to-base64',
-  },
-  {
-    id: 'webp-to-png',
-    name: 'WebP to PNG Converter',
-    description: 'Convert WebP images to PNG format',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/webp-to-png',
-  },
-  {
-    id: 'gif-maker',
-    name: 'GIF Maker',
-    description: 'Create animated GIFs from a series of images',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/gif-maker',
-  },
-  {
-    id: 'screenshot-to-pdf',
-    name: 'Screenshot to PDF',
-    description: 'Convert screenshots to PDF documents',
-    category: 'Image Tools',
-    icon: 'image',
-    path: '/tools/screenshot-to-pdf',
-  },
-
-  // SEO Tools
-  {
-    id: 'meta-tag-generator',
-    name: 'Meta Tag Generator',
-    description: 'Generate meta tags for better SEO',
-    category: 'SEO Tools',
-    icon: 'code',
-    path: '/tools/meta-tag-generator',
-    isNew: true,
-  },
-  {
-    id: 'keyword-density-checker',
-    name: 'Keyword Density Checker',
-    description: 'Analyze keyword density in your content',
-    category: 'SEO Tools',
-    icon: 'search',
-    path: '/tools/keyword-density',
-    isNew: true,
-  },
-  {
-    id: 'sitemap-generator',
-    name: 'Sitemap Generator',
-    description: 'Generate XML sitemaps for your website',
-    category: 'SEO Tools',
-    icon: 'file-text',
-    path: '/tools/sitemap-generator',
-    isNew: true,
-  },
-  {
-    id: 'robots-txt-generator',
-    name: 'Robots.txt Generator',
-    description: 'Create robots.txt files for crawler control',
-    category: 'SEO Tools',
-    icon: 'file-text',
-    path: '/tools/robots-txt-generator',
-  },
-  {
-    id: 'google-index-checker',
-    name: 'Google Index Checker',
-    description: 'Check if your pages are indexed by Google',
-    category: 'SEO Tools',
-    icon: 'search',
-    path: '/tools/google-index-checker',
-  },
-  {
-    id: 'backlink-checker',
-    name: 'Backlink Checker',
-    description: 'Analyze backlinks pointing to your website',
-    category: 'SEO Tools',
-    icon: 'link',
-    path: '/tools/backlink-checker',
-    isNew: true,
-  },
-  {
-    id: 'page-speed-checker',
-    name: 'Page Speed Checker',
-    description: 'Test your website loading speed',
-    category: 'SEO Tools',
-    icon: 'zap',
-    path: '/tools/page-speed-checker',
-    isNew: true,
-  },
-  {
-    id: 'xml-sitemap-validator',
-    name: 'XML Sitemap Validator',
-    description: 'Validate your XML sitemaps for errors',
-    category: 'SEO Tools',
-    icon: 'check',
-    path: '/tools/xml-sitemap-validator',
-    isNew: true,
-  },
-  {
-    id: 'seo-analyzer',
-    name: 'SEO Analyzer',
-    description: 'Comprehensive SEO analysis of your webpage',
-    category: 'SEO Tools',
-    icon: 'search',
-    path: '/tools/seo-analyzer',
-    isNew: true,
-  },
-  {
-    id: 'mobile-friendly-test',
-    name: 'Mobile-Friendly Test',
-    description: 'Check if your site is mobile-friendly',
-    category: 'SEO Tools',
-    icon: 'smartphone',
-    path: '/tools/mobile-friendly-test',
-    isNew: true,
-  },
-
-  // Text Tools
-  {
-    id: 'word-counter',
-    name: 'Word Counter',
-    description: 'Count words, characters and paragraphs in your text',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/word-counter',
-    isFeatured: true,
-  },
-  {
-    id: 'character-counter',
-    name: 'Character Counter',
-    description: 'Count characters with and without spaces',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/character-counter',
-    isNew: true,
-  },
-  {
-    id: 'case-converter',
-    name: 'Case Converter',
-    description: 'Convert text between different cases',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/case-converter',
-  },
-  {
-    id: 'lorem-ipsum-generator',
-    name: 'Lorem Ipsum Generator',
-    description: 'Generate dummy text for your designs',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/lorem-ipsum',
-  },
-  {
-    id: 'text-to-speech',
-    name: 'Text to Speech',
-    description: 'Convert text to spoken audio',
-    category: 'Text Tools',
-    icon: 'volume-2',
-    path: '/tools/text-to-speech',
-  },
-  {
-    id: 'speech-to-text',
-    name: 'Speech to Text',
-    description: 'Convert spoken language into written text',
-    category: 'Text Tools',
-    icon: 'mic',
-    path: '/tools/speech-to-text',
-  },
-  {
-    id: 'url-encoder-decoder',
-    name: 'URL Encoder/Decoder',
-    description: 'Encode or decode URL strings',
-    category: 'Text Tools',
-    icon: 'link',
-    path: '/tools/url-encoder-decoder',
-  },
-  {
-    id: 'text-diff-checker',
-    name: 'Text Diff Checker',
-    description: 'Compare two texts and find differences',
-    category: 'Text Tools',
-    icon: 'git-branch',
-    path: '/tools/text-diff',
-    isNew: true,
-  },
-  {
-    id: 'text-formatter',
-    name: 'Text Formatter',
-    description: 'Format and beautify your text',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/text-formatter',
-    isNew: true,
-  },
-  {
-    id: 'markdown-editor',
-    name: 'Markdown Editor',
-    description: 'Write and preview markdown in real-time',
-    category: 'Text Tools',
-    icon: 'edit',
-    path: '/tools/markdown-editor',
-    isNew: true,
-  },
-  {
-    id: 'string-utilities',
-    name: 'String Utilities',
-    description: 'Various string manipulation utilities',
-    category: 'Text Tools',
-    icon: 'text',
-    path: '/tools/string-utilities',
-    isNew: true,
-  },
-
-  // Developer Tools
-  {
-    id: 'formatter',
-    name: 'Formatter',
-    description: 'One tool for formatting code files',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/dev-formatting',
-    isNew: true,
-    isFeatured: true,
-  },
-  {
-    id: 'color-picker',
-    name: 'Color Picker',
-    description: 'Select and generate color codes for your projects',
-    category: 'Developer Tools',
-    icon: 'palette',
-    path: '/tools/color-picker',
-  },
-  {
-    id: 'css-minifier',
-    name: 'CSS Minifier',
-    description: 'Minify your CSS files',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/css-minifier',
-  },
-  {
-    id: 'js-minifier',
-    name: 'JavaScript Minifier',
-    description: 'Minify your JavaScript code',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/js-minifier',
-  },
-  {
-    id: 'html-minifier',
-    name: 'HTML Minifier',
-    description: 'Minify your HTML code',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/html-minifier',
-  },
-  {
-    id: 'base64-encoder-decoder',
-    name: 'Base64 Encoder/Decoder',
-    description: 'Encode and decode Base64 data',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/base64',
-  },
-  {
-    id: 'regex-tester',
-    name: 'Regex Tester',
-    description: 'Test and debug regular expressions',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/regex-tester',
-  },
-  {
-    id: 'html-to-markdown',
-    name: 'HTML to Markdown',
-    description: 'Convert HTML to Markdown syntax',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/html-to-markdown',
-  },
-  {
-    id: 'markdown-to-html',
-    name: 'Markdown to HTML',
-    description: 'Convert Markdown to HTML code',
-    category: 'Developer Tools',
-    icon: 'code',
-    path: '/tools/markdown-to-html',
-  },
-
-  // Math & Calculators
-  {
-    id: 'bmi-calculator',
-    name: 'BMI Calculator',
-    description: 'Calculate your Body Mass Index',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/bmi-calculator',
-  },
-  {
-    id: 'mortgage-calculator',
-    name: 'Mortgage Calculator',
-    description: 'Calculate mortgage payments and amortization schedules',
-    category: 'Math & Calculators',
-    icon: 'home',
-    path: '/tools/mortgage-calculator',
-  },
-  {
-    id: 'percentage-calculator',
-    name: 'Percentage Calculator',
-    description: 'Calculate percentages easily',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/percentage-calculator',
-  },
-  {
-    id: 'scientific-calculator',
-    name: 'Scientific Calculator',
-    description: 'Perform complex mathematical calculations',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/scientific-calculator',
-  },
-  {
-    id: 'age-calculator',
-    name: 'Age Calculator',
-    description: 'Calculate age between two dates',
-    category: 'Math & Calculators',
-    icon: 'calendar',
-    path: '/tools/age-calculator',
-  },
-  {
-    id: 'discount-calculator',
-    name: 'Discount Calculator',
-    description: 'Calculate discounts and final prices',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/discount-calculator',
-  },
-  {
-    id: 'time-calculator',
-    name: 'Time Calculator',
-    description: 'Add or subtract times',
-    category: 'Math & Calculators',
-    icon: 'clock',
-    path: '/tools/time-calculator',
-  },
-  {
-    id: 'tip-calculator',
-    name: 'Tip Calculator',
-    description: 'Calculate tips for restaurants and services',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/tip-calculator',
-  },
-  {
-    id: 'currency-converter',
-    name: 'Currency Converter',
-    description: 'Convert between different currencies',
-    category: 'Math & Calculators',
-    icon: 'dollar-sign',
-    path: '/tools/currency-converter',
-  },
-  {
-    id: 'binary-decimal-converter',
-    name: 'Binary Decimal Converter',
-    description: 'Convert between binary and decimal numbers',
-    category: 'Math & Calculators',
-    icon: 'calculator',
-    path: '/tools/binary-decimal',
-  },
-
-  // Unit Converters
-  {
-    id: 'unit-converter',
-    name: 'Unit Converter',
-    description: 'Convert between different units of measurement',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/unit-converter',
-    isFeatured: true,
-  },
-  {
-    id: 'length-converter',
-    name: 'Length Converter',
-    description: 'Convert between different units of length',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/length-converter',
-  },
-  {
-    id: 'weight-converter',
-    name: 'Weight Converter',
-    description: 'Convert between different units of weight',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/weight-converter',
-  },
-  {
-    id: 'temperature-converter',
-    name: 'Temperature Converter',
-    description: 'Convert between different temperature units',
-    category: 'Unit Converters',
-    icon: 'thermometer',
-    path: '/tools/temperature-converter',
-  },
-  {
-    id: 'speed-converter',
-    name: 'Speed Converter',
-    description: 'Convert between different units of speed',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/speed-converter',
-  },
-  {
-    id: 'volume-converter',
-    name: 'Volume Converter',
-    description: 'Convert between different units of volume',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/volume-converter',
-  },
-  {
-    id: 'area-converter',
-    name: 'Area Converter',
-    description: 'Convert between different units of area',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/area-converter',
-  },
-  {
-    id: 'data-storage-converter',
-    name: 'Data Storage Converter',
-    description: 'Convert between different digital storage units',
-    category: 'Unit Converters',
-    icon: 'hard-drive',
-    path: '/tools/data-storage-converter',
-  },
-  {
-    id: 'pressure-converter',
-    name: 'Pressure Converter',
-    description: 'Convert between different pressure units',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/pressure-converter',
-  },
-  {
-    id: 'angle-converter',
-    name: 'Angle Converter',
-    description: 'Convert between different angle units',
-    category: 'Unit Converters',
-    icon: 'ruler',
-    path: '/tools/angle-converter',
-  },
-
-  // Security & Encryption
-  {
-    id: 'password-generator',
-    name: 'Password Generator',
-    description: 'Generate secure and strong passwords',
-    category: 'Security & Encryption',
-    icon: 'key',
-    path: '/tools/password-generator',
-    isFeatured: true,
-  },
-  {
-    id: 'md5-generator',
-    name: 'MD5 Hash Generator',
-    description: 'Generate MD5 hashes from text',
-    category: 'Security & Encryption',
-    icon: 'key',
-    path: '/tools/md5-generator',
-  },
-  {
-    id: 'sha256-generator',
-    name: 'SHA256 Hash Generator',
-    description: 'Generate SHA256 hashes from text',
-    category: 'Security & Encryption',
-    icon: 'key',
-    path: '/tools/sha256-generator',
-  },
-  {
-    id: 'hash-identifier',
-    name: 'Hash Identifier',
-    description: 'Identify different types of hashes',
-    category: 'Security & Encryption',
-    icon: 'key',
-    path: '/tools/hash-identifier',
-  },
-  {
-    id: 'encryption-decryption',
-    name: 'Encryption/Decryption',
-    description: 'Encrypt and decrypt text with a password',
-    category: 'Security & Encryption',
-    icon: 'lock',
-    path: '/tools/encryption',
-  },
-  {
-    id: 'csrf-token-generator',
-    name: 'CSRF Token Generator',
-    description: 'Generate CSRF tokens for web security',
-    category: 'Security & Encryption',
-    icon: 'shield',
-    path: '/tools/csrf-token-generator',
-  },
-  {
-    id: 'ssl-checker',
-    name: 'SSL Checker',
-    description: 'Check SSL certificates of websites',
-    category: 'Security & Encryption',
-    icon: 'shield',
-    path: '/tools/ssl-checker',
-  },
-  {
-    id: 'random-string-generator',
-    name: 'Random String Generator',
-    description: 'Generate random strings for various purposes',
-    category: 'Security & Encryption',
-    icon: 'shuffle',
-    path: '/tools/random-string-generator',
-  },
-  {
-    id: 'password-strength-checker',
-    name: 'Password Strength Checker',
-    description: 'Check the strength of your passwords',
-    category: 'Security & Encryption',
-    icon: 'shield',
-    path: '/tools/password-strength',
-  },
-  {
-    id: 'jwt-decoder',
-    name: 'JWT Decoder',
-    description: 'Decode and verify JSON Web Tokens',
-    category: 'Security & Encryption',
-    icon: 'key',
-    path: '/tools/jwt-decoder',
-    isNew: true,
-  },
-
-  // Social Media Tools
-  {
-    id: 'youtube-thumbnail',
-    name: 'YouTube Thumbnail Downloader',
-    description: 'Download thumbnails from YouTube videos',
-    category: 'Social Media Tools',
-    icon: 'youtube',
-    path: '/tools/youtube-thumbnail',
-  },
-  {
-    id: 'social-media-image-resizer',
-    name: 'Social Media Image Resizer',
-    description: 'Resize images for different social platforms',
-    category: 'Social Media Tools',
-    icon: 'image',
-    path: '/tools/social-media-image-resizer',
-  },
-  {
-    id: 'hashtag-generator',
-    name: 'Hashtag Generator',
-    description: 'Generate relevant hashtags for your content',
-    category: 'Social Media Tools',
-    icon: 'hash',
-    path: '/tools/hashtag-generator',
-  },
-  {
-    id: 'twitter-card-generator',
-    name: 'Twitter Card Generator',
-    description: 'Create Twitter card previews',
-    category: 'Social Media Tools',
-    icon: 'twitter',
-    path: '/tools/twitter-card-generator',
-  },
-  {
-    id: 'instagram-font-generator',
-    name: 'Instagram Font Generator',
-    description: 'Create fancy text for Instagram bios',
-    category: 'Social Media Tools',
-    icon: 'instagram',
-    path: '/tools/instagram-font-generator',
-  },
-  {
-    id: 'og-image-generator',
-    name: 'OG Image Generator',
-    description: 'Create Open Graph images for social sharing',
-    category: 'Social Media Tools',
-    icon: 'image',
-    path: '/tools/og-image-generator',
-  },
-  {
-    id: 'social-media-color-picker',
-    name: 'Social Media Color Picker',
-    description: 'Get brand colors for social media platforms',
-    category: 'Social Media Tools',
-    icon: 'palette',
-    path: '/tools/social-media-color-picker',
-  },
-  {
-    id: 'twitter-character-counter',
-    name: 'Twitter Character Counter',
-    description: 'Count characters for Twitter posts',
-    category: 'Social Media Tools',
-    icon: 'twitter',
-    path: '/tools/twitter-character-counter',
-  },
-  {
-    id: 'social-profile-analyzer',
-    name: 'Social Profile Analyzer',
-    description: 'Analyze social media profiles',
-    category: 'Social Media Tools',
-    icon: 'users',
-    path: '/tools/social-profile-analyzer',
-  },
-  {
-    id: 'post-scheduler',
-    name: 'Post Scheduler',
-    description: 'Find the best times to post on social media',
-    category: 'Social Media Tools',
-    icon: 'clock',
-    path: '/tools/post-scheduler',
-  },
-
-  // Miscellaneous
-  {
-    id: 'random-number-generator',
-    name: 'Random Number Generator',
-    description: 'Generate random numbers within a specified range',
-    category: 'Miscellaneous',
-    icon: 'dice',
-    path: '/tools/random-number-generator',
-  },
-  {
-    id: 'uuid-generator',
-    name: 'UUID Generator',
-    description: 'Generate UUIDs/GUIDs',
-    category: 'Miscellaneous',
-    icon: 'key',
-    path: '/tools/uuid-generator',
-  },
-  {
-    id: 'coin-flip',
-    name: 'Coin Flip',
-    description: 'Flip a virtual coin',
-    category: 'Miscellaneous',
-    icon: 'dollar-sign',
-    path: '/tools/coin-flip',
-  },
-  {
-    id: 'dice-roller',
-    name: 'Dice Roller',
-    description: 'Roll virtual dice',
-    category: 'Miscellaneous',
-    icon: 'dice',
-    path: '/tools/dice-roller',
-  },
-  {
-    id: 'name-generator',
-    name: 'Name Generator',
-    description: 'Generate random names',
-    category: 'Miscellaneous',
-    icon: 'user',
-    path: '/tools/name-generator',
-  },
-  {
-    id: 'lorem-ipsum',
-    name: 'Lorem Ipsum Generator',
-    description: 'Generate placeholder text',
-    category: 'Miscellaneous',
-    icon: 'file-text',
-    path: '/tools/lorem-ipsum-generator',
-  },
-  {
-    id: 'pomodoro-timer',
-    name: 'Pomodoro Timer',
-    description: 'Time management with the Pomodoro technique',
-    category: 'Miscellaneous',
-    icon: 'clock',
-    path: '/tools/pomodoro-timer',
-  },
-  {
-    id: 'notes-app',
-    name: 'Quick Notes',
-    description: 'Take quick notes in your browser',
-    category: 'Miscellaneous',
-    icon: 'edit',
-    path: '/tools/notes',
-  },
-  {
-    id: 'screen-recorder',
-    name: 'Screen Recorder',
-    description: 'Record your screen directly in browser',
-    category: 'Miscellaneous',
-    icon: 'video',
-    path: '/tools/screen-recorder',
-    isNew: true,
-  },
-  {
-    id: 'meme-generator',
-    name: 'Meme Generator',
-    description: 'Create custom memes with templates',
-    category: 'Miscellaneous',
-    icon: 'image',
-    path: '/tools/meme-generator',
-  },
-];
-
-export const getToolsByCategory = (category: ToolCategory): Tool[] => {
-  if (category === 'All') {
-    return tools;
-  }
-  
-  return tools.filter(tool => tool.category === category);
-};
-
-export const getFeaturedTools = (): Tool[] => {
-  return tools.filter(tool => tool.isFeatured);
-};
-
-export const getNewTools = (): Tool[] => {
-  return tools.filter(tool => tool.isNew);
-};
-
+// Enhanced search function for better matching
 export const searchTools = (query: string): Tool[] => {
-  if (!query || query.trim() === '') {
-    return tools;
-  }
+  const normalizedQuery = query.toLowerCase().trim();
   
-  const searchTerms = query.toLowerCase().split(' ');
+  if (!normalizedQuery) return [];
   
-  return tools.filter(tool => {
-    const nameMatch = tool.name.toLowerCase();
-    const descMatch = tool.description.toLowerCase();
-    const categoryMatch = tool.category.toLowerCase();
-    
-    return searchTerms.some(term => 
-      nameMatch.includes(term) || 
-      descMatch.includes(term) || 
-      categoryMatch.includes(term)
-    );
-  });
+  // First check for exact matches in name or direct substring
+  const exactMatches = TOOLS.filter(
+    tool => 
+      tool.name.toLowerCase() === normalizedQuery ||
+      tool.name.toLowerCase().includes(normalizedQuery)
+  );
+  
+  // Then check for partial matches in other fields
+  const partialMatches = TOOLS.filter(
+    tool => 
+      !exactMatches.includes(tool) && (
+        tool.tags.some(tag => tag.toLowerCase().includes(normalizedQuery)) ||
+        tool.category.toLowerCase().includes(normalizedQuery) ||
+        tool.description.toLowerCase().includes(normalizedQuery)
+      )
+  );
+  
+  // Return exact matches first, then partial matches
+  return [...exactMatches, ...partialMatches];
 };
 
-export const categories: ToolCategory[] = [
-  'All',
-  'Image Tools',
-  'SEO Tools',
-  'Text Tools',
-  'Developer Tools',
-  'Math & Calculators',
-  'Unit Converters',
-  'Security & Encryption',
-  'Social Media Tools',
-  'Miscellaneous',
+// Define new tool for Lorem Ipsum Generator
+const loremIpsumTool: Tool = {
+  id: "lorem-ipsum-generator",
+  name: "Lorem Ipsum Generator",
+  description: "Generate placeholder text for designs and layouts",
+  path: "/tools/lorem-ipsum-generator",
+  category: "Content",
+  featured: false,
+  tags: ["placeholder", "text", "design", "content", "lorem ipsum", "dummy text", "filler text"],
+};
+
+export const TOOLS: Tool[] = [
+  {
+    id: "seo-analyzer",
+    name: "SEO Analyzer",
+    description: "Analyze your website's SEO and identify issues",
+    path: "/tools/seo-analyzer",
+    category: "SEO",
+    icon: Search,
+    featured: true,
+    tags: ["seo", "analyzer", "website", "analysis", "optimization"],
+  },
+  {
+    id: "mobile-friendly-test",
+    name: "Mobile-Friendly Test",
+    description: "Check if your website is mobile-friendly",
+    path: "/tools/mobile-friendly-test",
+    category: "SEO",
+    icon: Smartphone,
+    featured: true,
+    tags: ["mobile", "friendly", "test", "website", "responsive"],
+  },
+  {
+    id: "backlink-checker",
+    name: "Backlink Checker",
+    description: "Check the backlinks of your website",
+    path: "/tools/backlink-checker",
+    category: "SEO",
+    icon: Link,
+    featured: false,
+    tags: ["backlink", "checker", "website", "links", "referrals"],
+  },
+  {
+    id: "page-speed-checker",
+    name: "Page Speed Checker",
+    description: "Check your website's speed and performance",
+    path: "/tools/page-speed-checker",
+    category: "SEO",
+    icon: Speedometer,
+    featured: false,
+    tags: ["page", "speed", "checker", "website", "performance"],
+  },
+  {
+    id: "keyword-density-analyzer",
+    name: "Keyword Density Analyzer",
+    description: "Analyze the keyword density of your website's content",
+    path: "/tools/keyword-density-analyzer",
+    category: "SEO",
+    icon: FileText,
+    featured: false,
+    tags: ["keyword", "density", "analyzer", "content", "analysis"],
+  },
+  {
+    id: "broken-link-checker",
+    name: "Broken Link Checker",
+    description: "Find broken links on your website",
+    path: "/tools/broken-link-checker",
+    category: "SEO",
+    icon: Link,
+    featured: false,
+    tags: ["broken", "link", "checker", "website", "links"],
+  },
+  {
+    id: "image-resizer",
+    name: "Image Resizer",
+    description: "Resize your images online",
+    path: "/tools/image-resizer",
+    category: "Image",
+    icon: Image,
+    featured: true,
+    tags: ["image", "resizer", "resize", "online", "photo"],
+  },
+  {
+    id: "image-compressor",
+    name: "Image Compressor",
+    description: "Compress your images online",
+    path: "/tools/image-compressor",
+    category: "Image",
+    icon: Compress,
+    featured: false,
+    tags: ["image", "compressor", "compress", "online", "photo"],
+  },
+  {
+    id: "image-converter",
+    name: "Image Converter",
+    description: "Convert your images to different formats",
+    path: "/tools/image-converter",
+    category: "Image",
+    icon: FileDown,
+    featured: false,
+    tags: ["image", "converter", "convert", "online", "photo"],
+  },
+  {
+    id: "password-generator",
+    name: "Password Generator",
+    description: "Generate secure passwords online",
+    path: "/tools/password-generator",
+    category: "Security",
+    icon: Key,
+    featured: true,
+    tags: ["password", "generator", "secure", "online", "security"],
+  },
+  {
+    id: "qr-code-generator",
+    name: "QR Code Generator",
+    description: "Generate QR codes online",
+    path: "/tools/qr-code-generator",
+    category: "Utilities",
+    icon: QrCode,
+    featured: true,
+    tags: ["qr", "code", "generator", "online", "utility"],
+  },
+  {
+    id: "html-formatter",
+    name: "HTML Formatter",
+    description: "Format your HTML code online",
+    path: "/tools/html-formatter",
+    category: "Development",
+    icon: Code,
+    featured: false,
+    tags: ["html", "formatter", "format", "online", "code"],
+  },
+  {
+    id: "css-formatter",
+    name: "CSS Formatter",
+    description: "Format your CSS code online",
+    path: "/tools/css-formatter",
+    category: "Development",
+    icon: Code,
+    featured: false,
+    tags: ["css", "formatter", "format", "online", "code"],
+  },
+  {
+    id: "javascript-formatter",
+    name: "JavaScript Formatter",
+    description: "Format your JavaScript code online",
+    path: "/tools/javascript-formatter",
+    category: "Development",
+    icon: Code,
+    featured: false,
+    tags: ["javascript", "formatter", "format", "online", "code"],
+  },
+  {
+    id: "color-picker",
+    name: "Color Picker",
+    description: "Pick colors from an image or using a color wheel",
+    path: "/tools/color-picker",
+    category: "Design",
+    icon: Palette,
+    featured: true,
+    tags: ["color", "picker", "image", "wheel", "online"],
+  },
+  {
+    id: "text-case-converter",
+    name: "Text Case Converter",
+    description: "Convert text case online",
+    path: "/tools/text-case-converter",
+    category: "Text",
+    icon: TextCursor,
+    featured: false,
+    tags: ["text", "case", "converter", "online", "utility"],
+  },
+  {
+    id: "unit-converter",
+    name: "Unit Converter",
+    description: "Convert between different units",
+    path: "/tools/unit-converter",
+    category: "Utilities",
+    icon: Download,
+    featured: false,
+    tags: ["unit", "converter", "online", "utility"],
+  },
+  {
+    id: "ip-address-lookup",
+    name: "IP Address Lookup",
+    description: "Lookup the location of an IP address",
+    path: "/tools/ip-address-lookup",
+    category: "Utilities",
+    icon: Search,
+    featured: false,
+    tags: ["ip", "address", "lookup", "online", "utility"],
+  },
+  {
+    id: "domain-age-checker",
+    name: "Domain Age Checker",
+    description: "Check the age of a domain",
+    path: "/tools/domain-age-checker",
+    category: "SEO",
+    icon: Calendar,
+    featured: false,
+    tags: ["domain", "age", "checker", "online", "seo"],
+  },
+  {
+    id: "word-counter",
+    name: "Word Counter",
+    description: "Count the number of words in a text",
+    path: "/tools/word-counter",
+    category: "Text",
+    icon: FileText,
+    featured: false,
+    tags: ["word", "counter", "online", "text", "utility"],
+  },
+  {
+    id: "character-counter",
+    name: "Character Counter",
+    description: "Count the number of characters in a text",
+    path: "/tools/character-counter",
+    category: "Text",
+    icon: FileText,
+    featured: false,
+    tags: ["character", "counter", "online", "text", "utility"],
+  },
+  {
+    id: "email-validator",
+    name: "Email Validator",
+    description: "Validate an email address",
+    path: "/tools/email-validator",
+    category: "Utilities",
+    icon: Mail,
+    featured: false,
+    tags: ["email", "validator", "online", "utility"],
+  },
+  {
+    id: "lorem-ipsum-generator",
+    name: "Lorem Ipsum Generator",
+    description: "Generate placeholder text for designs and layouts",
+    path: "/tools/lorem-ipsum-generator",
+    category: "Content",
+    icon: Type,
+    featured: true,
+    tags: ["lorem", "ipsum", "generator", "online", "text", "utility"],
+  },
 ];
-
-export const getToolById = (id: string): Tool | undefined => {
-  return tools.find(tool => tool.id === id);
-};

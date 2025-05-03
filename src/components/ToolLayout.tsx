@@ -1,84 +1,63 @@
 
 import React from "react";
-import { NavBar } from "./NavBar";
-import { Footer } from "./Footer";
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FileText } from "lucide-react"; // Import a default icon
+import { cn } from "@/lib/utils";
+import { BackButton } from "./BackButton";
 
 interface ToolLayoutProps {
-  children: React.ReactNode;
   title: string;
   description?: string;
   icon?: React.ReactNode;
-  extraPadding?: boolean; 
+  children: React.ReactNode;
+  extraPadding?: boolean;
+  className?: string;
+  hideBackButton?: boolean;
 }
 
-export const ToolLayout: React.FC<ToolLayoutProps> = ({ 
-  children, 
-  title, 
+export const ToolLayout: React.FC<ToolLayoutProps> = ({
+  title,
   description,
   icon,
-  extraPadding = false 
+  children,
+  extraPadding = false,
+  className,
+  hideBackButton = false,
 }) => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        when: "beforeChildren",
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
-  // Always add enough padding to clear the navbar
-  const topPadding = extraPadding ? "pt-28" : "pt-24";
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <NavBar />
-      
-      <motion.div 
-        className="tool-page-container flex-grow"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <motion.div variants={itemVariants} className={`max-w-4xl mx-auto w-full ${topPadding} px-6`}>
-          <motion.div
-            variants={itemVariants}
-            className="mb-6 flex flex-col items-center justify-center"
-          >
-            {icon ? (
-              <span className="mb-3 text-primary text-xl">{icon}</span>
-            ) : (
-              <span className="mb-3 text-primary"><FileText size={24} /></span>
-            )}
-            <motion.h1 className="text-3xl font-bold text-center">
-              {title}
-            </motion.h1>
-            {description && (
-              <motion.p 
-                variants={itemVariants}
-                className="mt-2 text-muted-foreground text-center max-w-2xl"
-              >
-                {description}
-              </motion.p>
-            )}
-          </motion.div>
-          
-          {children}
-        </motion.div>
-      </motion.div>
-      
-      <Footer />
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={cn(
+        "w-full max-w-7xl mx-auto",
+        extraPadding ? "p-4 sm:p-6 md:p-10" : "p-4",
+        className
+      )}
+    >
+      <div className="flex flex-col">
+        {!isHomePage && !hideBackButton && (
+          <div className="mb-4">
+            <BackButton />
+          </div>
+        )}
+        
+        <div className="mb-6 md:mb-10">
+          <div className="flex items-center mb-2">
+            {icon && <div className="mr-3 text-primary">{icon}</div>}
+            <h1 className="text-2xl md:text-3xl font-bold">{title}</h1>
+          </div>
+          {description && (
+            <p className="text-muted-foreground">{description}</p>
+          )}
+        </div>
+
+        {children}
+      </div>
+    </motion.div>
   );
 };
 

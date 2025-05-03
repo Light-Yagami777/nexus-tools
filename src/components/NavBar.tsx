@@ -102,7 +102,7 @@ export const NavBar = () => {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-full left-0 right-0 glass shadow-lg p-6 flex flex-col space-y-6 md:hidden"
+            className="absolute top-full left-0 right-0 glass shadow-lg p-6 flex flex-col space-y-6 md:hidden z-50"
           >
             <SearchBar className="w-full" />
             <nav className="flex flex-col space-y-4">
@@ -111,6 +111,19 @@ export const NavBar = () => {
               <NavLink to="/about" mobile>About</NavLink>
             </nav>
           </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Background overlay when mobile menu is open */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm md:hidden z-40"
+            style={{ pointerEvents: 'none' }}
+          />
         )}
       </AnimatePresence>
     </motion.header>
