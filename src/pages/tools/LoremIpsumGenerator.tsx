@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Type } from 'lucide-react';
@@ -7,8 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { Copy, RefreshCw } from 'lucide-react';
-import { BackButton } from '@/components/BackButton';
+import { Copy, RefreshCw, FileText } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -81,8 +79,6 @@ const LoremIpsumGenerator = () => {
       extraPadding={true}
     >
       <div className="space-y-6">
-        <BackButton className="mb-4" />
-        
         <Card>
           <CardHeader>
             <CardTitle>Generator Options</CardTitle>

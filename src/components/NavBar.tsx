@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Box } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
 
 export const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,12 +49,12 @@ export const NavBar = () => {
       animate="animate"
       variants={navVariants}
       className={`fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-10 transition-all duration-300 ${
-        isScrolled ? "bg-background/95 backdrop-blur-sm border-b border-border/40" : "bg-transparent"
+        isScrolled ? "glass shadow-sm" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
+          <div className="bg-primary text-white p-1.5 rounded-lg">
             <motion.div 
               className="font-bold text-lg flex items-center justify-center w-6 h-6"
               whileHover={{ scale: 1.05 }}
@@ -77,12 +76,10 @@ export const NavBar = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/categories">Categories</NavLink>
           <NavLink to="/about">About</NavLink>
-          <ThemeToggle className="ml-2" />
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="flex items-center md:hidden">
-          <ThemeToggle className="mr-2" />
           <button
             className="p-2 focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -105,7 +102,7 @@ export const NavBar = () => {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border/40 shadow-lg p-6 flex flex-col space-y-6 md:hidden"
+            className="absolute top-full left-0 right-0 glass shadow-lg p-6 flex flex-col space-y-6 md:hidden"
           >
             <SearchBar className="w-full" />
             <nav className="flex flex-col space-y-4">
