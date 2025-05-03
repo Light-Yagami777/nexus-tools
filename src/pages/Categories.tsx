@@ -5,7 +5,7 @@ import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
 import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
-import { categories, getToolsByCategory, searchTools, ToolCategory } from "@/utils/toolsData";
+import { getToolsByCategory, searchTools, ToolCategory, categories } from "@/utils/toolsData";
 import { FolderKanban } from "lucide-react";
 
 const Categories = () => {

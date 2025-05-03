@@ -1,3 +1,4 @@
+
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
@@ -305,3 +306,23 @@ export const categories: ToolCategory[] = [
   "Content",
   "Miscellaneous",
 ];
+
+// Add the missing functions
+export const getFeaturedTools = (): Tool[] => {
+  return TOOLS.filter(tool => tool.featured);
+};
+
+export const getNewTools = (): Tool[] => {
+  return TOOLS.filter(tool => tool.isNew);
+};
+
+// Export tools constant to match what's being imported in files
+export const tools = TOOLS;
+
+// Add function to get tools by category
+export const getToolsByCategory = (category: ToolCategory): Tool[] => {
+  if (category === "All") {
+    return TOOLS;
+  }
+  return TOOLS.filter(tool => tool.category === category);
+};
