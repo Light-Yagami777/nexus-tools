@@ -5,22 +5,57 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Link, BarChart, ExternalLink } from "lucide-react";
+import { Link, BarChart, ExternalLink, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { showRewardedAd } from "@/utils/adUtils";
+import { useNavigate } from "react-router-dom";
 
 const BacklinkChecker = () => {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Improved URL validation function
+  const isValidUrl = (urlString: string) => {
+    try {
+      const url = new URL(urlString);
+      // Check if protocol is http or https and has a valid domain (with at least one dot and no spaces)
+      return (url.protocol === "http:" || url.protocol === "https:") && 
+             url.hostname.includes(".") && 
+             !url.hostname.includes(" ") &&
+             url.hostname.split(".")[0].length > 0;
+    } catch (e) {
+      return false;
+    }
+  };
 
   const handleAnalyzeBacklinks = async () => {
+    // Reset results when starting a new analysis
+    setResults(null);
+    
     if (!url) {
       toast({
         variant: "destructive",
         title: "URL Required",
-        description: "Please enter a valid URL to analyze backlinks.",
+        description: "Please enter a URL to analyze backlinks.",
+      });
+      return;
+    }
+
+    // Ensure URL has proper format
+    let formattedUrl = url;
+    if (!url.startsWith("http")) {
+      formattedUrl = "https://" + url;
+    }
+    
+    // Validate URL structure
+    if (!isValidUrl(formattedUrl)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid URL",
+        description: "Please enter a valid website URL (e.g., example.com).",
       });
       return;
     }
@@ -75,6 +110,18 @@ const BacklinkChecker = () => {
       extraPadding
     >
       <div className="space-y-6">
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="mr-2 flex items-center gap-1 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back</span>
+          </Button>
+        </div>
+
         <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">Enter Website URL</h2>
           <div className="flex flex-col sm:flex-row gap-3">

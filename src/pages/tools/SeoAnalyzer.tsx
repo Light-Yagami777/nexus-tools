@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, AlertCircle, AlertTriangle, ArrowRight, Search } from "lucide-react";
+import { Check, AlertCircle, AlertTriangle, ArrowRight, Search, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SeoAnalyzer = () => {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<SeoResults | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   interface SeoIssue {
     title: string;
@@ -39,10 +41,14 @@ const SeoAnalyzer = () => {
     };
   }
 
+  // Improved URL validation function
   const isValidUrl = (urlString: string) => {
     try {
       const url = new URL(urlString);
-      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.includes(".");
+      return (url.protocol === "http:" || url.protocol === "https:") && 
+             url.hostname.includes(".") && 
+             !url.hostname.includes(" ") &&
+             url.hostname.split(".")[0].length > 0;
     } catch (e) {
       return false;
     }
@@ -289,157 +295,171 @@ const SeoAnalyzer = () => {
 
   return (
     <ToolLayout title="SEO Analyzer" icon={<Search size={24} />}>
-      <Card className="p-6 mb-8">
-        <div className="mb-6">
-          <p className="text-lg mb-4">
-            Get a comprehensive SEO analysis of your webpage. Enter a URL below to analyze its content, performance, technical aspects, and mobile friendliness.
-          </p>
-          <div className="flex gap-3">
-            <Input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="Enter website URL (e.g., example.com)"
-              className="flex-1"
-              disabled={loading}
-            />
-            <Button onClick={analyzeSeo} disabled={loading || !url}>
-              {loading ? "Analyzing..." : "Analyze"}
-            </Button>
-          </div>
+      <div className="space-y-6">
+        <div className="flex items-center mb-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="mr-2 flex items-center gap-1 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back</span>
+          </Button>
         </div>
-      </Card>
-
-      {loading && (
+        
         <Card className="p-6 mb-8">
-          <div className="text-center mb-4">
-            <p className="text-muted-foreground mb-2">Analyzing your website...</p>
-            <Progress value={undefined} className="h-2 w-full" />
+          <div className="mb-6">
+            <p className="text-lg mb-4">
+              Get a comprehensive SEO analysis of your webpage. Enter a URL below to analyze its content, performance, technical aspects, and mobile friendliness.
+            </p>
+            <div className="flex gap-3">
+              <Input
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Enter website URL (e.g., example.com)"
+                className="flex-1"
+                disabled={loading}
+              />
+              <Button onClick={analyzeSeo} disabled={loading || !url}>
+                {loading ? "Analyzing..." : "Analyze"}
+              </Button>
+            </div>
           </div>
         </Card>
-      )}
 
-      {results && (
-        <>
+        {loading && (
           <Card className="p-6 mb-8">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Analysis Results</h2>
-              <p className="text-sm text-muted-foreground">
-                URL: {results.url} • Analyzed on: {results.date}
-              </p>
+            <div className="text-center mb-4">
+              <p className="text-muted-foreground mb-2">Analyzing your website...</p>
+              <Progress value={undefined} className="h-2 w-full" />
             </div>
+          </Card>
+        )}
 
-            <div className="mb-6">
-              <h3 className="text-lg font-medium mb-4 text-center">Overall Score</h3>
-              <ScoreGauge score={results.overallScore} />
-            </div>
+        {results && (
+          <>
+            <Card className="p-6 mb-8">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold mb-2">Analysis Results</h2>
+                <p className="text-sm text-muted-foreground">
+                  URL: {results.url} • Analyzed on: {results.date}
+                </p>
+              </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-              {Object.entries(results.categories).map(([key, category]) => (
-                <div key={key} className="text-center">
-                  <h4 className="text-sm font-medium mb-1">{category.name}</h4>
-                  <div className="flex justify-center">
-                    <div 
-                      className={`w-16 h-16 rounded-full flex items-center justify-center font-bold text-white
-                        ${category.score >= 90 ? 'bg-green-500' : 
-                          category.score >= 70 ? 'bg-yellow-500' : 
-                          category.score >= 50 ? 'bg-orange-500' : 'bg-red-500'}`}
-                    >
-                      {category.score}
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-4 text-center">Overall Score</h3>
+                <ScoreGauge score={results.overallScore} />
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                {Object.entries(results.categories).map(([key, category]) => (
+                  <div key={key} className="text-center">
+                    <h4 className="text-sm font-medium mb-1">{category.name}</h4>
+                    <div className="flex justify-center">
+                      <div 
+                        className={`w-16 h-16 rounded-full flex items-center justify-center font-bold text-white
+                          ${category.score >= 90 ? 'bg-green-500' : 
+                            category.score >= 70 ? 'bg-yellow-500' : 
+                            category.score >= 50 ? 'bg-orange-500' : 'bg-red-500'}`}
+                      >
+                        {category.score}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+                ))}
+              </div>
+            </Card>
 
-          <Card className="p-6 mb-8">
-            <Tabs defaultValue="content">
-              <TabsList className="grid w-full grid-cols-4 mb-6">
-                <TabsTrigger value="content">Content</TabsTrigger>
-                <TabsTrigger value="performance">Performance</TabsTrigger>
-                <TabsTrigger value="technical">Technical</TabsTrigger>
-                <TabsTrigger value="mobile">Mobile</TabsTrigger>
-              </TabsList>
+            <Card className="p-6 mb-8">
+              <Tabs defaultValue="content">
+                <TabsList className="grid w-full grid-cols-4 mb-6">
+                  <TabsTrigger value="content">Content</TabsTrigger>
+                  <TabsTrigger value="performance">Performance</TabsTrigger>
+                  <TabsTrigger value="technical">Technical</TabsTrigger>
+                  <TabsTrigger value="mobile">Mobile</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="content">
-                <h3 className="text-lg font-medium mb-4">Content Analysis</h3>
-                <div className="space-y-4">
-                  {results.categories.content.issues.map((issue, index) => (
-                    <IssueItem key={index} issue={issue} />
-                  ))}
-                </div>
-              </TabsContent>
+                <TabsContent value="content">
+                  <h3 className="text-lg font-medium mb-4">Content Analysis</h3>
+                  <div className="space-y-4">
+                    {results.categories.content.issues.map((issue, index) => (
+                      <IssueItem key={index} issue={issue} />
+                    ))}
+                  </div>
+                </TabsContent>
 
-              <TabsContent value="performance">
-                <h3 className="text-lg font-medium mb-4">Performance Analysis</h3>
-                <div className="space-y-4">
-                  {results.categories.performance.issues.map((issue, index) => (
-                    <IssueItem key={index} issue={issue} />
-                  ))}
-                </div>
-              </TabsContent>
+                <TabsContent value="performance">
+                  <h3 className="text-lg font-medium mb-4">Performance Analysis</h3>
+                  <div className="space-y-4">
+                    {results.categories.performance.issues.map((issue, index) => (
+                      <IssueItem key={index} issue={issue} />
+                    ))}
+                  </div>
+                </TabsContent>
 
-              <TabsContent value="technical">
-                <h3 className="text-lg font-medium mb-4">Technical Analysis</h3>
-                <div className="space-y-4">
-                  {results.categories.technical.issues.map((issue, index) => (
-                    <IssueItem key={index} issue={issue} />
-                  ))}
-                </div>
-              </TabsContent>
+                <TabsContent value="technical">
+                  <h3 className="text-lg font-medium mb-4">Technical Analysis</h3>
+                  <div className="space-y-4">
+                    {results.categories.technical.issues.map((issue, index) => (
+                      <IssueItem key={index} issue={issue} />
+                    ))}
+                  </div>
+                </TabsContent>
 
-              <TabsContent value="mobile">
-                <h3 className="text-lg font-medium mb-4">Mobile Friendliness</h3>
-                <div className="space-y-4">
-                  {results.categories.mobile.issues.map((issue, index) => (
-                    <IssueItem key={index} issue={issue} />
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </Card>
+                <TabsContent value="mobile">
+                  <h3 className="text-lg font-medium mb-4">Mobile Friendliness</h3>
+                  <div className="space-y-4">
+                    {results.categories.mobile.issues.map((issue, index) => (
+                      <IssueItem key={index} issue={issue} />
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </Card>
 
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Recommendations</h2>
-            <ul className="space-y-2">
-              {results.overallScore < 90 && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Recommendations</h2>
+              <ul className="space-y-2">
+                {results.overallScore < 90 && (
+                  <li className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-primary" />
+                    <span>Focus on improving {results.overallScore < 70 ? "critical" : "high-priority"} issues first</span>
+                  </li>
+                )}
+                {results.categories.content.score < 80 && (
+                  <li className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-primary" />
+                    <span>Improve your content quality and keyword optimization</span>
+                  </li>
+                )}
+                {results.categories.performance.score < 80 && (
+                  <li className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-primary" />
+                    <span>Optimize your page loading speed and Core Web Vitals</span>
+                  </li>
+                )}
+                {results.categories.technical.score < 80 && (
+                  <li className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-primary" />
+                    <span>Address technical issues like broken links and XML sitemap</span>
+                  </li>
+                )}
+                {results.categories.mobile.score < 80 && (
+                  <li className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-primary" />
+                    <span>Improve mobile responsiveness and touch element spacing</span>
+                  </li>
+                )}
                 <li className="flex items-center">
                   <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                  <span>Focus on improving {results.overallScore < 70 ? "critical" : "high-priority"} issues first</span>
+                  <span>Re-analyze your site after making improvements</span>
                 </li>
-              )}
-              {results.categories.content.score < 80 && (
-                <li className="flex items-center">
-                  <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                  <span>Improve your content quality and keyword optimization</span>
-                </li>
-              )}
-              {results.categories.performance.score < 80 && (
-                <li className="flex items-center">
-                  <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                  <span>Optimize your page loading speed and Core Web Vitals</span>
-                </li>
-              )}
-              {results.categories.technical.score < 80 && (
-                <li className="flex items-center">
-                  <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                  <span>Address technical issues like broken links and XML sitemap</span>
-                </li>
-              )}
-              {results.categories.mobile.score < 80 && (
-                <li className="flex items-center">
-                  <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                  <span>Improve mobile responsiveness and touch element spacing</span>
-                </li>
-              )}
-              <li className="flex items-center">
-                <ArrowRight className="h-4 w-4 mr-2 text-primary" />
-                <span>Re-analyze your site after making improvements</span>
-              </li>
-            </ul>
-          </Card>
-        </>
-      )}
+              </ul>
+            </Card>
+          </>
+        )}
+      </div>
     </ToolLayout>
   );
 };

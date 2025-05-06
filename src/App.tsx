@@ -1,92 +1,90 @@
-import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { NavBar } from "@/components/NavBar";
-import EnhancedFooter from "@/components/EnhancedFooter";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider } from "@/components/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-// Root pages
-const Index = lazy(() => import("@/pages/Index"));
-const AllTools = lazy(() => import("@/pages/AllTools"));
-const Categories = lazy(() => import("@/pages/Categories"));
-const About = lazy(() => import("@/pages/About"));
-const NotFound = lazy(() => import("@/pages/NotFound"));
+import Index from "@/pages/Index";
+import AllTools from "@/pages/AllTools";
+import Categories from "@/pages/Categories";
+import About from "@/pages/About";
+import NotFound from "@/pages/NotFound";
 
-// Tool pages
-const LoremIpsumGenerator = lazy(() => import("@/pages/tools/LoremIpsumGenerator"));
-const ColorPicker = lazy(() => import("@/pages/tools/ColorPicker"));
-const ImageResizer = lazy(() => import("@/pages/tools/ImageResizer"));
-const PasswordGenerator = lazy(() => import("@/pages/tools/PasswordGenerator"));
-const QrCodeGenerator = lazy(() => import("@/pages/tools/QrCodeGenerator"));
-const MobileFriendlyTest = lazy(() => import("@/pages/tools/MobileFriendlyTest"));
-const SeoAnalyzer = lazy(() => import("@/pages/tools/SeoAnalyzer"));
-const BacklinkChecker = lazy(() => import("@/pages/tools/BacklinkChecker"));
-const PageSpeedChecker = lazy(() => import("@/pages/tools/PageSpeedChecker"));
+// Tool imports
+import IpAddressLookup from "@/pages/tools/IpAddressLookup";
+import SeoAnalyzer from "@/pages/tools/SeoAnalyzer";
+import BacklinkChecker from "@/pages/tools/BacklinkChecker";
+import PageSpeedChecker from "@/pages/tools/PageSpeedChecker";
+import MobileFriendlyTest from "@/pages/tools/MobileFriendlyTest";
+import LoremIpsumGenerator from "@/pages/tools/LoremIpsumGenerator";
+import ImageResizer from "@/pages/tools/ImageResizer";
+import ImageCompressor from "@/pages/tools/ImageCompressor";
+import ImageConverter from "@/pages/tools/ImageConverter";
+import PasswordGenerator from "@/pages/tools/PasswordGenerator";
+import QrCodeGenerator from "@/pages/tools/QrCodeGenerator";
+import HtmlFormatter from "@/pages/tools/HtmlFormatter";
+import CssFormatter from "@/pages/tools/CssFormatter";
+import JavascriptFormatter from "@/pages/tools/JavascriptFormatter";
+import ColorPicker from "@/pages/tools/ColorPicker";
+import TextCaseConverter from "@/pages/tools/TextCaseConverter";
+import UnitConverter from "@/pages/tools/UnitConverter";
+import DomainAgeChecker from "@/pages/tools/DomainAgeChecker";
+import WordCounter from "@/pages/tools/WordCounter";
+import CharacterCounter from "@/pages/tools/CharacterCounter";
+import EmailValidator from "@/pages/tools/EmailValidator";
+import BrokenLinkChecker from "@/pages/tools/BrokenLinkChecker";
+import KeywordDensityAnalyzer from "@/pages/tools/KeywordDensityAnalyzer";
 
-// Define the ScrollToTop component
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-};
-
-// Define the main app content
-const AppContent = () => {
-  const location = useLocation();
-
-  return (
-    <div className="flex flex-col min-h-screen">
-      <NavBar />
-      <div className="flex-grow pb-16 pt-24">
-        <TransitionGroup component={null}>
-          <CSSTransition key={location.key} timeout={300} classNames="page-transition">
-            <Suspense
-              fallback={
-                <div className="flex justify-center items-center h-[50vh]">
-                  <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-                </div>
-              }
-            >
-              <Routes location={location}>
-                <Route path="/" element={<Index />} />
-                <Route path="/all-tools" element={<AllTools />} />
-                <Route path="/categories" element={<Categories />} />
-                <Route path="/about" element={<About />} />
-                
-                {/* Tools Routes */}
-                <Route path="/tools/lorem-ipsum-generator" element={<LoremIpsumGenerator />} />
-                <Route path="/tools/color-picker" element={<ColorPicker />} />
-                <Route path="/tools/image-resizer" element={<ImageResizer />} />
-                <Route path="/tools/password-generator" element={<PasswordGenerator />} />
-                <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
-                <Route path="/tools/mobile-friendly-test" element={<MobileFriendlyTest />} />
-                <Route path="/tools/seo-analyzer" element={<SeoAnalyzer />} />
-                <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
-                <Route path="/tools/page-speed-checker" element={<PageSpeedChecker />} />
-                
-                {/* 404 Route */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </CSSTransition>
-        </TransitionGroup>
-      </div>
-      <EnhancedFooter />
-      <Toaster position="bottom-right" />
-    </div>
-  );
-};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <AppContent />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/tools" element={<AllTools />} />
+            <Route path="/categories" element={<Categories />} />
+
+            {/* Tool routes */}
+            <Route path="/tools/seo-analyzer" element={<SeoAnalyzer />} />
+            <Route path="/tools/mobile-friendly-test" element={<MobileFriendlyTest />} />
+            <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+            <Route path="/tools/page-speed-checker" element={<PageSpeedChecker />} />
+            <Route path="/tools/lorem-ipsum-generator" element={<LoremIpsumGenerator />} />
+            <Route path="/tools/ip-address-lookup" element={<IpAddressLookup />} />
+            <Route path="/tools/image-resizer" element={<ImageResizer />} />
+            <Route path="/tools/image-compressor" element={<ImageCompressor />} />
+            <Route path="/tools/image-converter" element={<ImageConverter />} />
+            <Route path="/tools/password-generator" element={<PasswordGenerator />} />
+            <Route path="/tools/qr-code-generator" element={<QrCodeGenerator />} />
+            <Route path="/tools/html-formatter" element={<HtmlFormatter />} />
+            <Route path="/tools/css-formatter" element={<CssFormatter />} />
+            <Route path="/tools/javascript-formatter" element={<JavascriptFormatter />} />
+            <Route path="/tools/color-picker" element={<ColorPicker />} />
+            <Route path="/tools/text-case-converter" element={<TextCaseConverter />} />
+            <Route path="/tools/unit-converter" element={<UnitConverter />} />
+            <Route path="/tools/domain-age-checker" element={<DomainAgeChecker />} />
+            <Route path="/tools/word-counter" element={<WordCounter />} />
+            <Route path="/tools/character-counter" element={<CharacterCounter />} />
+            <Route path="/tools/email-validator" element={<EmailValidator />} />
+            <Route path="/tools/broken-link-checker" element={<BrokenLinkChecker />} />
+            <Route path="/tools/keyword-density-analyzer" element={<KeywordDensityAnalyzer />} />
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster richColors closeButton />
+        </Router>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

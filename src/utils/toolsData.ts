@@ -1,11 +1,10 @@
-
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
   QrCode, Download, TextCursor, Link, BarChart, 
   Mail, MessageSquare, Calendar, Clock, FileSearch2, 
   FileDown, Users, FileCode2, CheckCircle2, LucideIcon,
-  Smartphone
+  Smartphone, Globe
 } from "lucide-react";
 
 export interface Tool {
@@ -231,12 +230,13 @@ export const TOOLS: Tool[] = [
   {
     id: "ip-address-lookup",
     name: "IP Address Lookup",
-    description: "Lookup the location of an IP address",
+    description: "Look up information about an IP address or domain name",
     path: "/tools/ip-address-lookup",
     category: "Utilities",
-    icon: Search,
+    icon: Globe,
     featured: false,
-    tags: ["ip", "address", "lookup", "online", "utility"],
+    isNew: true,
+    tags: ["ip", "address", "lookup", "geolocation", "domain", "utility"],
   },
   {
     id: "domain-age-checker",
