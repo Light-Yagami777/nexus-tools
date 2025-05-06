@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,6 +34,12 @@ import CharacterCounter from "@/pages/tools/CharacterCounter";
 import EmailValidator from "@/pages/tools/EmailValidator";
 import BrokenLinkChecker from "@/pages/tools/BrokenLinkChecker";
 import KeywordDensityAnalyzer from "@/pages/tools/KeywordDensityAnalyzer";
+import SHA256HashGenerator from "@/pages/tools/SHA256HashGenerator";
+import ScreenRecorder from "@/pages/tools/ScreenRecorder";
+import ScreenshotToPdf from "@/pages/tools/ScreenshotToPdf";
+import SSLChecker from "@/pages/tools/SSLChecker";
+import RobotsTxtGenerator from "@/pages/tools/RobotsTxtGenerator";
+import Base64 from "@/pages/tools/Base64";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,6 +85,12 @@ function App() {
             <Route path="/tools/email-validator" element={<EmailValidator />} />
             <Route path="/tools/broken-link-checker" element={<BrokenLinkChecker />} />
             <Route path="/tools/keyword-density-analyzer" element={<KeywordDensityAnalyzer />} />
+            <Route path="/tools/sha256-hash-generator" element={<SHA256HashGenerator />} />
+            <Route path="/tools/screen-recorder" element={<ScreenRecorder />} />
+            <Route path="/tools/screenshot-to-pdf" element={<ScreenshotToPdf />} />
+            <Route path="/tools/ssl-checker" element={<SSLChecker />} />
+            <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
+            <Route path="/tools/base64" element={<Base64 />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,10 +1,12 @@
+
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
   QrCode, Download, TextCursor, Link, BarChart, 
   Mail, MessageSquare, Calendar, Clock, FileSearch2, 
   FileDown, Users, FileCode2, CheckCircle2, LucideIcon,
-  Smartphone, Globe
+  Smartphone, Globe, Video, FileImage, Shield,
+  MonitorSmartphone, FileCog, Binary
 } from "lucide-react";
 
 export interface Tool {
@@ -143,7 +145,7 @@ export const TOOLS: Tool[] = [
     description: "Convert your images to different formats",
     path: "/tools/image-converter",
     category: "Image",
-    icon: FileDown,
+    icon: FileImage,
     featured: false,
     tags: ["image", "converter", "convert", "online", "photo"],
   },
@@ -288,6 +290,67 @@ export const TOOLS: Tool[] = [
     featured: true,
     tags: ["lorem", "ipsum", "generator", "online", "text", "utility"],
   },
+  {
+    id: "sha256-hash-generator",
+    name: "SHA256 Hash Generator",
+    description: "Generate SHA256 hash values from text or files",
+    path: "/tools/sha256-hash-generator",
+    category: "Security",
+    icon: Key,
+    featured: false,
+    tags: ["sha256", "hash", "generator", "encryption", "security"],
+  },
+  {
+    id: "screen-recorder",
+    name: "Screen Recorder",
+    description: "Record your screen directly in your browser",
+    path: "/tools/screen-recorder",
+    category: "Utilities",
+    icon: Video,
+    featured: false,
+    isNew: true,
+    tags: ["screen", "recorder", "video", "capture", "recording"],
+  },
+  {
+    id: "screenshot-to-pdf",
+    name: "Screenshot to PDF",
+    description: "Convert screenshots to a PDF document",
+    path: "/tools/screenshot-to-pdf",
+    category: "Utilities",
+    icon: FileImage,
+    featured: false,
+    tags: ["screenshot", "pdf", "converter", "image", "document"],
+  },
+  {
+    id: "ssl-checker",
+    name: "SSL Checker",
+    description: "Check SSL certificates for validity and security issues",
+    path: "/tools/ssl-checker",
+    category: "Security",
+    icon: Shield,
+    featured: false,
+    tags: ["ssl", "certificate", "security", "checker", "website"],
+  },
+  {
+    id: "robots-txt-generator",
+    name: "Robots.txt Generator",
+    description: "Generate a robots.txt file for your website",
+    path: "/tools/robots-txt-generator",
+    category: "SEO",
+    icon: FileCog,
+    featured: false,
+    tags: ["robots.txt", "generator", "seo", "website", "crawler"],
+  },
+  {
+    id: "base64",
+    name: "Base64 Encoder/Decoder",
+    description: "Encode or decode text and files to/from Base64",
+    path: "/tools/base64",
+    category: "Development",
+    icon: Binary,
+    featured: false,
+    tags: ["base64", "encoder", "decoder", "text", "file", "conversion"],
+  }
 ];
 
 // Define the allowed tool categories
@@ -307,11 +370,12 @@ export const categories: ToolCategory[] = [
   "Miscellaneous",
 ];
 
-// Add the missing functions
+// Get featured tools
 export const getFeaturedTools = (): Tool[] => {
   return TOOLS.filter(tool => tool.featured);
 };
 
+// Get new tools
 export const getNewTools = (): Tool[] => {
   return TOOLS.filter(tool => tool.isNew);
 };
@@ -319,7 +383,7 @@ export const getNewTools = (): Tool[] => {
 // Export tools constant to match what's being imported in files
 export const tools = TOOLS;
 
-// Add function to get tools by category
+// Get tools by category
 export const getToolsByCategory = (category: ToolCategory): Tool[] => {
   if (category === "All") {
     return TOOLS;
