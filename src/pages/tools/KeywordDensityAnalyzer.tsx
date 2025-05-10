@@ -240,7 +240,7 @@ const KeywordDensityAnalyzer = () => {
                 <h4 className="font-medium mb-2">Keyword Density Tips</h4>
                 <ul className="list-disc list-inside space-y-1">
                   <li>Aim for a keyword density of 1-3% for primary keywords</li>
-                  <li>Avoid keyword stuffing (density > 5%) as it can trigger search engine penalties</li>
+                  <li>Avoid keyword stuffing (density {'>'} 5%) as it can trigger search engine penalties</li>
                   <li>Use related keywords and synonyms to improve content relevance</li>
                   <li>Focus on creating high-quality, readable content for users</li>
                   <li>Place important keywords in headings, introduction, and conclusion</li>
