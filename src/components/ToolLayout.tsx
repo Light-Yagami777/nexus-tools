@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,11 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
 }) => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  
+  // Add this effect to scroll to top when a new page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <motion.div

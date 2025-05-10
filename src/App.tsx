@@ -43,6 +43,14 @@ import Base64 from "@/pages/tools/Base64";
 import JwtDecoder from "@/pages/tools/JwtDecoder";
 import CssMinifier from "@/pages/tools/CssMinifier";
 
+// Converter tools
+import LengthConverter from "@/pages/tools/LengthConverter";
+import WeightConverter from "@/pages/tools/WeightConverter";
+import TemperatureConverter from "@/pages/tools/TemperatureConverter";
+import SpeedConverter from "@/pages/tools/SpeedConverter";
+import VolumeConverter from "@/pages/tools/VolumeConverter";
+import AngleConverter from "@/pages/tools/AngleConverter";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -95,6 +103,14 @@ function App() {
             <Route path="/tools/base64" element={<Base64 />} />
             <Route path="/tools/jwt-decoder" element={<JwtDecoder />} />
             <Route path="/tools/css-minifier" element={<CssMinifier />} />
+            
+            {/* Converter routes */}
+            <Route path="/tools/length-converter" element={<LengthConverter />} />
+            <Route path="/tools/weight-converter" element={<WeightConverter />} />
+            <Route path="/tools/temperature-converter" element={<TemperatureConverter />} />
+            <Route path="/tools/speed-converter" element={<SpeedConverter />} />
+            <Route path="/tools/volume-converter" element={<VolumeConverter />} />
+            <Route path="/tools/angle-converter" element={<AngleConverter />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

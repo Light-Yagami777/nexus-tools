@@ -1,3 +1,4 @@
+
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
@@ -5,7 +6,8 @@ import {
   Mail, MessageSquare, Calendar, Clock, FileSearch2, 
   FileDown, Users, FileCode2, CheckCircle2, LucideIcon,
   Smartphone, Globe, Video, FileImage, Shield,
-  MonitorSmartphone, FileCog, Binary
+  MonitorSmartphone, FileCog, Binary, Ruler, Scale,
+  Thermometer, Gauge, Beaker, Compass
 } from "lucide-react";
 
 export interface Tool {
@@ -22,7 +24,8 @@ export interface Tool {
     | "Development"
     | "Design"
     | "Content"
-    | "Miscellaneous";
+    | "Miscellaneous"
+    | "Converter";
   icon: LucideIcon;
   featured: boolean;
   tags: string[];
@@ -370,6 +373,73 @@ export const TOOLS: Tool[] = [
     featured: false,
     tags: ["css", "minifier", "compress", "development", "code", "optimizer"],
   },
+  // Add new converter tools
+  {
+    id: "length-converter",
+    name: "Length Converter",
+    description: "Convert between different units of length",
+    path: "/tools/length-converter",
+    category: "Converter",
+    icon: Ruler,
+    featured: true,
+    isNew: true,
+    tags: ["length", "distance", "converter", "units", "measurement", "meters", "feet", "inches"],
+  },
+  {
+    id: "weight-converter",
+    name: "Weight Converter",
+    description: "Convert between different units of weight and mass",
+    path: "/tools/weight-converter",
+    category: "Converter",
+    icon: Scale,
+    featured: true,
+    isNew: true,
+    tags: ["weight", "mass", "converter", "units", "measurement", "kilograms", "pounds", "ounces"],
+  },
+  {
+    id: "temperature-converter",
+    name: "Temperature Converter",
+    description: "Convert between Celsius, Fahrenheit, and Kelvin",
+    path: "/tools/temperature-converter",
+    category: "Converter",
+    icon: Thermometer,
+    featured: true,
+    isNew: true,
+    tags: ["temperature", "converter", "celsius", "fahrenheit", "kelvin", "units"],
+  },
+  {
+    id: "speed-converter",
+    name: "Speed Converter",
+    description: "Convert between different units of speed",
+    path: "/tools/speed-converter",
+    category: "Converter",
+    icon: Gauge,
+    featured: false,
+    isNew: true,
+    tags: ["speed", "velocity", "converter", "mph", "kph", "m/s", "knots"],
+  },
+  {
+    id: "volume-converter",
+    name: "Volume Converter",
+    description: "Convert between different units of volume",
+    path: "/tools/volume-converter",
+    category: "Converter",
+    icon: Beaker,
+    featured: false,
+    isNew: true,
+    tags: ["volume", "converter", "liters", "gallons", "cubic", "fluid", "measurement"],
+  },
+  {
+    id: "angle-converter",
+    name: "Angle Converter",
+    description: "Convert between different angle measurement units",
+    path: "/tools/angle-converter",
+    category: "Converter",
+    icon: Compass,
+    featured: false,
+    isNew: true,
+    tags: ["angle", "converter", "degrees", "radians", "gradians", "measurement"],
+  }
 ];
 
 // Define the allowed tool categories
@@ -386,6 +456,7 @@ export const categories: ToolCategory[] = [
   "Development",
   "Design",
   "Content",
+  "Converter",
   "Miscellaneous",
 ];
 
