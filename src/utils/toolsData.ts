@@ -1,4 +1,3 @@
-
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
@@ -350,7 +349,27 @@ export const TOOLS: Tool[] = [
     icon: Binary,
     featured: false,
     tags: ["base64", "encoder", "decoder", "text", "file", "conversion"],
-  }
+  },
+  {
+    id: "jwt-decoder",
+    name: "JWT Decoder",
+    description: "Decode and verify JWT tokens",
+    path: "/tools/jwt-decoder",
+    category: "Development",
+    icon: Key,
+    featured: false,
+    tags: ["jwt", "token", "decoder", "json", "web", "token", "development"],
+  },
+  {
+    id: "css-minifier",
+    name: "CSS Minifier",
+    description: "Minify CSS code to reduce file size",
+    path: "/tools/css-minifier",
+    category: "Development",
+    icon: Code,
+    featured: false,
+    tags: ["css", "minifier", "compress", "development", "code", "optimizer"],
+  },
 ];
 
 // Define the allowed tool categories

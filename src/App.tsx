@@ -40,6 +40,8 @@ import ScreenshotToPdf from "@/pages/tools/ScreenshotToPdf";
 import SSLChecker from "@/pages/tools/SSLChecker";
 import RobotsTxtGenerator from "@/pages/tools/RobotsTxtGenerator";
 import Base64 from "@/pages/tools/Base64";
+import JwtDecoder from "@/pages/tools/JwtDecoder";
+import CssMinifier from "@/pages/tools/CssMinifier";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,6 +93,8 @@ function App() {
             <Route path="/tools/ssl-checker" element={<SSLChecker />} />
             <Route path="/tools/robots-txt-generator" element={<RobotsTxtGenerator />} />
             <Route path="/tools/base64" element={<Base64 />} />
+            <Route path="/tools/jwt-decoder" element={<JwtDecoder />} />
+            <Route path="/tools/css-minifier" element={<CssMinifier />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
