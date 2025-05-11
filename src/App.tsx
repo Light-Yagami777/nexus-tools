@@ -50,6 +50,14 @@ import TemperatureConverter from "@/pages/tools/TemperatureConverter";
 import SpeedConverter from "@/pages/tools/SpeedConverter";
 import VolumeConverter from "@/pages/tools/VolumeConverter";
 import AngleConverter from "@/pages/tools/AngleConverter";
+import AreaConverter from "@/pages/tools/AreaConverter";
+import DataStorageConverter from "@/pages/tools/DataStorageConverter";
+import PressureConverter from "@/pages/tools/PressureConverter";
+import AgeCalculator from "@/pages/tools/AgeCalculator";
+import MetaTagGenerator from "@/pages/tools/MetaTagGenerator";
+import WebpToPng from "@/pages/tools/WebpToPng";
+import SpeechToText from "@/pages/tools/SpeechToText";
+import TextToSpeech from "@/pages/tools/TextToSpeech";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,6 +119,16 @@ function App() {
             <Route path="/tools/speed-converter" element={<SpeedConverter />} />
             <Route path="/tools/volume-converter" element={<VolumeConverter />} />
             <Route path="/tools/angle-converter" element={<AngleConverter />} />
+            <Route path="/tools/area-converter" element={<AreaConverter />} />
+            <Route path="/tools/data-storage-converter" element={<DataStorageConverter />} />
+            <Route path="/tools/pressure-converter" element={<PressureConverter />} />
+            
+            {/* New tools */}
+            <Route path="/tools/age-calculator" element={<AgeCalculator />} />
+            <Route path="/tools/meta-tag-generator" element={<MetaTagGenerator />} />
+            <Route path="/tools/webp-to-png" element={<WebpToPng />} />
+            <Route path="/tools/speech-to-text" element={<SpeechToText />} />
+            <Route path="/tools/text-to-speech" element={<TextToSpeech />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

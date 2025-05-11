@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
-import { Thermometer, ArrowDown } from 'lucide-react';
+import { Activity, ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-type PressureUnit = 'pascal' | 'kilopascal' | 'megapascal' | 'bar' | 'psi' | 'ksi' | 'atmosphere' | 'torr' | 'mmHg' | 'inHg';
+type PressureUnit = 'pascal' | 'kilopascal' | 'megapascal' | 'bar' | 'millibar' | 'psi' | 'torr' | 'mmHg' | 'atm' | 'inHg';
 
 const PressureConverter = () => {
   const [inputValue, setInputValue] = useState<string>('1');
@@ -16,16 +16,17 @@ const PressureConverter = () => {
   const [toUnit, setToUnit] = useState<PressureUnit>('psi');
   const [result, setResult] = useState<string>('');
 
+  // Conversion factors to pascals (Pa)
   const conversionFactors: Record<PressureUnit, number> = {
     'pascal': 1,
     'kilopascal': 1000,
     'megapascal': 1000000,
     'bar': 100000,
+    'millibar': 100,
     'psi': 6894.76,
-    'ksi': 6894760,
-    'atmosphere': 101325,
     'torr': 133.322,
     'mmHg': 133.322,
+    'atm': 101325,
     'inHg': 3386.39
   };
 
@@ -60,25 +61,25 @@ const PressureConverter = () => {
     { value: 'pascal', label: 'Pascal (Pa)' },
     { value: 'kilopascal', label: 'Kilopascal (kPa)' },
     { value: 'megapascal', label: 'Megapascal (MPa)' },
-    { value: 'bar', label: 'Bar (bar)' },
+    { value: 'bar', label: 'Bar' },
+    { value: 'millibar', label: 'Millibar (mbar)' },
     { value: 'psi', label: 'Pounds per Square Inch (psi)' },
-    { value: 'ksi', label: 'Kilopounds per Square Inch (ksi)' },
-    { value: 'atmosphere', label: 'Standard Atmosphere (atm)' },
-    { value: 'torr', label: 'Torr (Torr)' },
+    { value: 'torr', label: 'Torr' },
     { value: 'mmHg', label: 'Millimeters of Mercury (mmHg)' },
+    { value: 'atm', label: 'Standard Atmosphere (atm)' },
     { value: 'inHg', label: 'Inches of Mercury (inHg)' }
   ];
 
-  const unitSymbols: Record<PressureUnit, string> = {
+  const unitLabels: Record<PressureUnit, string> = {
     'pascal': 'Pa',
     'kilopascal': 'kPa',
     'megapascal': 'MPa',
     'bar': 'bar',
+    'millibar': 'mbar',
     'psi': 'psi',
-    'ksi': 'ksi',
-    'atmosphere': 'atm',
     'torr': 'Torr',
     'mmHg': 'mmHg',
+    'atm': 'atm',
     'inHg': 'inHg'
   };
 
@@ -86,7 +87,7 @@ const PressureConverter = () => {
     <ToolLayout 
       title="Pressure Converter" 
       description="Convert between different units of pressure"
-      icon={<Thermometer className="h-6 w-6" />}
+      icon={<Activity className="h-6 w-6" />}
       extraPadding={true}
     >
       <div className="flex-grow container mx-auto px-4 py-8">
@@ -98,7 +99,7 @@ const PressureConverter = () => {
           <div className="mb-6 text-center">
             <h1 className="text-3xl font-bold mb-2">Pressure Converter</h1>
             <p className="text-muted-foreground">
-              Convert between different pressure units
+              Convert between different units of pressure
             </p>
           </div>
 
@@ -161,7 +162,7 @@ const PressureConverter = () => {
                 <div className="text-center">
                   <div className="text-sm text-muted-foreground mb-1">Result</div>
                   <div className="text-2xl font-bold">
-                    {result ? `${result} ${unitSymbols[toUnit]}` : '-'}
+                    {result ? `${result} ${unitLabels[toUnit]}` : '-'}
                   </div>
                 </div>
               </div>
@@ -169,32 +170,37 @@ const PressureConverter = () => {
           </Card>
 
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Pressure Conversion Reference</h2>
+            <h2 className="text-xl font-semibold mb-4">Pressure Units Explained</h2>
             <Card className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-medium mb-2">Common Pressure Conversions</h3>
+                  <h3 className="font-medium mb-2">Common Pressure Units</h3>
                   <ul className="space-y-2">
-                    <li>1 bar = 100,000 Pa</li>
-                    <li>1 bar = 14.5038 psi</li>
-                    <li>1 atmosphere = 101,325 Pa</li>
-                    <li>1 atmosphere = 1.01325 bar</li>
-                    <li>1 atmosphere = 14.6959 psi</li>
-                    <li>1 atmosphere = 760 mmHg (Torr)</li>
-                    <li>1 psi = 6,894.76 Pa</li>
-                    <li>1 psi = 0.068948 bar</li>
+                    <li><strong>Pascal (Pa)</strong>: The SI unit of pressure, 1 Pa = 1 N/m²</li>
+                    <li><strong>Bar</strong>: 1 bar = 100,000 Pa, close to 1 atmosphere</li>
+                    <li><strong>PSI</strong>: Pounds per square inch, common in US and UK</li>
+                    <li><strong>Atmosphere (atm)</strong>: Average sea-level pressure</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-medium mb-2">Practical Examples</h3>
+                  <h3 className="font-medium mb-2">Other Units</h3>
                   <ul className="space-y-2">
-                    <li>Standard atmospheric pressure: 1 atm (101,325 Pa)</li>
-                    <li>Car tire pressure: ~30-35 psi (2.1-2.4 bar)</li>
-                    <li>Bicycle tire pressure: ~80-130 psi (5.5-9.0 bar)</li>
-                    <li>Blood pressure (normal): ~120/80 mmHg</li>
-                    <li>Deep ocean (10,000m): ~1,000 bar</li>
+                    <li><strong>Torr</strong>: Named after Torricelli, 1 Torr ≈ 133.32 Pa</li>
+                    <li><strong>mmHg</strong>: Millimeters of mercury, used in medicine</li>
+                    <li><strong>inHg</strong>: Inches of mercury, used in meteorology</li>
+                    <li><strong>Millibar</strong>: Used in meteorology, 1 mbar = 100 Pa</li>
                   </ul>
                 </div>
+              </div>
+              
+              <div className="mt-6">
+                <h3 className="font-medium mb-2">Common Conversions</h3>
+                <ul className="space-y-2">
+                  <li>1 bar ≈ 14.5038 psi</li>
+                  <li>1 atmosphere ≈ 1.01325 bar ≈ 14.6959 psi</li>
+                  <li>1 mmHg ≈ 0.00132 atm ≈ 0.0193 psi</li>
+                  <li>1 psi ≈ 6,894.76 Pa ≈ 6.89 kPa</li>
+                </ul>
               </div>
             </Card>
           </div>

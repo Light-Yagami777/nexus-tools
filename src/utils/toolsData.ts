@@ -1,4 +1,3 @@
-
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
@@ -7,7 +6,9 @@ import {
   FileDown, Users, FileCode2, CheckCircle2, LucideIcon,
   Smartphone, Globe, Video, FileImage, Shield,
   MonitorSmartphone, FileCog, Binary, Ruler, Scale,
-  Thermometer, Gauge, Beaker, Compass
+  Thermometer, Gauge, Beaker, Compass, SquareStack,
+  Database, Activity, CalendarCheck, FileJson, 
+  FileType2, Speech, Text
 } from "lucide-react";
 
 export interface Tool {
@@ -439,6 +440,95 @@ export const TOOLS: Tool[] = [
     featured: false,
     isNew: true,
     tags: ["angle", "converter", "degrees", "radians", "gradians", "measurement"],
+  },
+  // New tools
+  {
+    id: "area-converter",
+    name: "Area Converter",
+    description: "Convert between different units of area",
+    path: "/tools/area-converter",
+    category: "Converter",
+    icon: SquareStack,
+    featured: false,
+    isNew: true,
+    tags: ["area", "converter", "square meters", "square feet", "acres", "hectares", "measurement"],
+  },
+  {
+    id: "data-storage-converter",
+    name: "Data Storage Converter",
+    description: "Convert between different units of digital storage",
+    path: "/tools/data-storage-converter",
+    category: "Converter",
+    icon: Database,
+    featured: false,
+    isNew: true,
+    tags: ["data", "storage", "converter", "bytes", "kilobytes", "megabytes", "gigabytes", "terabytes"],
+  },
+  {
+    id: "pressure-converter",
+    name: "Pressure Converter",
+    description: "Convert between different units of pressure",
+    path: "/tools/pressure-converter",
+    category: "Converter",
+    icon: Activity,
+    featured: false,
+    isNew: true,
+    tags: ["pressure", "converter", "pascal", "bar", "psi", "atmosphere", "measurement"],
+  },
+  {
+    id: "age-calculator",
+    name: "Age Calculator",
+    description: "Calculate age between two dates",
+    path: "/tools/age-calculator",
+    category: "Utilities",
+    icon: CalendarCheck,
+    featured: false,
+    isNew: true,
+    tags: ["age", "calculator", "date", "birthday", "years", "months", "days"],
+  },
+  {
+    id: "meta-tag-generator",
+    name: "Meta Tag Generator",
+    description: "Generate meta tags for your website",
+    path: "/tools/meta-tag-generator",
+    category: "SEO",
+    icon: FileJson,
+    featured: false,
+    isNew: true,
+    tags: ["meta", "tag", "generator", "seo", "html", "website", "description"],
+  },
+  {
+    id: "webp-to-png",
+    name: "WebP to PNG Converter",
+    description: "Convert WebP images to PNG format",
+    path: "/tools/webp-to-png",
+    category: "Image",
+    icon: FileType2,
+    featured: false,
+    isNew: true,
+    tags: ["webp", "png", "converter", "image", "format", "conversion"],
+  },
+  {
+    id: "speech-to-text",
+    name: "Speech to Text",
+    description: "Convert speech to text using your microphone",
+    path: "/tools/speech-to-text",
+    category: "Text",
+    icon: Speech,
+    featured: false,
+    isNew: true,
+    tags: ["speech", "text", "voice", "recognition", "transcription", "audio"],
+  },
+  {
+    id: "text-to-speech",
+    name: "Text to Speech",
+    description: "Convert text to speech with different voices",
+    path: "/tools/text-to-speech",
+    category: "Text",
+    icon: Text,
+    featured: false,
+    isNew: true,
+    tags: ["text", "speech", "voice", "audio", "synthesis", "read"],
   }
 ];
 
