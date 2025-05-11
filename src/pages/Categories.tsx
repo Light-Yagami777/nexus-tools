@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { NavBar } from "@/components/NavBar";
 import { ToolGrid } from "@/components/ToolGrid";
 import { Footer } from "@/components/Footer";
@@ -9,11 +10,25 @@ import { getToolsByCategory, searchTools, ToolCategory, categories } from "@/uti
 import { FolderKanban } from "lucide-react";
 
 const Categories = () => {
-  const [selectedCategory, setSelectedCategory] = useState<ToolCategory>("All");
+  const location = useLocation();
+  const [selectedCategory, setSelectedCategory] = useState<ToolCategory>(
+    // Try to get category from sessionStorage first
+    () => {
+      const savedCategory = sessionStorage.getItem("selectedCategory");
+      return (savedCategory && categories.includes(savedCategory as ToolCategory)) 
+        ? savedCategory as ToolCategory 
+        : "All";
+    }
+  );
   const [searchQuery, setSearchQuery] = useState("");
   
   const categoryTools = getToolsByCategory(selectedCategory);
   const filteredTools = searchQuery ? searchTools(searchQuery) : categoryTools;
+
+  // Save selected category to sessionStorage when it changes
+  useEffect(() => {
+    sessionStorage.setItem("selectedCategory", selectedCategory);
+  }, [selectedCategory]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,7 +67,11 @@ const Categories = () => {
             <h2 className="text-2xl font-semibold mb-8 text-center">
               {searchQuery ? "Search Results" : `${selectedCategory} Tools`}
             </h2>
-            <ToolGrid tools={filteredTools} initialCategory={selectedCategory} />
+            <ToolGrid 
+              tools={filteredTools} 
+              initialCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
           </div>
         </div>
       </section>

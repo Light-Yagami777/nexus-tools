@@ -7,11 +7,13 @@ import { Tool, ToolCategory, categories } from "@/utils/toolsData";
 interface ToolGridProps {
   tools: Tool[];
   initialCategory?: ToolCategory;
+  onCategoryChange?: (category: ToolCategory) => void;
 }
 
 export const ToolGrid: React.FC<ToolGridProps> = ({ 
   tools, 
-  initialCategory = "All" 
+  initialCategory = "All",
+  onCategoryChange
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory>(initialCategory);
   const [filteredTools, setFilteredTools] = useState<Tool[]>(tools);
@@ -24,6 +26,13 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
     }
   }, [selectedCategory, tools]);
 
+  const handleCategoryChange = (category: ToolCategory) => {
+    setSelectedCategory(category);
+    if (onCategoryChange) {
+      onCategoryChange(category);
+    }
+  };
+
   return (
     <div className="w-full">
       {/* Category Pills */}
@@ -31,7 +40,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({
         {categories.map((category) => (
           <button
             key={category}
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => handleCategoryChange(category)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
               selectedCategory === category
                 ? "bg-primary text-white shadow-md"

@@ -102,7 +102,7 @@ export const NavBar = () => {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="absolute top-full left-0 right-0 glass shadow-lg p-6 flex flex-col space-y-6 md:hidden z-50"
+            className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md shadow-lg p-6 flex flex-col space-y-6 md:hidden z-50 border-t border-border/10"
           >
             <SearchBar className="w-full" />
             <nav className="flex flex-col space-y-4">
@@ -121,8 +121,9 @@ export const NavBar = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm md:hidden z-40"
-            style={{ pointerEvents: 'none' }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-md md:hidden z-40"
+            style={{ pointerEvents: 'auto' }}
+            onClick={() => setIsMobileMenuOpen(false)}
           />
         )}
       </AnimatePresence>
