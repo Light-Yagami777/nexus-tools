@@ -1,3 +1,4 @@
+
 import { 
   Rocket, Search, ShieldCheck, Image, Type, LayoutDashboard, 
   ListChecks, FileText, Fingerprint, Key, Code, Palette, 
@@ -8,7 +9,7 @@ import {
   MonitorSmartphone, FileCog, Binary, Ruler, Scale,
   Thermometer, Gauge, Beaker, Compass, SquareStack,
   Database, Activity, CalendarCheck, FileJson, 
-  FileType2, Speech, Text
+  FileType2, Speech, Text, Coins, Dices, FileXml
 } from "lucide-react";
 
 export interface Tool {
@@ -529,6 +530,40 @@ export const TOOLS: Tool[] = [
     featured: false,
     isNew: true,
     tags: ["text", "speech", "voice", "audio", "synthesis", "read"],
+  },
+  // Newest tools
+  {
+    id: "coin-flip",
+    name: "Coin Flip",
+    description: "Flip a virtual coin for making decisions",
+    path: "/tools/coin-flip",
+    category: "Utilities",
+    icon: Coins,
+    featured: false,
+    isNew: true,
+    tags: ["coin", "flip", "random", "decision", "heads", "tails", "chance"],
+  },
+  {
+    id: "dice-roller",
+    name: "Dice Roller",
+    description: "Roll virtual dice for games and random decisions",
+    path: "/tools/dice-roller",
+    category: "Utilities",
+    icon: Dices,
+    featured: false,
+    isNew: true,
+    tags: ["dice", "roll", "random", "game", "d20", "d6", "rpg", "tabletop"],
+  },
+  {
+    id: "xml-sitemap-generator",
+    name: "XML Sitemap Generator",
+    description: "Create XML sitemaps for your website",
+    path: "/tools/xml-sitemap-generator",
+    category: "SEO",
+    icon: FileXml,
+    featured: false,
+    isNew: true,
+    tags: ["sitemap", "xml", "seo", "website", "search engine", "google", "indexing"],
   }
 ];
 

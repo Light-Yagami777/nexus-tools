@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import ToolLayout from '@/components/ToolLayout';
+import { ToolLayout } from '@/components/ToolLayout';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,7 +26,9 @@ const SpeechToText = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
   const [browserSupport, setBrowserSupport] = useState(true);
   const recognitionRef = useRef<any>(null);
-  const lastTranscriptRef = useRef<string>('');
+  
+  // Keep track of final transcript to prevent duplication
+  const [processedResults, setProcessedResults] = useState(new Set<string>());
 
   useEffect(() => {
     // Check if browser supports speech recognition
@@ -67,12 +68,12 @@ const SpeechToText = () => {
       }
 
       const recognition = new SpeechRecognitionAPI();
-      // Set to false to prevent repetition
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = selectedLanguage;
-      // Reset the last transcript reference
-      lastTranscriptRef.current = '';
+      
+      // Clear the set of processed results when starting a new session
+      setProcessedResults(new Set());
 
       recognition.onstart = () => {
         setIsRecording(true);
@@ -84,16 +85,23 @@ const SpeechToText = () => {
         let finalTranscript = '';
 
         for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript;
+          
           if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
+            // Check if we've already processed this result
+            if (!processedResults.has(transcript)) {
+              finalTranscript += transcript;
+              // Add this result to the set of processed results
+              setProcessedResults(prev => new Set(prev).add(transcript));
+            }
           } else {
-            interimTranscript += event.results[i][0].transcript;
+            interimTranscript += transcript;
           }
         }
 
-        if (finalTranscript && finalTranscript !== lastTranscriptRef.current) {
-          lastTranscriptRef.current = finalTranscript;
-          setTranscription((prev) => prev + finalTranscript + ' ');
+        // Only append final transcript if it's not empty
+        if (finalTranscript) {
+          setTranscription(prev => prev + finalTranscript + ' ');
         }
       };
 
@@ -140,7 +148,7 @@ const SpeechToText = () => {
   };
 
   return (
-    <ToolLayout title="Speech to Text">
+    <ToolLayout title="Speech to Text" icon={<Mic size={24} />}>
       <div className="space-y-6">
         <Card>
           <CardHeader>

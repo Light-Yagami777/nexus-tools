@@ -1,220 +1,233 @@
 
 import React, { useState } from 'react';
-import ToolLayout from '@/components/ToolLayout';
-import { Card } from '@/components/ui/card';
+import { ToolLayout } from '@/components/ToolLayout';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dice1, RefreshCw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Input } from '@/components/ui/input';
+import { Dices } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+
+type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 
 interface DiceRoll {
-  id: number;
-  sides: number;
-  value: number;
-  timestamp: number;
+  dieType: DieType;
+  results: number[];
+  total: number;
+  time: Date;
 }
 
-const diceTypes = [4, 6, 8, 10, 12, 20, 100];
-
-const DiceRoller: React.FC = () => {
-  const [numDice, setNumDice] = useState(1);
-  const [diceSides, setDiceSides] = useState(6);
+const DiceRoller = () => {
+  const [dieType, setDieType] = useState<DieType>(6);
+  const [numberOfDice, setNumberOfDice] = useState(1);
   const [isRolling, setIsRolling] = useState(false);
-  const [rolls, setRolls] = useState<DiceRoll[]>([]);
-  const [rollHistory, setRollHistory] = useState<{total: number, dice: DiceRoll[]}[]>([]);
+  const [currentRoll, setCurrentRoll] = useState<number[]>([]);
+  const [rollHistory, setRollHistory] = useState<DiceRoll[]>([]);
 
-  const handleNumDiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    setNumDice(Math.min(Math.max(value, 1), 10)); // Limit between 1 and 10
+  const handleDieTypeChange = (value: string) => {
+    setDieType(parseInt(value) as DieType);
   };
 
-  const handleDiceSidesChange = (value: string) => {
-    setDiceSides(parseInt(value));
+  const handleNumberOfDiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (isNaN(value) || value < 1) {
+      setNumberOfDice(1);
+    } else if (value > 10) {
+      setNumberOfDice(10);
+      toast.info("Maximum 10 dice allowed");
+    } else {
+      setNumberOfDice(value);
+    }
   };
 
   const rollDice = () => {
     if (isRolling) return;
-    
+
     setIsRolling(true);
-    
-    // Generate new rolls
-    const newRolls: DiceRoll[] = [];
-    for (let i = 0; i < numDice; i++) {
-      newRolls.push({
-        id: Date.now() + i,
-        sides: diceSides,
-        value: Math.floor(Math.random() * diceSides) + 1,
-        timestamp: Date.now()
-      });
-    }
-    
-    // Add to history
-    setTimeout(() => {
-      setRolls(newRolls);
-      setRollHistory(prev => [
-        { total: newRolls.reduce((sum, roll) => sum + roll.value, 0), dice: [...newRolls] },
-        ...prev.slice(0, 9) // Keep last 10 rolls
-      ]);
-      setIsRolling(false);
-    }, 800);
+    toast('Rolling dice...');
+
+    // Simulate dice rolling animation
+    let animationRolls = 0;
+    const maxAnimationRolls = 10;
+    const animationInterval = setInterval(() => {
+      const randomRolls = Array.from({ length: numberOfDice }, () => 
+        Math.floor(Math.random() * dieType) + 1
+      );
+      setCurrentRoll(randomRolls);
+      
+      animationRolls++;
+      if (animationRolls >= maxAnimationRolls) {
+        clearInterval(animationInterval);
+        
+        // Final roll
+        const finalRolls = Array.from({ length: numberOfDice }, () => 
+          Math.floor(Math.random() * dieType) + 1
+        );
+        const total = finalRolls.reduce((sum, val) => sum + val, 0);
+        
+        setCurrentRoll(finalRolls);
+        setRollHistory(prev => [{
+          dieType,
+          results: finalRolls,
+          total,
+          time: new Date()
+        }, ...prev.slice(0, 9)]);
+        
+        toast.success(`Rolled ${finalRolls.join(', ')} = ${total}`);
+        setIsRolling(false);
+      }
+    }, 100);
   };
 
   const clearHistory = () => {
     setRollHistory([]);
-    setRolls([]);
+    setCurrentRoll([]);
+    toast('History cleared');
   };
 
-  // Render a single die for the current roll
-  const renderDie = (roll: DiceRoll) => {
-    const getDieStyle = () => {
-      switch (roll.sides) {
-        case 4: return 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%)';
-        case 8: return 'clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
-        case 10: return 'clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)';
-        case 12: return 'clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
-        case 20: return 'clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
-        case 100: return 'rounded-full';
-        default: return 'rounded-lg'; // d6
-      }
-    };
-
+  const getDieImage = (value: number, dieType: DieType) => {
+    // Simple representation of dice faces
     return (
-      <motion.div
-        key={roll.id}
-        initial={{ rotateY: 0, scale: 0.5, opacity: 0 }}
-        animate={{ rotateY: 360, scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-16 h-16 flex items-center justify-center bg-primary/20 border-2 border-primary/30 shadow-lg m-2"
-        style={{ [getDieStyle()]: '' }}
+      <div 
+        className="inline-flex items-center justify-center rounded-md bg-background border shadow-sm w-10 h-10 text-center text-lg font-bold"
       >
-        <span className="text-xl font-bold">{roll.value}</span>
-      </motion.div>
+        {value}
+      </div>
     );
   };
 
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
   return (
-    <ToolLayout title="Dice Roller" extraPadding={true}>
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Dice1 className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Dice Roller</h2>
-        </div>
-        
-        <p className="text-muted-foreground mb-6">
-          Roll virtual dice with customizable number of sides and dice count.
-        </p>
-        
-        <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="num-dice">Number of Dice (1-10)</Label>
-              <Input
-                id="num-dice"
-                type="number"
-                min="1"
-                max="10"
-                value={numDice}
-                onChange={handleNumDiceChange}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="dice-sides">Dice Type</Label>
-              <Select
-                value={diceSides.toString()}
-                onValueChange={handleDiceSidesChange}
-              >
-                <SelectTrigger id="dice-sides">
-                  <SelectValue placeholder="Select dice type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {diceTypes.map(sides => (
-                    <SelectItem key={sides} value={sides.toString()}>
-                      d{sides}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <div className="flex justify-center">
-            <Button
-              onClick={rollDice}
-              disabled={isRolling}
-              size="lg"
-              className="px-8"
-            >
-              {isRolling ? 'Rolling...' : 'Roll Dice'}
-            </Button>
-          </div>
-          
-          {/* Current Roll */}
-          <div className="min-h-32">
-            <h3 className="text-lg font-medium mb-3">Current Roll:</h3>
-            
-            <AnimatePresence>
-              {rolls.length > 0 && (
-                <motion.div
-                  key="result"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <div className="flex flex-wrap justify-center mb-4">
-                    {rolls.map(roll => renderDie(roll))}
-                  </div>
-                  
-                  <div className="text-center">
-                    <p className="text-xl font-bold">
-                      Total: {rolls.reduce((sum, roll) => sum + roll.value, 0)}
-                    </p>
-                    {rolls.length > 1 && (
-                      <p className="text-sm text-muted-foreground">
-                        ({rolls.map(r => r.value).join(' + ')})
-                      </p>
+    <ToolLayout 
+      title="Dice Roller" 
+      description="Roll virtual dice for games and random decisions"
+      icon={<Dices className="h-6 w-6" />}
+    >
+      <div className="container max-w-3xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center">
+                  <div className="min-h-36 mb-8 flex items-center justify-center flex-wrap gap-4">
+                    {currentRoll.length > 0 ? (
+                      currentRoll.map((value, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ rotateX: 0, rotateY: 0, rotateZ: 0 }}
+                          animate={{ 
+                            rotateX: isRolling ? [0, 360, 720, 1080] : 0,
+                            rotateY: isRolling ? [0, 360, 720, 1080] : 0,
+                            rotateZ: isRolling ? [0, 360, 720, 1080] : 0
+                          }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                        >
+                          {getDieImage(value, dieType)}
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="text-muted-foreground">Roll the dice to get started</div>
                     )}
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
+                  {currentRoll.length > 0 && (
+                    <div className="mb-6 text-center">
+                      <p className="text-sm text-muted-foreground">Total</p>
+                      <p className="text-3xl font-bold">{currentRoll.reduce((sum, val) => sum + val, 0)}</p>
+                    </div>
+                  )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md mb-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Die Type</label>
+                      <Select defaultValue={dieType.toString()} onValueChange={handleDieTypeChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select die" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="4">D4</SelectItem>
+                          <SelectItem value="6">D6</SelectItem>
+                          <SelectItem value="8">D8</SelectItem>
+                          <SelectItem value="10">D10</SelectItem>
+                          <SelectItem value="12">D12</SelectItem>
+                          <SelectItem value="20">D20</SelectItem>
+                          <SelectItem value="100">D100</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Number of Dice</label>
+                      <Input
+                        type="number"
+                        value={numberOfDice}
+                        onChange={handleNumberOfDiceChange}
+                        min={1}
+                        max={10}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 w-full max-w-md">
+                    <Button 
+                      onClick={rollDice}
+                      disabled={isRolling}
+                      className="w-full"
+                      size="lg"
+                    >
+                      {isRolling ? 'Rolling...' : `Roll ${numberOfDice}d${dieType}`}
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      onClick={clearHistory}
+                      className="w-full"
+                    >
+                      Clear History
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
           
-          {/* Roll History */}
-          {rollHistory.length > 0 && (
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-lg font-medium">Roll History:</h3>
-                <Button variant="ghost" size="sm" onClick={clearHistory}>
-                  <RefreshCw className="h-4 w-4 mr-1" />
-                  Clear
-                </Button>
-              </div>
-              
-              <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
-                {rollHistory.map((historyItem, index) => (
-                  <div 
-                    key={index} 
-                    className="p-3 rounded-md bg-muted flex justify-between items-center"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-sm font-medium mr-2">
-                        {historyItem.dice.length}d{historyItem.dice[0]?.sides}:
-                      </span>
-                      <span className="text-sm">
-                        {historyItem.dice.map(d => d.value).join(', ')}
-                      </span>
-                    </div>
-                    <span className="font-bold">{historyItem.total}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <div>
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="font-medium text-lg mb-2">Roll History</h3>
+                {rollHistory.length > 0 ? (
+                  <ul className="space-y-3">
+                    {rollHistory.map((roll, index) => (
+                      <li key={index} className="p-3 bg-muted/50 rounded-md">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium">{roll.numberOfDice}d{roll.dieType}</span>
+                          <span className="text-muted-foreground text-xs">{formatTime(roll.time)}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1 my-2">
+                          {roll.results.map((value, i) => (
+                            <div key={i} className="w-6 h-6 flex items-center justify-center rounded-sm bg-muted text-xs font-medium">
+                              {value}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="text-right font-medium">
+                          = {roll.total}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted-foreground text-sm">No rolls yet</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </Card>
+      </div>
     </ToolLayout>
   );
 };

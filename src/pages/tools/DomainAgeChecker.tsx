@@ -4,13 +4,46 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
+import { Calendar, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+
+interface WhoisResponse {
+  domainName?: string;
+  creationDate?: string;
+  expiryDate?: string;
+  registrarName?: string;
+  whoisServer?: string;
+  nameServers?: string[];
+  states?: string[];
+}
 
 const DomainAgeChecker = () => {
   const [domain, setDomain] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [domainToCheck, setDomainToCheck] = useState("");
+  
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['domainAge', domainToCheck],
+    queryFn: async () => {
+      if (!domainToCheck) return null;
+      
+      try {
+        // Using WhoisXMLAPI
+        const response = await fetch(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_D1HfDJxVntp09bzKBImlcM4ClQ5rD&domainName=${domainToCheck}&outputFormat=JSON`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch domain information');
+        }
+        
+        const data = await response.json();
+        return data.WhoisRecord;
+      } catch (error) {
+        console.error("Error fetching domain data:", error);
+        throw new Error('Failed to fetch domain data');
+      }
+    },
+    enabled: !!domainToCheck,
+  });
 
   const handleCheck = () => {
     if (!domain) {
@@ -25,60 +58,62 @@ const DomainAgeChecker = () => {
       return;
     }
 
-    setLoading(true);
-
-    // In a real application, this would call an API to get domain age information
-    // For demonstration, we'll create mock data after a short delay
-    setTimeout(() => {
-      // Generate a random past date (1-15 years ago)
+    setDomainToCheck(domain);
+    refetch();
+  };
+  
+  // Function to calculate age from creation date
+  const calculateAge = (creationDateStr: string) => {
+    try {
+      const creationDate = new Date(creationDateStr);
       const currentDate = new Date();
-      const years = Math.floor(Math.random() * 15) + 1;
-      const registerDate = new Date(
-        currentDate.getFullYear() - years,
-        Math.floor(Math.random() * 12),
-        Math.floor(Math.random() * 28) + 1
-      );
       
-      // Calculate age in years, months and days
-      const yearDiff = currentDate.getFullYear() - registerDate.getFullYear();
-      const monthDiff = currentDate.getMonth() - registerDate.getMonth();
-      const dayDiff = currentDate.getDate() - registerDate.getDate();
+      let years = currentDate.getFullYear() - creationDate.getFullYear();
+      let months = currentDate.getMonth() - creationDate.getMonth();
+      let days = currentDate.getDate() - creationDate.getDate();
       
-      let ageYears = yearDiff;
-      let ageMonths = monthDiff;
-      let ageDays = dayDiff;
-      
-      if (dayDiff < 0) {
-        ageMonths -= 1;
-        const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0);
-        ageDays += lastMonth.getDate();
+      if (days < 0) {
+        months--;
+        const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+        days += lastMonth.getDate();
       }
       
-      if (ageMonths < 0) {
-        ageYears -= 1;
-        ageMonths += 12;
+      if (months < 0) {
+        years--;
+        months += 12;
       }
-
-      setResult({
-        domain,
-        registrationDate: registerDate.toISOString(),
-        ageYears,
-        ageMonths,
-        ageDays,
-        registrar: ["GoDaddy", "Namecheap", "Google Domains", "NameSilo", "Cloudflare"][Math.floor(Math.random() * 5)],
-      });
-
-      setLoading(false);
-    }, 1500);
+      
+      return { years, months, days };
+    } catch (e) {
+      return { years: 0, months: 0, days: 0 };
+    }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    try {
+      return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (e) {
+      return "Unknown date";
+    }
   };
+  
+  const getCreationDate = () => {
+    if (data?.createdDate) {
+      return data.createdDate;
+    } else if (data?.registryData?.createdDate) {
+      return data.registryData.createdDate;
+    } else if (data?.createdDateNormalized) {
+      return data.createdDateNormalized;
+    }
+    return "Unknown";
+  };
+
+  const creationDate = data ? getCreationDate() : null;
+  const age = creationDate ? calculateAge(creationDate) : null;
 
   return (
     <ToolLayout title="Domain Age Checker" icon={<Calendar size={24} />}>
@@ -98,40 +133,59 @@ const DomainAgeChecker = () => {
               />
               <Button 
                 onClick={handleCheck} 
-                disabled={loading}
+                disabled={isLoading}
                 className="whitespace-nowrap"
               >
-                {loading ? "Checking..." : "Check Domain Age"}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Checking...
+                  </>
+                ) : "Check Domain Age"}
               </Button>
             </div>
           </div>
 
-          {result && (
+          {error && (
+            <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 p-4 rounded-md text-sm">
+              <p className="font-medium">Failed to check domain age</p>
+              <p className="text-muted-foreground mt-1">Please check the domain and try again.</p>
+            </div>
+          )}
+
+          {data && creationDate && creationDate !== "Unknown" && (
             <div className="mt-6 border rounded-md p-6">
               <h3 className="text-lg font-medium mb-4">Domain Age Results</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Domain Name</p>
-                  <p className="font-medium">{result.domain}</p>
+                  <p className="font-medium">{data.domainName}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm text-muted-foreground">Registrar</p>
-                  <p className="font-medium">{result.registrar}</p>
+                  <p className="font-medium">{data.registrarName || 'Unknown'}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm text-muted-foreground">Registration Date</p>
-                  <p className="font-medium">{formatDate(result.registrationDate)}</p>
+                  <p className="font-medium">{formatDate(creationDate)}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm text-muted-foreground">Domain Age</p>
                   <p className="font-medium">
-                    {result.ageYears} years, {result.ageMonths} months, {result.ageDays} days
+                    {age ? `${age.years} years, ${age.months} months, ${age.days} days` : 'Unknown'}
                   </p>
                 </div>
+                
+                {data.expiryDate && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Expiry Date</p>
+                    <p className="font-medium">{formatDate(data.expiryDate)}</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -42,6 +42,7 @@ import RobotsTxtGenerator from "@/pages/tools/RobotsTxtGenerator";
 import Base64 from "@/pages/tools/Base64";
 import JwtDecoder from "@/pages/tools/JwtDecoder";
 import CssMinifier from "@/pages/tools/CssMinifier";
+import CaseConverter from "@/pages/tools/CaseConverter";
 
 // Converter tools
 import LengthConverter from "@/pages/tools/LengthConverter";
@@ -58,6 +59,11 @@ import MetaTagGenerator from "@/pages/tools/MetaTagGenerator";
 import WebpToPng from "@/pages/tools/WebpToPng";
 import SpeechToText from "@/pages/tools/SpeechToText";
 import TextToSpeech from "@/pages/tools/TextToSpeech";
+
+// New tools to add
+import CoinFlip from "@/pages/tools/CoinFlip";
+import DiceRoller from "@/pages/tools/DiceRoller";
+import XmlSitemapGenerator from "@/pages/tools/XmlSitemapGenerator";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,6 +117,7 @@ function App() {
             <Route path="/tools/base64" element={<Base64 />} />
             <Route path="/tools/jwt-decoder" element={<JwtDecoder />} />
             <Route path="/tools/css-minifier" element={<CssMinifier />} />
+            <Route path="/tools/case-converter" element={<CaseConverter />} />
             
             {/* Converter routes */}
             <Route path="/tools/length-converter" element={<LengthConverter />} />
@@ -129,6 +136,11 @@ function App() {
             <Route path="/tools/webp-to-png" element={<WebpToPng />} />
             <Route path="/tools/speech-to-text" element={<SpeechToText />} />
             <Route path="/tools/text-to-speech" element={<TextToSpeech />} />
+            
+            {/* Newest tools */}
+            <Route path="/tools/coin-flip" element={<CoinFlip />} />
+            <Route path="/tools/dice-roller" element={<DiceRoller />} />
+            <Route path="/tools/xml-sitemap-generator" element={<XmlSitemapGenerator />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

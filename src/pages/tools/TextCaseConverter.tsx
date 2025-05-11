@@ -95,7 +95,7 @@ const TextCaseConverter = () => {
       <Card className="p-6">
         <div className="space-y-6">
           <Tabs defaultValue="uppercase" onValueChange={handleTabChange}>
-            <TabsList className="grid grid-cols-3 md:grid-cols-6">
+            <TabsList className="grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-6">
               <TabsTrigger value="uppercase">UPPERCASE</TabsTrigger>
               <TabsTrigger value="lowercase">lowercase</TabsTrigger>
               <TabsTrigger value="capitalize">Capitalize</TabsTrigger>
