@@ -9,7 +9,7 @@ import {
   MonitorSmartphone, FileCog, Binary, Ruler, Scale,
   Thermometer, Gauge, Beaker, Compass, SquareStack,
   Database, Activity, CalendarCheck, FileJson, 
-  FileType2, Speech, Text, Coins, Dices, FileXml
+  FileType2, Speech, Text, Coins, Dices, FileCode
 } from "lucide-react";
 
 export interface Tool {
@@ -560,7 +560,7 @@ export const TOOLS: Tool[] = [
     description: "Create XML sitemaps for your website",
     path: "/tools/xml-sitemap-generator",
     category: "SEO",
-    icon: FileXml,
+    icon: FileCode,
     featured: false,
     isNew: true,
     tags: ["sitemap", "xml", "seo", "website", "search engine", "google", "indexing"],

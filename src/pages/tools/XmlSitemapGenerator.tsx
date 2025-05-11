@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileXml, Copy, Download, Plus, Trash, Link, Calendar, Gauge } from 'lucide-react';
+import { FileCode, Copy, Download, Plus, Trash, Link, Calendar, Gauge } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -171,7 +170,7 @@ const XmlSitemapGenerator = () => {
     <ToolLayout 
       title="XML Sitemap Generator" 
       description="Create XML sitemaps for your website"
-      icon={<FileXml className="h-6 w-6" />}
+      icon={<FileCode className="h-6 w-6" />}
     >
       <div className="container max-w-4xl mx-auto px-4 py-8">
         <Card>

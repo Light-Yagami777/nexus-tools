@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ToolLayout } from '@/components/ToolLayout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,6 +15,7 @@ interface DiceRoll {
   results: number[];
   total: number;
   time: Date;
+  numberOfDice?: number; // Added as optional to fix the error
 }
 
 const DiceRoller = () => {
@@ -71,7 +71,8 @@ const DiceRoller = () => {
           dieType,
           results: finalRolls,
           total,
-          time: new Date()
+          time: new Date(),
+          numberOfDice // Add this property to the DiceRoll object
         }, ...prev.slice(0, 9)]);
         
         toast.success(`Rolled ${finalRolls.join(', ')} = ${total}`);
@@ -204,7 +205,7 @@ const DiceRoller = () => {
                     {rollHistory.map((roll, index) => (
                       <li key={index} className="p-3 bg-muted/50 rounded-md">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium">{roll.numberOfDice}d{roll.dieType}</span>
+                          <span className="text-sm font-medium">{roll.numberOfDice || roll.results.length}d{roll.dieType}</span>
                           <span className="text-muted-foreground text-xs">{formatTime(roll.time)}</span>
                         </div>
                         <div className="flex flex-wrap gap-1 my-2">
