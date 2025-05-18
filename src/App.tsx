@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
+import "@/components/ui/dice.css"; // Import dice CSS
 
 import Index from "@/pages/Index";
 import AllTools from "@/pages/AllTools";
@@ -83,6 +84,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/tools" element={<AllTools />} />
+            <Route path="/all-tools" element={<AllTools />} /> {/* Added this line to handle "/all-tools" route */}
             <Route path="/categories" element={<Categories />} />
 
             {/* Tool routes */}

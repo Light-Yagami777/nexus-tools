@@ -4,7 +4,7 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar, Loader2 } from "lucide-react";
+import { Calendar, Loader2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,6 +21,7 @@ interface WhoisResponse {
 const DomainAgeChecker = () => {
   const [domain, setDomain] = useState("");
   const [domainToCheck, setDomainToCheck] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
   
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['domainAge', domainToCheck],
@@ -36,6 +37,12 @@ const DomainAgeChecker = () => {
         }
         
         const data = await response.json();
+        
+        // Check if we have an error response
+        if (data.ErrorMessage) {
+          throw new Error(data.ErrorMessage.msg || 'Failed to fetch domain information');
+        }
+        
         return data.WhoisRecord;
       } catch (error) {
         console.error("Error fetching domain data:", error);
@@ -43,22 +50,47 @@ const DomainAgeChecker = () => {
       }
     },
     enabled: !!domainToCheck,
+    retry: 1,
+    retryDelay: 1000,
   });
 
-  const handleCheck = () => {
+  // Basic domain validation
+  const validateDomain = (domain: string): boolean => {
     if (!domain) {
-      toast.error("Please enter a domain name");
-      return;
+      setValidationError("Please enter a domain name");
+      return false;
     }
 
-    // Basic domain validation
+    // Remove http/https and www if present
+    let cleanDomain = domain;
+    if (cleanDomain.startsWith('http://')) cleanDomain = cleanDomain.substring(7);
+    if (cleanDomain.startsWith('https://')) cleanDomain = cleanDomain.substring(8);
+    if (cleanDomain.startsWith('www.')) cleanDomain = cleanDomain.substring(4);
+    
+    // Check for valid domain format
     const domainRegex = /^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|localhost)$/;
-    if (!domainRegex.test(domain)) {
-      toast.error("Please enter a valid domain name");
+    if (!domainRegex.test(cleanDomain)) {
+      setValidationError("Please enter a valid domain name (e.g., example.com)");
+      return false;
+    }
+    
+    setValidationError(null);
+    return true;
+  };
+
+  const handleCheck = () => {
+    if (!validateDomain(domain)) {
+      toast.error(validationError || "Invalid domain");
       return;
     }
 
-    setDomainToCheck(domain);
+    // Clean domain name (remove http/https and www if present)
+    let cleanDomain = domain;
+    if (cleanDomain.startsWith('http://')) cleanDomain = cleanDomain.substring(7);
+    if (cleanDomain.startsWith('https://')) cleanDomain = cleanDomain.substring(8);
+    if (cleanDomain.startsWith('www.')) cleanDomain = cleanDomain.substring(4);
+
+    setDomainToCheck(cleanDomain);
     refetch();
   };
   
@@ -113,7 +145,7 @@ const DomainAgeChecker = () => {
   };
 
   const creationDate = data ? getCreationDate() : null;
-  const age = creationDate ? calculateAge(creationDate) : null;
+  const age = creationDate && creationDate !== "Unknown" ? calculateAge(creationDate) : null;
 
   return (
     <ToolLayout title="Domain Age Checker" icon={<Calendar size={24} />}>
@@ -127,9 +159,12 @@ const DomainAgeChecker = () => {
             <div className="flex flex-col md:flex-row gap-2">
               <Input
                 value={domain}
-                onChange={(e) => setDomain(e.target.value)}
+                onChange={(e) => {
+                  setDomain(e.target.value);
+                  if (validationError) setValidationError(null);
+                }}
                 placeholder="Enter domain name (e.g., example.com)"
-                className="flex-grow"
+                className={`flex-grow ${validationError ? 'border-red-500' : ''}`}
               />
               <Button 
                 onClick={handleCheck} 
@@ -144,12 +179,22 @@ const DomainAgeChecker = () => {
                 ) : "Check Domain Age"}
               </Button>
             </div>
+            {validationError && (
+              <p className="text-sm text-red-500 mt-1">{validationError}</p>
+            )}
           </div>
 
           {error && (
             <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 p-4 rounded-md text-sm">
-              <p className="font-medium">Failed to check domain age</p>
-              <p className="text-muted-foreground mt-1">Please check the domain and try again.</p>
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium">Failed to check domain age</p>
+                  <p className="text-muted-foreground mt-1">
+                    {error instanceof Error ? error.message : 'Please check the domain and try again.'}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 

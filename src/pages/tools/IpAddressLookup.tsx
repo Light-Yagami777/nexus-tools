@@ -24,6 +24,7 @@ interface IpData {
 const IpAddressLookup = () => {
   const [ipInput, setIpInput] = useState('');
   const [ipToFetch, setIpToFetch] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const {
     data: ipData,
@@ -34,28 +35,77 @@ const IpAddressLookup = () => {
     queryKey: ['ipData', ipToFetch],
     queryFn: async () => {
       if (!ipToFetch) return null;
-      const response = await fetch(`https://ipinfo.io/${ipToFetch}/json?token=94b65fa6c9eb35`);
-      if (!response.ok) {
+      
+      try {
+        const response = await fetch(`https://ipinfo.io/${ipToFetch}/json?token=94b65fa6c9eb35`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error?.message || 'Failed to fetch IP data');
+        }
+        return response.json() as Promise<IpData>;
+      } catch (err) {
+        console.error("Error fetching IP data:", err);
         throw new Error('Failed to fetch IP data');
       }
-      return response.json() as Promise<IpData>;
     },
     enabled: !!ipToFetch,
+    retry: 1,
   });
+
+  const validateInput = (input: string): boolean => {
+    // Check if input is empty
+    if (!input.trim()) {
+      setValidationError("Please enter an IP address or domain");
+      return false;
+    }
+
+    // Check if it's a domain name (contains at least one dot and no spaces)
+    if (input.includes('.') && !input.includes(' ')) {
+      setValidationError(null);
+      return true;
+    }
+
+    // Check if it's a valid IPv4
+    const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+    if (ipv4Regex.test(input)) {
+      const parts = input.split('.').map(part => parseInt(part, 10));
+      const isValid = parts.every(part => part >= 0 && part <= 255);
+      
+      if (!isValid) {
+        setValidationError("Invalid IP address format. IP values must be between 0-255.");
+        return false;
+      }
+      
+      setValidationError(null);
+      return true;
+    }
+
+    // Check if it's a valid IPv6
+    const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^::$|^::1$|^([0-9a-fA-F]{1,4}::?){1,7}([0-9a-fA-F]{1,4})$/;
+    if (ipv6Regex.test(input)) {
+      setValidationError(null);
+      return true;
+    }
+
+    setValidationError("Please enter a valid IP address or domain");
+    return false;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ipInput.trim()) {
-      toast.error('Please enter an IP address or domain');
-      return;
+    
+    if (validateInput(ipInput.trim())) {
+      setIpToFetch(ipInput.trim());
+      refetch();
+    } else {
+      toast.error(validationError || "Invalid input");
     }
-    setIpToFetch(ipInput.trim());
-    refetch();
   };
 
   const handleMyIP = () => {
     setIpInput('');
     setIpToFetch('');
+    setValidationError(null);
     refetch();
   };
 
@@ -80,8 +130,11 @@ const IpAddressLookup = () => {
                   id="ip-input"
                   placeholder="e.g. 8.8.8.8 or example.com"
                   value={ipInput}
-                  onChange={(e) => setIpInput(e.target.value)}
-                  className="flex-grow"
+                  onChange={(e) => {
+                    setIpInput(e.target.value);
+                    if (validationError) setValidationError(null);
+                  }}
+                  className={`flex-grow ${validationError ? 'border-red-500' : ''}`}
                 />
                 <Button 
                   type="submit" 
@@ -90,6 +143,9 @@ const IpAddressLookup = () => {
                   {isLoading ? 'Looking up...' : 'Lookup'}
                 </Button>
               </div>
+              {validationError && (
+                <p className="text-sm text-red-500 mt-1">{validationError}</p>
+              )}
             </div>
 
             <div className="flex justify-center">
@@ -133,10 +189,12 @@ const IpAddressLookup = () => {
                   </div>
                 )}
                 
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">{ipData.city}, {ipData.region}, {ipData.country}</p>
-                </div>
+                {ipData.city && ipData.region && ipData.country && (
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Location</p>
+                    <p className="font-medium">{ipData.city}, {ipData.region}, {ipData.country}</p>
+                  </div>
+                )}
                 
                 {ipData.org && (
                   <div className="space-y-1">
